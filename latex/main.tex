@@ -1,0 +1,265 @@
+\documentclass[
+	fontsize=10pt,
+	twoside=true,
+	open=any,
+	chapterprefix=true,
+	%chapterentrydots=true,
+	numbers=noenddot,
+	draft=true,
+	%overfullrule=true,
+]{kaobook}
+
+% Set the language
+\usepackage[english]{babel} % Load characters and hyphenation
+\usepackage[english=british]{csquotes} % English quotes
+
+% Load packages for testing
+\usepackage{blindtext}
+%\usepackage{showframe} % Uncomment to show boxes around the text area, margin, header and footer
+%\usepackage{showlabels} % Uncomment to output the content of \label commands to the document where they are used
+
+% Load the bibliography package
+\usepackage{styles/kaobiblio}
+%\addbibresource{main.bib} % Bibliography file
+
+% Load mathematical packages for theorems and related environments. NOTE: choose only one between 'mdftheorems' and 'plaintheorems'.
+\usepackage{styles/mdftheorems}
+%\usepackage{styles/plaintheorems}
+
+\graphicspath{{examples/documentation/images/}{images/}} % Paths in which to look for images
+
+\makeindex[columns=3, title=Alphabetical Index, intoc] % Make LaTeX produce the files required to compile the index
+
+\makeglossaries % Make LaTeX produce the files required to compile the glossary
+
+\makenomenclature % Make LaTeX produce the files required to compile the nomenclature
+
+\newcommand{\ames}{\texttt{\%ames}}
+\newcommand{\behn}{\texttt{\%behn}}
+\newcommand{\clay}{\texttt{\%clay}}
+\newcommand{\dill}{\texttt{\%dill}}
+\newcommand{\eyre}{\texttt{\%eyre}}
+\newcommand{\ford}{\texttt{++ford}}
+\newcommand{\gall}{\texttt{\%gall}}
+\newcommand{\iris}{\texttt{\%iris}}
+\newcommand{\jael}{\texttt{\%jael}}
+\newcommand{\lull}{\texttt{\%lull}}
+\newcommand{\zuse}{\texttt{\%zuse}}
+
+\newcommand{\ask}{\texttt{\%ask}}
+\newcommand{\graphstore}{\texttt{\%graph-store}}
+\newcommand{\mock}{\texttt{++mock}}
+\newcommand{\patp}{\texttt{@p}}
+\newcommand{\say}{\texttt{\%say}}
+\newcommand{\unix}{\texttt{\%unix}}
+
+
+% Reset sidenote counter at chapters
+%\counterwithin*{sidenote}{chapter}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	BOOK INFORMATION
+%----------------------------------------------------------------------------------------
+
+\titlehead{An Approach to Developing on Urbit}
+\subject{Urbit}
+
+\title{An Approach to Developing on Urbit}
+\subtitle{Customise this page according to your needs}
+
+\author[N E Davis]{N E Davis \thanks{University of Illinois}}
+
+\date{\today}
+
+\publishers{Malancandra \& Sons}
+
+%----------------------------------------------------------------------------------------
+
+\frontmatter % Denotes the start of the pre-document content, uses roman numerals
+
+%----------------------------------------------------------------------------------------
+%	OPENING PAGE
+%----------------------------------------------------------------------------------------
+
+%\makeatletter
+%\extratitle{
+%	% In the title page, the title is vspaced by 9.5\baselineskip
+%	\vspace*{9\baselineskip}
+%	\vspace*{\parskip}
+%	\begin{center}
+%		% In the title page, \huge is set after the komafont for title
+%		\usekomafont{title}\huge\@title
+%	\end{center}
+%}
+%\makeatother
+
+%----------------------------------------------------------------------------------------
+%	COPYRIGHT PAGE
+%----------------------------------------------------------------------------------------
+
+\makeatletter
+\uppertitleback{\@titlehead} % Header
+
+\lowertitleback{
+	\textbf{Copyright ©2021 by N E Davis}\\
+
+	\medskip
+
+	\textbf{Colophon} \\
+	This document was typeset with the help of \href{https://sourceforge.net/projects/koma-script/}{\KOMAScript} and \href{https://www.latex-project.org/}{\LaTeX} using the \href{https://github.com/fmarotta/kaobook/}{kaobook} class.
+
+	The source code of this book is available at:\\\url{https://github.com/davis68/urbit-textbook}
+
+	\medskip
+
+	\textbf{Publisher} \\
+	First printed in July 2022 by \@publishers
+}
+\makeatother
+
+%----------------------------------------------------------------------------------------
+%	DEDICATION
+%----------------------------------------------------------------------------------------
+
+\dedication{
+	Lights All Askew in the Heavens. \\
+	Stars Not Where They Seemed or Were Calculated to Be. \\
+	A BOOK FOR 12 WISE MEN. \\
+	No More in All the World Could Comprehend It. \\
+	\flushright -- \href{https://en.wikisource.org/wiki/The_New_York_Times/Lights_All_Askew_in_the_Heavens}{\emph{The New York Times}, November 19, 1919}
+}
+
+%----------------------------------------------------------------------------------------
+%	OUTPUT TITLE PAGE AND PREVIOUS
+%----------------------------------------------------------------------------------------
+
+% Note that \maketitle outputs the pages before here
+
+% If twoside=false, \uppertitleback and \lowertitleback are not printed
+% To overcome this issue, we set twoside=semi just before printing the title pages, and set it back to false just after the title pages
+\KOMAoptions{twoside=semi}
+\maketitle
+\KOMAoptions{twoside=false}
+
+%----------------------------------------------------------------------------------------
+%	PREFACE
+%----------------------------------------------------------------------------------------
+
+%\input{chapters/preface.tex}
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS & LIST OF FIGURES/TABLES
+%----------------------------------------------------------------------------------------
+
+\begingroup % Local scope for the following commands
+
+% Define the style for the TOC, LOF, and LOT
+%\setstretch{1} % Uncomment to modify line spacing in the ToC
+%\hypersetup{linkcolor=blue} % Uncomment to set the colour of links in the ToC
+\setlength{\textheight}{23cm} % Manually adjust the height of the ToC pages
+
+% Turn on compatibility mode for the etoc package
+\etocstandarddisplaystyle % "toc display" as if etoc was not loaded
+\etocstandardlines % toc lines as if etoc was not loaded
+
+\tableofcontents % Output the table of contents
+
+\listoffigures % Output the list of figures
+
+% Comment both of the following lines to have the LOF and the LOT on different pages
+\let\cleardoublepage\bigskip
+\let\clearpage\bigskip
+
+\listoftables % Output the list of tables
+
+\endgroup
+
+%----------------------------------------------------------------------------------------
+%	MAIN BODY
+%----------------------------------------------------------------------------------------
+
+\mainmatter % Denotes the start of the main document content, resets page numbering and uses arabic numbers
+\setchapterstyle{kao} % Choose the default chapter heading style
+
+\input{content/intro.tex}
+
+\pagelayout{wide} % No margins
+\addpart{Language Essentials}
+\pagelayout{margin} % Restore margins
+
+\input{content/nock.tex}
+\input{content/hoon-elements.tex}
+\input{content/hoon-advanced.tex}
+
+\pagelayout{wide} % No margins
+\addpart{System Development}
+\pagelayout{margin} % Restore margins
+
+\input{content/kernel.tex}
+\input{content/userspace.tex}
+\input{content/support.tex}
+\input{content/conclusion.tex}
+
+\appendix % From here onwards, chapters are numbered with letters, as is the appendix convention
+
+\pagelayout{wide} % No margins
+\addpart{Appendix}
+\pagelayout{margin} % Restore margins
+
+\input{content/appendix.tex}
+
+%----------------------------------------------------------------------------------------
+
+\backmatter % Denotes the end of the main document content
+\setchapterstyle{plain} % Output plain chapters from this point onwards
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+
+% The bibliography needs to be compiled with biber using your LaTeX editor, or on the command line with 'biber main' from the template directory
+
+\defbibnote{bibnote}{Here are the references in citation order.\par\bigskip} % Prepend this text to the bibliography
+\printbibliography[heading=bibintoc, title=Bibliography, prenote=bibnote] % Add the bibliography heading to the ToC, set the title of the bibliography and output the bibliography note
+
+%----------------------------------------------------------------------------------------
+%	NOMENCLATURE
+%----------------------------------------------------------------------------------------
+
+% The nomenclature needs to be compiled on the command line with 'makeindex main.nlo -s nomencl.ist -o main.nls' from the template directory
+
+\nomenclature{$c$}{Speed of light in a vacuum inertial frame}
+\nomenclature{$h$}{Planck constant}
+
+\renewcommand{\nomname}{Notation} % Rename the default 'Nomenclature'
+\renewcommand{\nompreamble}{The next list describes several symbols that will be later used within the body of the document.} % Prepend this text to the nomenclature
+
+\printnomenclature % Output the nomenclature
+
+%----------------------------------------------------------------------------------------
+%	INDEX
+%----------------------------------------------------------------------------------------
+
+% The index needs to be compiled on the command line with 'makeindex main' from the template directory
+
+\printindex % Output the index
+
+%----------------------------------------------------------------------------------------
+%	BACK COVER
+%----------------------------------------------------------------------------------------
+
+% If you have a PDF/image file that you want to use as a back cover, uncomment the following lines
+
+%\clearpage
+%\thispagestyle{empty}
+%\null%
+%\clearpage
+%\includepdf{cover-back.pdf}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
