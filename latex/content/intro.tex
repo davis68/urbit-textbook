@@ -11,10 +11,23 @@ compatibility-breaking
 
 As of this writing, Urbit runs on any of several interpreters as a "hosted OS," or a
 
+% Write like SeeTee shareholder letter but for Urbit, demolish all objections
+
+Let us posit a social operating system, or SOS;  a protocol for network-oriented platforms to utilize to ensure that user requirements are met securely.  If we enumerate user-oriented desiderata for a social operating system, surely the following must rank prominently:
+
+\begin{itemize}
+	\item  Privacy
+	\item  Security
+	\item  Ownership
+\end{itemize}
 
 
 \section{Azimuth, the Urbit Address Space}
 \labsec{azimuth}
+
+
+Zooko's trilemma
+
 
 Many modern printed textbooks have adopted a layout with prominent
 margins where small figures, tables, remarks and just about everything
@@ -111,15 +124,10 @@ The main features are the following:
 
 \begin{marginfigure}[-5.5cm]
 	\includegraphics{monalisa}
-	\caption[The Mona Lisa]{The Mona Lisa.\\
-	\url{https://commons.wikimedia.org/wiki/File:Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF_retouched.jpg}}
-	\labfig{marginmonalisa}
+	\caption[Sigils]{Some sigils\\
+	\url{https://media.urbit.org/site/posts/essays/help-the-environment.jpg}}
+	\labfig{marginsigils}
 \end{marginfigure}
-
-The order of the title pages, table of contents and preface can be
-easily changed, as in any \LaTeX\ document. In addition, the class is
-based on \KOMAScript's \Class{scrbook}, therefore it inherits all the
-goodies of that.
 
 \section{Developing for Urbit}
 \labsec{developing}
@@ -133,3 +141,12 @@ Urbit development can be divided into three cases:
 \end{enumerate}
 
 This guide focuses on getting the reader up to speed on the second development case early, then branches out.
+
+We encourage the reader to approach each example and exercise in the following spirit:
+
+\begin{enumerate}
+  \item  Identify the input and outputs, preferably at the data type level and contents.
+	\item  Reason analogically from other Hoon examples available in the text and elsewhere.
+	\item  Create and complete an outline of the code content.
+	\item  Devise and compose a suitable test suite.
+\end{enumerate}

@@ -8,38 +8,84 @@
 
 Arvo is essentially an event handler which can coordinate and dispatch messages between vanes as well as emit \unix~events to the underlying (presumed Unix-compatible) host OS.  Arvo does not carry out several tasks specific to the machine hardware, such as memory allocation, system thread management, and hardware- or firmware-level operations.  These are left to the king and serf, or the daemon processes which together run Arvo.  Collectively, the system-level instrumentation of Arvo is described in Chapter~\ref{support}.
 
-\subsection{\zuse~and \lull}
+\subsection[\zuse~\&~\lull]{\zuse~and \lull}
 \labsec{zuse}
 
-\section{\ames, A Network}
+\zuse~and \lull~define common structures and library functions for Arvo.
+
+subject wrapped
+
+\section[\ames]{\ames, A Network}
 \labsec{ames}
 
-\section{\behn, A Timer}
+In a sense, \ames~is the operative definition of an urbit on the network.  That is, from outside of one's own urbit, the only specification that must be hewed to is that \ames~behaves a certain way in response to events.
+
+\ames~implements a system expecting—and delivering—guaranteed one-time delivery.  This derives from an observation by \citeauthor{Yarvin2016}~in the Whitepaper:  "bus v. commands whatever"
+
+UDP packet structure
+
+network events
+acks \& nacks
+
+
+\section[\behn]{\behn, A Timer}
 \labsec{behn}
 
-\section{\clay, A File System}
+\behn~is a simple vane that promises to emit events after—but never before—their timestamp.  This guarantee
+
+As the shortest vane, we commend \behn~to the student as an excellent subject for a first dive into the structure of a vane.
+
+\behn~maintains an event handler and a state.
+
+Any task may have one of the following states:
+
+\begin{lstlisting}
+%born  born:event-core
+%rest  (rest:event-core date=p.task)
+%drip  (drip:event-core move=p.task)
+%huck  (huck:event-core syn.task)
+%trim  trim:event-core
+%vega  vega:event-core
+%wait  (wait:event-core date=p.task)
+%wake  (wake:event-core error=~)
+\end{lstlisting}
+
+
+\section[\clay]{\clay, A File System}
 \labsec{clay}
 
-\subsection{\ford, A Build System}
+\subsection[\ford]{\ford, A Build System}
 \labsec{ford}
 
 \subsection{Scrying}
 \labsec{scry}
 
-\subsection{Marks and conversions}
+\subsection[Marks]{Marks and conversions}
 \labsec{marks2}
 
-\section{\dill, A Terminal driver}
+\section[\dill]{\dill, A Terminal driver}
 \labsec{dill}
 
-\section{\eyre~and \iris, Server and Client Vanes}
+\section[\eyre~\&~\iris]{\eyre~and \iris, Server and Client Vanes}
 \labsec{eyre}
 
-\section{\jael, Secretkeeper}
+\section[\jael]{\jael, Secretkeeper}
 \labsec{jael}
 
-\section{Azimuth, Address Space Management}
+\marginnote[2mm]{
+\jael is named after Jael, the wife of Heber, who kept mum and slew fleeing enemy general Sisera in Judges 4.
+}
+
+\jael~weighs in as one of the shorter vanes
+
+As of Arvo XXX K, the
+
+\begin{lstlisting}
+
+\end{lstlisting}
+
+\section[Azimuth]{Azimuth, Address Space Management}
 \labsec{azimuth2}
 
-\section{The Hoon Parser}
+\section[Hoon Parser]{The Hoon Parser}
 \labsec{hoonparse}

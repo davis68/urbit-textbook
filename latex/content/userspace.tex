@@ -3,28 +3,41 @@
 \labch{Userspace}
 
 
-\section{\gall}
+\section{\gall, A Runtime Agent}
 \labsec{gall}
 
-\subsection{Walkthrough:  Time (Clock)}
-\labsec{wtime}
+\marginnote[2mm]{
+Modern \gall~is sometimes called "static Gall," in contrast to an earlier specification "dynamic Gall."  Dynamic Gall did not specify the arms and permitted each agent its own structure; in practice, this proved to be difficult for programmers to maintain in a consistent manner, leading to code refactors and maintenance of defunct arms for backwards compatibility of agents.
+}
 
-\subsection{Walkthrough:  Chat CLI}
+
+\section{Deep Dives in \gall}
+
+Each of the following case studies is drawn from published code, most of it incorporated into the Urbit userspace.  In some cases, the original code uses conventions we have not yet introduced; we have simplified these to rely on the runes introduced in the main text through Chapter~\ref{advancedhoon}.
+
+\subsection{Chat CLI}
 \labsec{wchat}
 
-\subsection{Walkthrough:  Publish}
-\labsec{wpublish}
-
-\subsection{Walkthrough:  \graphstore}
-\labsec{wgraph}
-
-\subsection{Walkthrough:  Drum and Helm}
+\subsection{Drum and Helm}
 \labsec{wdrum}
 
-\subsection{Walkthrough:  Bitcoin API}
+\subsection{Bitcoin API}
 \labsec{wbtc}
 
-\subsection{Walkthrough:  Bots}
+\subsection{Bots}
 \labsec{wbots}
 
+\section{Threading with Spider}
+
 \section{Urbit API}
+
+\section{Deep Dives with Urbit API}
+
+\subsection{Time (Clock)}
+\labsec{wtime}
+
+\subsection{Publish}
+\labsec{wpublish}
+
+\subsection{\graphstore}
+\labsec{wgraph}

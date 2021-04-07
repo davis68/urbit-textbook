@@ -2,10 +2,10 @@
 	fontsize=10pt,
 	twoside=true,
 	open=any,
-	chapterprefix=true,
+	%chapterprefix=true,
 	%chapterentrydots=true,
 	numbers=noenddot,
-	draft=true,
+	%draft=true,
 	%overfullrule=true,
 ]{kaobook}
 
@@ -26,6 +26,26 @@
 \usepackage{styles/mdftheorems}
 %\usepackage{styles/plaintheorems}
 
+\usepackage{color}
+
+\usepackage{listings}
+\lstset{ % General setup for the package
+    language=Perl,
+    basicstyle=\small\sffamily,
+    numbers=left,
+    numberstyle=\tiny,
+    frame=tb,
+    tabsize=4,
+    columns=fixed,
+    showstringspaces=false,
+    showtabs=false,
+    keepspaces,
+    commentstyle=\color{red},
+    keywordstyle=\color{blue}
+}
+\lstdefinestyle{numbers}{numbers=left, stepnumber=1, numberstyle=\tiny, numbersep=10pt}
+\lstdefinestyle{nonumbers}{numbers=none}
+
 \graphicspath{{examples/documentation/images/}{images/}} % Paths in which to look for images
 
 \makeindex[columns=3, title=Alphabetical Index, intoc] % Make LaTeX produce the files required to compile the index
@@ -33,6 +53,8 @@
 \makeglossaries % Make LaTeX produce the files required to compile the glossary
 
 \makenomenclature % Make LaTeX produce the files required to compile the nomenclature
+
+\renewcommand{\eg}{\emph{e.g.,}}
 
 \newcommand{\ames}{\texttt{\%ames}}
 \newcommand{\behn}{\texttt{\%behn}}
@@ -49,10 +71,32 @@
 \newcommand{\ask}{\texttt{\%ask}}
 \newcommand{\graphstore}{\texttt{\%graph-store}}
 \newcommand{\mock}{\texttt{++mock}}
-\newcommand{\patp}{\texttt{@p}}
 \newcommand{\say}{\texttt{\%say}}
 \newcommand{\unix}{\texttt{\%unix}}
 
+\newcommand{\nullchr}{\texttt{\textasciitilde}}
+\newcommand{\patc}{\texttt{@c}}
+\newcommand{\patp}{\texttt{@p}}
+\newcommand{\patt}{\texttt{@t}}
+
+\newcommand{\irrtis}{\texttt{=(a b)}}
+
+\newcommand{\wut}{\texttt{?}}
+
+\newcommand{\pcenhep}{\texttt{\%-} "cenhep"}
+\newcommand{\pdotket}{\texttt{.\^} "dotket"}
+\newcommand{\pdottar}{\texttt{.*} "dottar"}
+\newcommand{\psigpam}{\texttt{~\&} "sigpam"}
+\newcommand{\pwuttis}{\texttt{?=} "wuttis"}
+\newcommand{\pzapzap}{\texttt{!!} "zapzap"}
+\newcommand{\pzapcom}{\texttt{!,} "zapcom"}
+
+\newcommand{\cenhep}{\texttt{\%-}}
+\newcommand{\dottar}{\texttt{.*}}
+\newcommand{\dottis}{\texttt{.=}}
+\newcommand{\sigpam}{\texttt{~\&}}
+\newcommand{\wuttis}{\texttt{?=}}
+\newcommand{\zapzap}{\texttt{!!}}
 
 % Reset sidenote counter at chapters
 %\counterwithin*{sidenote}{chapter}
@@ -65,13 +109,13 @@
 %	BOOK INFORMATION
 %----------------------------------------------------------------------------------------
 
-\titlehead{An Approach to Developing on Urbit}
-\subject{Urbit}
+\titlehead{}
+\subject{}
 
 \title{An Approach to Developing on Urbit}
-\subtitle{Customise this page according to your needs}
+\subtitle{}
 
-\author[N E Davis]{N E Davis \thanks{University of Illinois}}
+\author[N E Davis]{N E Davis} %\thanks{University of Illinois}}
 
 \date{\today}
 

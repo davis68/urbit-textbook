@@ -15,19 +15,11 @@ https://www.coindesk.com/how-to-build-an-internet-where-communities-thrive
 
 https://github.com/fmarotta/kaobook
 
-The goals of this section are to:
 
-- Execute Hoon code on one or more platforms
--
 
-Although not a compiled language, the binary-tree structure of Hoon can lead to fairly involved programs which are difficult to type and parse directly as (say) Python affords.  We instead encourage you to use one of three methods to run Hoon programs:
 
-1. The Dojo REPL, which offers some convenient shortcuts to modify the subject for subsequent commands.
-2. A tight loop of text editor and running fakezod.
-3. The online interactive sandbox at https://understanding-urbit.com
 
-For the first several exercises, we will suggest that you utilize one of these methods in particular so that you get a feel for how each works.  After you are more comfortable working with Hoon code on Urbit, we will refrain.
-
+https://github.com/Fang-/Urbit-By-Doing/blob/master/talkbot/4.md
 
 
 ```

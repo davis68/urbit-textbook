@@ -6,8 +6,365 @@
 \section{Primitive rules and the combinator calculus}
 \labsec{primitive}
 
+
+A combinator calculus is one way of writing primitive computational systems.  Combinatory logic allows one to eliminate the need for variables (unknown quantities like $x$) and thus deal exclusively (?) with pure functions.
+
+one combinator calculus
+
+
+
+To understand how Nock structures
+the \emph{subject}.  The subject is somewhat analogous to a namespace in other programming languages; it encompasses the computational context and the
+TODO too informal
+
+Nock is a crash-only language; that is, while it can emit events that are interpretable by the runtime as errors that can be handled, Nock itself fails when an invalid operation occurs.
+
+Nock is a standard of behavior, not necessarily an actual machine.  (It is an actual machine, of course, as a fallback, but the point is that any Nock virtual machine should implement the same behavior.)  We like to think of this analogous to solving a matrix.  Formally, given an equation
+
+$$
+A \vec{x} = \vec{b}
+$$
+
+the solution should be obtained as
+
+$$
+A^{-1} A \vec{x} = A^{-1} \vec{b} \rightarrow \vec{x} = A^{-1} \vec{b}
+$$
+
+This is correct, but often computationally inefficient to achieve.  Therefore we use this behavior as a standard definition for $\vec{x}$, but may actually obtain $\vec{x}$ using other more efficient methods.  Keep this in mind with Nock:  one has to know the specification but doesn't have to follow suit to implement it this way (thus, jet-accelerated Nock, Section~\ref{jetting}).
+
+\subsection{Nock 4K}
+
+The current version of Nock, Nock 4K, consists of six primitive rules as well as a handful of compound adjuncts.  The primitive rules are conventionally written in an explanatory pseudocode:
+
+\begin{lstlisting}[style=nonumbers]
+*[a 0 b]            /[b a]
+*[a 1 b]            b
+*[a 2 b c]          *[*[a b] *[a c]]
+*[a 3 b]            ?*[a b]
+*[a 4 b]            +*[a b]
+*[a 5 b c]          =[*[a b] *[a c]]
+\end{lstlisting}
+
+with the following operations:
+
+\begin{itemize}
+  \item  \texttt{*} is the \emph{evaluate} operator, which operates on a cell of \texttt{[subject formula]};
+  \item  \texttt{/} is the \emph{slot} operator or address \texttt{b} of [tree] \texttt{a};
+  \item  \texttt{?} is the \emph{cell} operator, testing whether its operand is a cell.
+  \item  \texttt{+} is the \emph{increment} operator.
+  \item  \texttt{=} is the \emph{equality} operator, checking for structural equality of the operands evaluated against the subject \texttt{a}.
+\end{itemize}
+
+It is also instructive to write these as mathematical rules:
+
+\begin{align}
+*_{0}[a](b) &:= a_{b} \\
+*_{1}[a](b) &:= b \\
+*_{2}[a](b,c) &:= *({*[a](b)}, {*[a](c)}) \\
+*_{3}[a](b) &:= \left\{\begin{matrix} 0 & \text{if cell} \\ 1 & \text{if atom} \end{matrix} \right. \\
+*_{4}[a](b) &:= {*(a,b) + 1} \\
+*_{5}[a](b,c) &:= ({*(a,b)} \stackrel{?}{=} {*(a,c)})
+\end{align}
+
+where $*$ is the generic evaluate operator.
+
+Each rule is referred to by its number; \eg~"Nock 3" refers to the cell test rule.
+
+Nock operates on unsigned integers, with zero $0$ expressing the null or empty value.  Frequently this is written as a tilde, $\textasciitilde$ or \nullchr.  This value plays a complex role similar to \texttt{NULL} and \texttt{'\textbackslash 0'} in C and other programming languages—although, critically, it is still numeric.
+
+%-------------------------------------------------------------------------------
+\subsubsection[Nock 0]{Nock 0, Addressing}
+\labsec{nock0}
+
+\begin{lstlisting}[style=nonumbers]
+*[a 0 b]            /[b a]
+\end{lstlisting}
+
+$$
+*_{0}(a,b) := a_{b}
+$$
+
+Nock Zero allows the retrieval of nouns against the Nock subject.  Data access requires knowing the address and how to retrieve the corresponding value at that address.  The slot operator expresses this relationship using \texttt{a} as the subject and the atom \texttt{b} as the one-indexed address.
+
+Every structure in Nock is a binary tree.  Elements are enumerated left-to-right starting at $1$ for the entire tree.
+
+
+One common convention is to store values at the leftward leaves of rightward branches; this produces a cascade of values at addresses $2^{n}-2$.
+
+\marginnote[2mm]{The address of a value in the Nock binary tree has no direct correspondence to its address in physical memory.  This latter is handled by the Nock runtime, avoiding the use of pointers in Nock code.}
+
+
+
+
+By hand,
+
+
+\marginnote[2mm]{
+\dottar~implements Nock Two, which is of course \emph{evaluate}.
+}
+
+In the Dojo, you may evaluate this statement using the \pdottar~rune:
+
+\begin{lstlisting}[style=nonumbers]
+.*(TODO)
+\end{lstlisting}
+
+You may also use \texttt{++mock}
+
+virtualization arm computes a formula.  `++mock` is Nock in Nock, however, so it is not very fast or efficient.
+
+`++mock` returns a tagged cell, which indicates the kinds of things that can go awry:
+
+- `%0` indicates success
+- `%1` indicates a blocked calculation
+- `%2` indicates a crash with stack trace
+
+`++mock` is used in Gall and Hoon to virtualize Nock calculations and intercept scrys.  It is also used in Aqua, the testnet infrastructure of virtual ships.
+
+%-------------------------------------------------------------------------------
+\subsubsection[Nock 1]{Nock 1, Constant Reduction}
+\labsec{nock1}
+
+\begin{lstlisting}[style=nonumbers]
+*[a 1 b]            b
+\end{lstlisting}
+
+$$
+*_{1}(a,b) := b
+$$
+
+Nock One simply returns the constant value of noun \texttt{b}.
+
+%-------------------------------------------------------------------------------
+\subsubsection[Nock 2]{Nock 2, Evaluate}
+\labsec{nock2}
+
+\begin{lstlisting}[style=nonumbers]
+*[a 2 b c]          *[*[a b] *[a c]]
+\end{lstlisting}
+
+$$
+*_{2}[a](b,c) := *({*[a](b)}, {*[a](c)})
+$$
+
+%-------------------------------------------------------------------------------
+\subsubsection[Nock 3]{Nock 3, Test Cell}
+\labsec{nock3}
+
+\marginnote[2mm]{
+  Although unusual, Nock is by no means the only language to adopt $0$ as the standard of truth.  The POSIX-compliant shells such as Bash adopt the convention that $0$ is \texttt{TRUE}.  So do Ruby and Scheme, although with caveats.
+}
+
+Nock Three
+zero as true (because there is one way to be right and many ways to be wrong).
+
+%-------------------------------------------------------------------------------
+\subsubsection[Nock 4]{Nock 4, Increment}
+\labsec{nock4}
+%-------------------------------------------------------------------------------
+\subsubsection[Nock 5]{Nock 5, Test Equivalence}
+\labsec{nock5}
+
+Let us examine some Nock samples by hand and see if we can reconstruct what they do.  We will then create some new short programs and apply them by hand via the Nock rules.
+
+
 \section{Compound rules}
 \labsec{compound}
 
+For the convenience of programmers working directly with Nock (largely the implementers of Hoon), a number of compound rules were defined that reduce to the primitive rules.  These implement slightly higher-order conventions such as a decision operator.
+
+\begin{lstlisting}[style=nonumbers]
+*[a 6 b c d]        *[a *[[c d] 0 *[[2 3] 0 *[a 4 4 b]]]]
+*[a 7 b c]          *[*[a b] c]
+*[a 8 b c]          *[[*[a b] a] c]
+*[a 9 b c]          *[*[a c] 2 [0 1] 0 b]
+*[a 10 [b c] d]     #[b *[a c] *[a d]]
+
+*[a 11 [b c] d]     *[[*[a c] *[a d]] 0 3]
+*[a 11 b c]         *[a c]
+\end{lstlisting}
+
+with the following operation:
+
+\begin{itemize}
+  \item  \texttt{\#} is the \emph{replace} operator, which edits a noun by replacing part of it with another piece.
+\end{itemize}
+
+As mathematical rules, these would be:
+
+\begin{align}
+*_{6}[a](b,c,d) &:= \left\{ \begin{matrix} *[a](c) & \textrm{if } b \\ *[a](d) & \textrm{otherwise} \end{matrix} \right. \\
+*_{7}[a](b,c) &:= *[*[a](b)](c) \\
+*_{8}[a](b,c) &:= *[*[*[a](b)](a)](c) \\  %TODO CHECKME
+*_{9}[a](b,c) &:= \left\{\begin{matrix} 0 & \text{if cell} \\ 1 & \text{if atom} \end{matrix} \right. \\
+*_{10}[a](b,c,d) &:= {*(a,b) + 1} \\
+*_{11}[a](b,c,d) &:= ({*(a,b)} \stackrel{?}{=} {*(a,c)})
+*_{11}[a](b,c) &:= ({*(a,b)} \stackrel{?}{=} {*(a,c)})
+\end{align}
+
+where $*$ is the generic evaluate operator.
+
+%-------------------------------------------------------------------------------
+\subsubsection[Nock 6]{Nock 6, Conditional Branch}
+\labsec{nock6}
+%-------------------------------------------------------------------------------
+\subsubsection[Nock 7]{Nock 7, Compose}
+\labsec{nock7}
+%-------------------------------------------------------------------------------
+\subsubsection[Nock 8]{Nock 8, Declare Variable}
+\labsec{nock8}
+%-------------------------------------------------------------------------------
+\subsubsection[Nock 9]{Nock 9, Produce Arm of Core}
+\labsec{nock9}
+%-------------------------------------------------------------------------------
+\subsubsection[Nock 10]{Nock 10, Replace}
+\labsec{nock10}
+%-------------------------------------------------------------------------------
+\subsubsection[Nock 11]{Nock 11, Hint to Interpreter}
+\labsec{nock11}
+
+\marginnote[2mm]{
+There's also a "fake Nock" Rule Twelve, \pdotket, which exposes a namespace into Arvo.  More details on this in Section~TODO.
+}
+
+With Nock under your belt, many of the quirks of Hoon become more legible.  For instance, since everything in Nock is a binary tree, so also everything in Hoon.  Nock also naturally gives rise to cores, which are a way of pairing operations and data in a cell.
+
+Although Nock is the runtime language of Urbit, developers write actual code using Hoon.  Given a Hoon expression, you can produce the equivalent Nock formula using \pzaptis.
+
+\begin{lstlisting}[style=nonumbers]
+> !=(+(1))
+[4 1 1]
+
+> !=((add 1 1))
+[8 [9 36 0 1.023] 9 2 10 [6 [7 [0 3] 1 1] 7 [0 3] 1 1] 0 2]
+\end{lstlisting}
+
+(Why do these differ so much?  \texttt{++add} is doing a bit more than just adding a raw $1$ to an unsigned integer.  We'll walk through this function later in Section~TODO.)
+
+implicit cons
+
+\subsection{Nock Examples}
+
+Infamously, Nock does not have a native decrement operator, only an increment (Rule Four).  Let us dissect a simple decrement operation in Nock:
+
+\begin{lstlisting}[style=nonumbers]
+> !=(|=(a=@ =+(b=0 |-(?:(=(a +(b)) b $(b +(b)))))))
+[ 8
+  [1 0]
+  [1 8 [1 0] 8 [1 6 [5 [0 30] 4 0 6] [0 6] 9 2 10 [6 4 0 6] 0 1] 9 2 0 1]
+  0
+  1
+]
+\end{lstlisting}
+
+which can be restated in one line as
+
+\begin{lstlisting}[style=nonumbers]
+[8 [[1 0] [1 8 [1 0] 8 [1 6 [5 [0 30] 4 0 6] [0 6] 9 2 10 [6 4 0 6] 0 1] 9 2 0 1] 0 1]]
+\end{lstlisting}
+
+or in many lines as
+
+\begin{lstlisting}[style=numbers]
+[8
+  [1 0]
+  [1 [8
+       [1 0]
+       [8
+         [1 [6
+              [5
+                [0 30]
+                [4 0 6]
+              ]
+              [0 6]
+              [9
+                2
+                [10
+                  [6 4 0 6]
+                  [0 1]
+                ]
+              ]
+            ]
+           [9 2 0 1]
+         ]
+       ]
+     ]
+  ]
+  [0 1]
+]
+\end{lstlisting}
+
+(It's advantageous to see both.)
+
+We can pattern-match a bit to figure out what the pieces of the Nock are supposed to be in higher-level Hoon.  From the Hoon, we can expect to see a few kinds of structures:  a trap, a test, a `sample`.  At a glance, we seem to see Rules One, Five, Six, Eight, and Nine being used.  Let's dig in.
+
+(Do you see all those `0 6` pieces?  Rule Zero means to grab a value from an address, and what's at address `6`?  The `sample`, we'll need that frequently.)
+
+The outermost rule is Rule Eight `*[a 8 b c]→*[[*[a b] a] c]` computed against an unknown subject (because this is a gate).  It has two children, the `b` `[0 1]` and the `c` which is much longer.  Rule Eight is a sugar formula which essentially says, run `*[a b]` and then make that the head of a new subject, then compute `c` against that new subject.  `[0 1]` grabs the first argument of the `sample` in the `payload`, which is represented in Hoon by `a=@`.
+
+The main formula is then the body of the gate.  It's another Rule Eight, this time to calculate the `b=0` line of the Hoon.
+
+There's a Rule One, or constant reduction to return the bare value resulting from the formula.
+
+Then one more Rule Eight (the last one!).  This one creates the default subject for the trap `$`; this is implicit in Hoon.
+
+Next, a Rule Six.  This is an `if`/`then`/`else` clause, so we expect a test and two branches.
+
+- The test is calculated with Rule Five, an equality test between the address `30` of the subject and the increment of the `sample`.  In Hoon, `=(a +(b))`.
+
+- The `[0 6]` returns the `sample` address.
+
+- The other branch is a Rule Nine reboot of the subject via Rule Ten.  Note the `[4 0 6]` increment of the `sample`.
+
+Finally, Rule Nine is invoked with `[9 2 0 1]`, which grabs a particular arm of the subject and executes it.
+
+Contrast the built-in `++dec` arm:
+
+```nock
+> !=((dec 1))
+[8 [9 2.398 0 1.023] 9 2 10 [6 7 [0 3] 1 1] 0 2]
+```
+
+for which the Hoon is:
+
+```hoon
+++  dec
+  |=  a=@
+  ?<  =(0 a)
+  =+  b=0
+  |-  ^-  @
+  ?:  =(a +(b))  b
+  $(b +(b))
+```
+
+Scan for pieces you recognize:  the beginning of a cell is frequently the rule being applied.
+
+In tall form,
+
+```hoon
+[8
+  [9
+    [2.398 [0 1.023]]
+  ]
+  [9 2
+       [10
+         [6 7 [0 3] 1 1]
+         [0 2]
+       ]
+  ]
+]
+```
+
+What's going on with the above `++dec` is that the Arvo-shaped subject is being addressed into at `2.398`, then some internal Rule Nine/Ten/Six/Seven processing happens.
+
 \section{Kelvin versioning}
 \labsec{kelvin}
+
+Each version of Nock
+
+telescopic versioning
+
+\section{Exercises}
+
+Compose a Nock interpreter in a language of your choice.  (These aren't full Arvo interpreters, of course, since you don't have the Hoon, \zuse, and vane subject present.)

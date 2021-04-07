@@ -6,17 +6,131 @@
 \section{Reading the Runes}
 \labsec{reading}
 
+The goals of this section are for you to be able to:
+
+\begin{enumerate}
+  \item  Identify Hoon runes and children in both inline and long-form syntax.
+  \item  Trace a short Hoon expression to its final result.
+  \item  Produce output as a side effect using the \sigpam~rune.
+\end{enumerate}
+
+\marginnote[2mm]{
+Although not a compiled language, the binary-tree structure of Hoon can lead to fairly involved programs which are difficult to type and parse as directly as some other languages afford.  We instead encourage you to use one of three methods to run Hoon programs:
+
+\begin{enumerate}
+  \item  The Dojo REPL, which offers some convenient shortcuts to modify the subject for subsequent commands.
+  \item  A tight loop of text editor and running fakezod.
+  \item  The online interactive sandbox at \url{https://approaching-urbit.com}
+\end{enumerate}
+}
+
+For the first several exercises, we will suggest that you utilize one of these methods in particular so that you get a feel for how each works.  After you are more comfortable working with Hoon code on Urbit, we will refrain.
+
+
+
+Each rune accepts at least one child, except for \pzapzap.
+
 \section{Irregular Forms}
 \labsec{irregular}
+
+Many runes in common currency are not written in their regular form (tall or wide), but rather using syntactic sugar as irregular.
+
+For instance, \pcenhep~is most frequently written using parentheses \texttt{()} which permits a Lisp-like calling syntax:
+
+\begin{lstlisting}
+(add 1 2)
+\end{lstlisting}
+
+is equivalent to
+
+\begin{lstlisting}
+%-  add  [1 2]
+\end{lstlisting}
+
+is also equivalent to
+
+\begin{lstlisting}
+%-(add [1 2])
+\end{lstlisting}
+
+
+
+Hoon parses to an abstract syntax tree (AST), which includes cleaning up all of the sugar syntax and non-primitive runes.  To see the AST of any given Hoon expression, use \pzapcom.
+
+\begin{lstlisting}[style=nonumbers]
+> !,(*hoon TODO)
+TODO
+\end{lstlisting}
 
 \section{Nouns}
 \labsec{nouns}
 
+All values in Urbit are nouns, meaning either atoms or cells.  An atom is an unsigned integer, which frequently has an \emph{aura} associated with it.  A cell is a pair of nouns.
+
+
 \section{Hoon as Nock Macro}
 \labsec{macro}
 
+The point of employing Hoon is, of course, that Hoon compiles to Nock.  Rather than even say \emph{compile}, however, we should really just say Hoon is a \emph{macro} of Nock.  Each Hoon rune, data structure, and effect corresponds to a well-defined Nock primitive form.  We may say that Hoon is to Nock as C is to assembler, except that the Hoon-to-Nock transformation is completely specified and portable.  Hoon is ultimately defined in terms of Nock; many Hoon runes are defined in terms of other more fundamental Hoon runes, but all runes parse unambiguously to Nock expressions.
+
+
+\marginnote[2mm]{Binary trees are explained in more detail in Section~\ref{nock0}.}
+
+Hoon values are addressed as elements in a binary tree.
+
+
+\marginnote[2mm]{
+Be careful to not confuse \irrtis, which evaluates to \dottis, with the various \wut~runes like \wuttis.
+}
+
 \section{Key Data Structures}
 \labsec{keydata}
+
+\subsection{Lists}
+\labsec{lists}
+
+\subsection{Text}
+\labsec{text}
+
+\marginnote[2mm]{Both cords and tapes are casually referred to as strings.}
+
+Hoon recognizes two basic text types:  the \emph{cord} or \patt~and the \emph{tape}.  Cords are single atoms containing the text as UTF-8 bytes interpreted as a single stacked number.  Tapes are lists of individual one-element cords.
+
+\marginnote[2mm]{Lists are null-terminated, and thus so are tapes.}
+
+Cords are useful as a compact primary storage and data transfer format, but frequently parsing and processing involves converting the text into tape format.  There are more utilities for handling tapes, as they are already broken up in a legible manner.
+
+\begin{lstlisting}
+++  trip
+  |=  a/@  ^-  tape
+  ?:  =(0 (met 3 a))  ~
+  [^-(@ta (end 3 1 a)) $(a (rsh 3 1 a))]
+\end{lstlisting}
+
+
+For instance, \texttt{trip} converts a cord to a tape; \texttt{crip} does the opposite.
+
+%\marginnote[2mm]{
+%\begin{lstlisting}
+%++  trip
+%  |=  a/@  ^-  tape
+%  ?:  =(0 (met 3 a))  ~
+%  [^-(@ta (end 3 1 a)) $(a (rsh 3 1 a))]
+%\end{lstlisting}
+%\texttt{++met}, \texttt{++end}, and \texttt{++rsh} are bitwise manipulation gates.
+%}
+
+\marginnote[2mm]{
+%\begin{lstlisting}
+\texttt{++  crip  |=(a=tape `@t`(rap 3 a))}
+%\end{lstlisting}
+
+\texttt{++rap} assembles the list interpreted as cords with block size of $2^3$ (in this case).
+}
+
+
+All text in Urbit is UTF-8 (\emph{a fortiori} ASCII).  The \patc~UTF-32 aura is only used by \dill and Hood (the Dojo terminal agent).
+
 
 \subsection{Cores, Gates, Doors}
 \labsec{doors}
