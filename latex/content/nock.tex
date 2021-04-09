@@ -13,9 +13,8 @@ one combinator calculus
 
 
 
-To understand how Nock structures
-the \emph{subject}.  The subject is somewhat analogous to a namespace in other programming languages; it encompasses the computational context and the
-TODO too informal
+To understand how Nock expressions produce nouns as pure stateless functions, we need to introduce the \emph{subject}.  The subject is somewhat analogous to a namespace in other programming languages; it encompasses the computational context and the arguments.  Another way to put it is that the subject \emph{is} the argument to the Nock formula:  not all of the subject may be used in evaluating the formula, but it is all present.
+
 
 Nock is a crash-only language; that is, while it can emit events that are interpretable by the runtime as errors that can be handled, Nock itself fails when an invalid operation occurs.
 
@@ -172,7 +171,7 @@ Let us examine some Nock samples by hand and see if we can reconstruct what they
 \section{Compound rules}
 \labsec{compound}
 
-For the convenience of programmers working directly with Nock (largely the implementers of Hoon), a number of compound rules were defined that reduce to the primitive rules.  These implement slightly higher-order conventions such as a decision operator.
+For the convenience of programmers working directly with Nock (largely the implementers of Hoon), a number of compound rules were defined that reduce to the primitive rules.  These implement slightly higher-order conventions such as a decision operator.  Each of these provide syntactic sugar that render Nock manipulations slightly less cumbersome.
 
 \begin{lstlisting}[style=nonumbers]
 *[a 6 b c d]        *[a *[[c d] 0 *[[2 3] 0 *[a 4 4 b]]]]
@@ -225,12 +224,14 @@ where $*$ is the generic evaluate operator.
 \labsec{nock11}
 
 \marginnote[2mm]{
-There's also a "fake Nock" Rule Twelve, \pdotket, which exposes a namespace into Arvo.  More details on this in Section~TODO.
+There's also a "fake Nock" Rule Twelve, \pdotket, which exposes a namespace into Arvo.  More details on this follow in Section~\ref{TODO}.
 }
 
 With Nock under your belt, many of the quirks of Hoon become more legible.  For instance, since everything in Nock is a binary tree, so also everything in Hoon.  Nock also naturally gives rise to cores, which are a way of pairing operations and data in a cell.
 
 Although Nock is the runtime language of Urbit, developers write actual code using Hoon.  Given a Hoon expression, you can produce the equivalent Nock formula using \pzaptis.
+
+After this chapter, you may never write Nock code again.  That's fine!  We need to understand Nock to understand Hoon, but will not need to compose in Nock directly to do any work in Urbit, even low-level work.  (There is no \texttt{inline}~equivalent.)
 
 \begin{lstlisting}[style=nonumbers]
 > !=(+(1))
@@ -242,9 +243,12 @@ Although Nock is the runtime language of Urbit, developers write actual code usi
 
 (Why do these differ so much?  \texttt{++add} is doing a bit more than just adding a raw $1$ to an unsigned integer.  We'll walk through this function later in Section~TODO.)
 
-implicit cons
+
+One last piece is necessary for us to effectively interpret Nock code:  the implicit cons.  Cons is a Lisp function to construct a pair, or what in Nock terms we call a cell.  Many times we find Nock expressions in which the operand is a cell, and so TODO
 
 \subsection{Nock Examples}
+
+We will work through several Nock programs by hand.  Since each Nock program is a pure function and emits no side effects, when we have applied all of the rules to achieve a final value, we are done calculating the expression.
 
 Infamously, Nock does not have a native decrement operator, only an increment (Rule Four).  Let us dissect a simple decrement operation in Nock:
 
@@ -307,7 +311,7 @@ The main formula is then the body of the gate.  It's another Rule Eight, this ti
 
 There's a Rule One, or constant reduction to return the bare value resulting from the formula.
 
-Then one more Rule Eight (the last one!).  This one creates the default subject for the trap `$`; this is implicit in Hoon.
+Then one more Rule Eight (the last one!).  This one creates the default subject for the trap \texttt{\$}; this is implicit in Hoon.
 
 Next, a Rule Six.  This is an `if`/`then`/`else` clause, so we expect a test and two branches.
 
@@ -356,7 +360,7 @@ In tall form,
 ]
 ```
 
-What's going on with the above `++dec` is that the Arvo-shaped subject is being addressed into at `2.398`, then some internal Rule Nine/Ten/Six/Seven processing happens.
+What's going on with the above \texttt{++dec} is that the Arvo-shaped subject is being addressed into at `2.398`, then some internal Rule Nine/Ten/Six/Seven processing happens.
 
 \section{Kelvin versioning}
 \labsec{kelvin}
