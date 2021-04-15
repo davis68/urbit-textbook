@@ -57,14 +57,14 @@ with the following operations:
 
 It is also instructive to write these as mathematical rules:
 
-\begin{align}
-*_{0}[a](b) &:= a_{b} \\
-*_{1}[a](b) &:= b \\
-*_{2}[a](b,c) &:= *({*[a](b)}, {*[a](c)}) \\
-*_{3}[a](b) &:= \left\{\begin{matrix} 0 & \text{if cell} \\ 1 & \text{if atom} \end{matrix} \right. \\
-*_{4}[a](b) &:= {*(a,b) + 1} \\
-*_{5}[a](b,c) &:= ({*(a,b)} \stackrel{?}{=} {*(a,c)})
-\end{align}
+\begin{alignat*}{3}
+*_{0}&[a](b) &&:= a_{b} \\
+*_{1}&[a](b) &&:= b \\
+*_{2}&[a](b,c) &&:= *({*[a](b)}, {*[a](c)}) \\
+*_{3}&[a](b) &&:= \left\{\begin{matrix} 0 & \text{if cell} \\ 1 & \text{if atom} \end{matrix} \right. \\
+*_{4}&[a](b) &&:= {*(a,b) + 1} \\
+*_{5}&[a](b,c) &&:= ({*(a,b)} \stackrel{?}{=} {*(a,c)})
+\end{alignat*}
 
 where $*$ is the generic evaluate operator.
 
@@ -192,15 +192,15 @@ with the following operation:
 
 As mathematical rules, these would be:
 
-\begin{align}
-*_{6}[a](b,c,d) &:= \left\{ \begin{matrix} *[a](c) & \textrm{if } b \\ *[a](d) & \textrm{otherwise} \end{matrix} \right. \\
-*_{7}[a](b,c) &:= *[*[a](b)](c) \\
-*_{8}[a](b,c) &:= *[*[*[a](b)](a)](c) \\  %TODO CHECKME
-*_{9}[a](b,c) &:= \left\{\begin{matrix} 0 & \text{if cell} \\ 1 & \text{if atom} \end{matrix} \right. \\
-*_{10}[a](b,c,d) &:= {*(a,b) + 1} \\
-*_{11}[a](b,c,d) &:= ({*(a,b)} \stackrel{?}{=} {*(a,c)})
-*_{11}[a](b,c) &:= ({*(a,b)} \stackrel{?}{=} {*(a,c)})
-\end{align}
+\begin{alignat*}{3}
+*_{6}&[a](b,c,d) &&:= \left\{ \begin{matrix} *[a](c) & \textrm{if } b \\ *[a](d) & \textrm{otherwise} \end{matrix} \right. \\
+*_{7}&[a](b,c) &&:= *[*[a](b)](c) \\
+*_{8}&[a](b,c) &&:= *[*[*[a](b)](a)](c) \\  %TODO CHECKME
+*_{9}&[a](b,c) &&:= \left\{\begin{matrix} 0 & \text{if cell} \\ 1 & \text{if atom} \end{matrix} \right. \\
+*_{10}&[a](b,c,d) &&:= {*(a,b) + 1} \\
+*_{11}&[a](b,c,d) &&:= ({*(a,b)} \stackrel{?}{=} {*(a,c)})
+*_{11}&[a](b,c) &&:= ({*(a,b)} \stackrel{?}{=} {*(a,c)})
+\end{alignat}
 
 where $*$ is the generic evaluate operator.
 

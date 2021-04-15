@@ -87,3 +87,29 @@ Some of the supporting material, like the Urbit API and Aqua, may be useful to i
     4. Hoon Comparison with Other Languages (Lisp, Haskell, OCaml)
     5. Zuse/Lull versions
     6. Textbook Changelog
+
+---
+
+what do yall do for debugging hoon? the only thing i have in my toolbox is ~& and i figure there must be other tools
+~master-morzod
+5:16 PM
+there's also ~| and ~!
+
+poproxoɹdod
+5:57 PM
+i should have been more specific - i meant ~& as shorthand for "debugging printfs". are there any debugging tools beyond that? i feel like i would have heard of a hoon-specific one by now if there were one, but like can you e.g. use gnu debugger for anything other than like getting stack traces from core dumps (that being literally the only thing ive ever used gdb for - idk how general of a tool it is)
+
+𐐝𐐮𐐾𐐮𐑊𐐰𐑌𐐻𐐨 · Sigilante
+6:03 PM
+isn't there a profiler?
+~master-morzod
+6:12 PM
+there's two
+and you can ctrl-c anytime to get a stack trace
+there's no interactive debugger
+ctrl-c kills the event, of course. it'd be nice to have a signal that prints a trace and keeps running
+-j run a tracing profiler, writes json output to .urb/put/trace/
+those files can be visualized in chrome's about:tracing
+-P runs a sampling profiler, and prints the output when you exit
+the latter is only useful if your binary was built with U3_CPU_DEBUG
+CPU_DEBUG=1 ./configure or whatever

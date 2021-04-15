@@ -15,7 +15,7 @@ https://www.coindesk.com/how-to-build-an-internet-where-communities-thrive
 
 https://github.com/fmarotta/kaobook
 
-
+https://third-bit.com/2021/01/27/essence-of-teaching/
 
 
 

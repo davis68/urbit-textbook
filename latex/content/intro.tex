@@ -3,8 +3,69 @@
 \labch{intro}
 
 
-\section{Why Urbit Matters}
-\labsec{matters}
+\section{What We Talk About When We Talk About Urbit}
+\labsec{urbittalk}
+
+Urbit is a functional-as-in-language, network-first, compatibility-breaking
+operation function (or hosted operating system).  But what does any of this mean?  As we explore Urbit software development throughout this book, keep in mind that every piece of Urbit aims to solve a ambitious battery of critical problems with the existing legacy World Wide Web.
+
+The Urbit project intends to cut the Gordian knot of user autonomy and privacy.  To this end, the Urbit developers have articulated an approach prioritizing \emph{a legible future-proof program stack}, \emph{data security}, and \emph{cryptographic ownership}.  The ambitious scope of this project—and the evolution of the goals over the decade of the 2010s—has led many to have difficulty grasping what exactly Urbit is all about.
+
+\subsection{A Series of Unfortunate Events}
+
+\paragraph{Centralization}.  For most contemporary corporations, whether enterprise-scale or startup, the driving factor for growth and revenue became the number of customers (users) they were able to attract to their platform or app.  Services like \texttt{del.icio.us} (founded 2003) and Flickr (founded 2004) betokened a wave of massive centralization, cemented by Facebook, Google, and Apple in the late aughts.  TODO XXX number of users on each in 2010
+
+As users jostled onto burgeoning social media platforms, their patterns of behavior changed, and more and more social interactions of significance took place within "walled gardens," service platforms that interfaced only poorly with the exterior web.  Vendor lock-in and the nonportability of user data between platforms meant that consumer choice became a byword.  It became (and remains) difficult for any user to find out just what a corporation or even an app knows about them, particularly given the rise of surveilling cookies and data trackers.
+
+The shift to mobile computing starting with the 2007 launch of Apple's iPhone drove a rise in cloud computing and cloud storage.  To many users, the data storage and access permissions on their data became largely illegible.  Sometimes this led to poor assumptions, such as that the custodial corporation would never allow a leak, or that the data would always be backed up safely.  As projects failed (like \texttt{del.icio.us}) or unilaterally changed policies (Tumblr), users permanently lost data.  Given the effort involved in curating tags, bookmarks, images, contacts, and research data, these outcomes frequently amounted in the loss of years of human effort.
+
+\paragraph{Data leaks}.  During the 2000s and 2010s, data leaks became so common as to hardly merit notice.  As users flocked to corporate platforms for social media, publishing, photography, dating, and every other aspect of digital life, insufficient attention was given by corporations to both the practical security of user data and the potential fallout of leaks.  Data breaches grew in number ever year, and affected corporations of every size in every industry.
+
+\begin{itemize}
+  \item  2013:  Evernote, 50 million records
+  \item  2014:  Ebay, 145 million records
+  \item  2015:  Ashley Madison, 32 million records
+  \item  2016:  Yahoo!, 1 billion records
+  \item  2017:  Experian, 147 million records
+  \item  2019:  Facebook, 850 million records
+  \item  2019:  CapitalOne, 106 million records
+\end{itemize}
+
+("Records" does not equal "people" or even "accounts," of course, rendering these numbers mutually incommensurable.  Regardless, the scale staggers the mind.)  Sometimes these breaches were the result of clever social engineering; more frequently, someone forgot to properly salt password hashes or just stored or transmitted them in unencrypted plaintext.  Occasionally, the data were even just left available at a deprecated or forgotten API endpoint.  Identity security is challenging to get right, and those who had custody of user data were frequently subject to moral hazard.
+%Data are from [Juliana de Groot, "The History of Data Breaches"](https://digitalguardian.com/blog/history-data-breaches) and [Wikipedia, "List of Data Breaches"](https://en.wikipedia.org/wiki/List_of_data_breaches).
+
+\paragraph{The looming software stack}.  A combination of practical manufacturing limits ending Moore's law and a complexifying operating system and software stack led to a long-term stagnation in the perceived speed and fluidity of user experience with computers.  For the most part, even as multicore CPUs become more widespread, software bloat grows more acute with each new operating system version.  For many enterprise developers, there have been insufficient incentives to simplify software rather than to continue making it more complex.  Minimalist software by and large remained the demesne of hackers and code golf enthusiasts.
+
+For instance,
+TODO MS Word menu structure
+
+Even websites with visually minimalist aesthetics often presented
+\citeauthor{Ceglowski2015}
+a
+- Optional Reading: [Maciej Cegłowski, "The Website Obesity Crisis"](https://idlewords.com/talks/website_obesity.htm)
+- Optional Reading: [Maciej Cegłowski, "Build a Better Monster: Morality, Machine Learning, and Mass Surveillance"](https://idlewords.com/talks/build_a_better_monster.htm)
+- Optional Reading: [Mark Tarver, "The Cathedral and the Bizarre"](http://marktarver.com/thecathedralandthebizarre.html)
+
+
+\paragraph{Security breaches}.
+
+
+
+heartbleed
+
+\paragraph{Morbidity in open-source software projects}.
+
+FOSS lanternfish
+
+
+\paragraph{Spam}.
+
+We have a cascading stack of legacy software and strange interdependencies.  We have an anemic FOSS program in general.  Taken together, actually getting the functionality you want as a user often requires a proprietary platform anyway.
+
+
+For the Urbit developers, "security" means both guaranteed cryptographic ownership and access, and \emph{security against future utilization} or future-proofing.
+
+Data ownership
 
 Urbit is a  network-first,
 compatibility-breaking
@@ -22,11 +83,27 @@ Let us posit a social operating system, or SOS;  a protocol for network-oriented
 \end{itemize}
 
 
+
+The Urbit project does not completely solve all of these problems—for instance, pwned hardware—but it offers a reasonable set of solutions for many of the social and software issues raised by contemporary corporate practice on the World Wide Web.
+
+
 \section{Azimuth, the Urbit Address Space}
 \labsec{azimuth}
 
 
-Zooko's trilemma
+
+In \citeyear{Zooko2001}, digital cash pioneer Zooko Wilcox-O'Hearn postulated that a namespace cannot simultaneously possess three qualities:
+
+\begin{enumerate}
+	\item  distributedness ("in the sense that there is no central authority which can control the namespace, which is the same as saying that the namespace spans trust boundaries"),
+	\item  security ("in the sense that name lookups cannot be forced to return incorrect values by an attacker, where the definition of "incorrect" is determined by some universal policy of name ownership"), and
+	\item  human legibility (or interpretable by human users).
+
+This trilemma, dubbed Zooko's triangle, laid down a challenge to cryptographic researchers, who spent some effort to empirically refute the postulate.
+
+In the case of Urbit,
+
+% https://web.archive.org/web/20011020191610/http://zooko.com/distnames.html
 
 
 Many modern printed textbooks have adopted a layout with prominent
