@@ -20,12 +20,14 @@ Although not a compiled language, the binary-tree structure of Hoon can lead to 
 \begin{enumerate}
   \item  The Dojo REPL, which offers some convenient shortcuts to modify the subject for subsequent commands.
   \item  A tight loop of text editor and running fakezod.
-  \item  The online interactive sandbox at \url{https://approaching-urbit.com}
+  \item  The online interactive sandbox at \url{https://approaching-urbit.com}{\texttt{https://approaching-urbit.com}}
 \end{enumerate}
 }
 
 For the first several exercises, we will suggest that you utilize one of these methods in particular so that you get a feel for how each works.  After you are more comfortable working with Hoon code on Urbit, we will refrain.
 
+
+The terminology used is often unfamiliar.  Sometimes this means that you are dealing with a truly new concept (and overloading an older word like "subroutine" or "function" would obfuscate), and sometimes you are dealing with an internal aspect that doesn't really map well to other systems.  The strangeness can be frustrating.  The strangeness can make concepts fresh again.  You'll encounter both as you move ahead.
 
 
 Each rune accepts at least one child, except for \pzapzap.
@@ -65,8 +67,115 @@ TODO
 \section{Nouns}
 \labsec{nouns}
 
-All values in Urbit are nouns, meaning either atoms or cells.  An atom is an unsigned integer, which frequently has an \emph{aura} associated with it.  A cell is a pair of nouns.
+All values in Urbit are nouns, meaning either atoms or cells.  An atom is an unsigned integer.  A cell is a pair of nouns.  Since all values are ultimately integers, we need a way to tell different "kinds" (or applications) of integers apart.  Enter auras.
 
+\subsection{Atoms}
+\labsec{atoms}
+
+\marginnote[2mm]{
+For what it may be worth, having all integers isn't that different from any other digital machine, built on binary numbers.  These all derive ultimately from \href{https://en.wikipedia.org/wiki/Gödel_numbering}{Gödel numbering} as introduced by Gödel in the proof of his famous incompleteness theorems.  Urbit makes this about as apparent as C does (via \texttt{union}, for instance), but it's first-order accessible via the Dojo REPL.
+}
+Atoms have auras which are tagged types.  In other words, an aura is a bit of metadata Hoon attaches to a value which tells Urbit how you intend to use a number.  (Of course, ultimately an aura is itself an integer as well!)  The default aura for a value is \patud, unsigned decimal, but of course there are many more.  Aura operations are extremely convenient for converting between representations.  They are also used to enforce type constraints on atoms in expressions and gates.
+
+For instance, to a machine there is no fundamental difference between binary $\ub 1101\,1001$, decimal $217$, and hexadecimal $\ux d9$.  A human coder recognizes them as different encoding schemes and associates tacit information with each:  an assembler instruction, an integer value, a memory address.  Hoon offers two ways of designating values with auras:  either directly by the formatting of the number (such as \texttt{0b1101.1001}) or using the irregular syntax \texttt{`@`}:
+
+\begin{lstlisting}
+0b1101.1001
+`@ud`0b1101.1001  :: yields 217
+`@ux`0b1101.1001  :: yields 0xd9
+\end{lstlisting}
+
+\begin{example}
+Try the following auras.  See if you can figure out how each one is behaving.
+
+\begin{lstlisting}
+`@ud`0x1001.1111
+`@ub`0x1001.1111
+`@ux`0x1001.1111
+`@p`0x1001.1111
+
+`@ud`.1
+`@ux`.1
+`@ub`.1
+`@sb`.1
+
+`@p`0b1111.0000.1111.0000
+
+`@ta`'hello'
+`@ud`'hello'
+`@ux`'hello'
+`@uc`'hello'
+`@sb`'hello'
+`@rs`'hello'
+\end{lstlisting}
+\end{example}
+
+\marginnote[2mm]{For a full table of auras, see Appendix~\ref{app:auras}.}
+The atom/aura system represents all simple data types in Hoon:  dates, floating-point numbers, text strings, Bitcoin addresses, and so forth.  Each value is represented in least-significant byte (LSB) order; for instance, a text string may be deconstructed as follows:
+
+\begin{tabular}{l}
+  \texttt{'Urbit'} \\
+  \texttt{0b111.0100.0110.1001.0110.0010.0111.0010.0101.0101} \\
+  \texttt{0b111.0100} \texttt{0b110.1001} \texttt{0b110.0010} \\ \texttt{0b111.0010} \texttt{0b101.0101} \\
+  $116\;105\;98\;114\;85$ (ASCII characters) \\
+  t i b r U
+\end{tabular}
+
+Note in the above that leading zeroes are always stripped.  Since each atom is an integer, there is no way to distinguish $0$ from $00$ from $000$ etc.
+
+In this vein, it's worth mentioning that Dojo automatically parses any typed input and disallows invalid representations.  This can lead to confusion until you are accustomed to the type signatures; for instance, try to type \texttt{0b0001} into Dojo.
+
+\paragraph{Operators}.  Hoon has no primitive operators.  Instead, aura-specific functions or \emph{gates} are used to evaluate one or more atoms to produce basic arithmetic results.  Gate names are conventionally prefixed with \texttt{++} which designates them as \emph{arms} of a \emph{core}.  (More on this terminology in Section~\ref{TODO}.)  Some gates operate on any input atom auras, while others enforce strict requirements on the types they will accept.  Gates are commonly invoked using a Lisp-like syntax and a reverse-Polish notation (RPN), with the operator first followed by the first and second (and following) operands.
+
+\begin{tabular}{lll}
+  Operation & Function & Example \\ \hline \\
+  Addition & \texttt{++add} & \texttt{(add 1 2)} $\rightarrow$ \texttt{3} \\
+  Subtraction & \texttt{++sub} & \texttt{(sub 4 3)} $\rightarrow$ \texttt{1} \\
+  Multiplication & \texttt{++mul} & \texttt{(mul 5 6)} $\rightarrow$ \texttt{30} \\
+  Division & \texttt{++div} & \texttt{(div 8 2)} $\rightarrow$ \texttt{4} \\
+  Modulus/Remainder & \texttt{++mod} & \texttt{(mod 12 7)} $\rightarrow$ \texttt{5} \\
+\end{tabular}
+
+Following Nock's lead, Hoon uses loobeans ($0$ = $\textrm{true}$) rather than booleans for logical operations.  Loobeans are written \yes~for $\textrm{true}$, $0$, and \no~for $\textrm{false}$, $1$.
+
+\begin{tabular}{lll}
+  Operation & Function & Example \\ \hline \\
+  Greater than & \texttt{++gth} & \texttt{(gth 5 6)} $\rightarrow$ \no \\
+  Greater than or equal to & \texttt{++gte} & \texttt{(gte 5 6)} $\rightarrow$ \no \\
+  Less than & \texttt{++lth} & \texttt{(lth 5 6)} $\rightarrow$ \yes \\
+  Less than or equal to & \texttt{++lte} & \texttt{(lte 5 6)} $\rightarrow$ \yes \\
+  Equals & \texttt{=} & \texttt{=(5 5)} $\rightarrow$ \yes \\
+  Logical \texttt{AND}, $^TODO$ & \texttt{\&} & \texttt{\&(\%.y \%.n)} $\rightarrow$ \no \\
+  Logical \texttt{OR}, $v$ & \texttt{|} & \texttt{|(\%.y \%.n)} $\rightarrow$ \yes \\
+\end{tabular}
+
+Operators can be grouped for precedence; \eg,
+
+$$
+TODO
+$$
+
+\begin{lstlisting}
+\&()
+\end{lstlisting}
+
+The Hoon standard library, largely in \zuse, further defines bitwise operations, arithmetic for integers and floating-point values (half-width, single-precision, double-precision, and quadruple-precision), TODO
+These are introduced incidentally as necessary and listed in more detail in Appendix~\ref{stdlib}.
+
+\subsection{Cells}
+\labsec{cells}
+
+
+
+binary tree format
+flattened representation/convention
+
+\marginnote[2mm]{Binary trees are explained in more detail in Section~\ref{nock0}.}
+
+Hoon values are addressed as elements in a binary tree.
+
+
+Finally, the most general mold is \texttt{*} which simply matches any noun—and thus anything in Hoon at all.
 
 \section{Hoon as Nock Macro}
 \labsec{macro}
@@ -74,9 +183,8 @@ All values in Urbit are nouns, meaning either atoms or cells.  An atom is an uns
 The point of employing Hoon is, of course, that Hoon compiles to Nock.  Rather than even say \emph{compile}, however, we should really just say Hoon is a \emph{macro} of Nock.  Each Hoon rune, data structure, and effect corresponds to a well-defined Nock primitive form.  We may say that Hoon is to Nock as C is to assembler, except that the Hoon-to-Nock transformation is completely specified and portable.  Hoon is ultimately defined in terms of Nock; many Hoon runes are defined in terms of other more fundamental Hoon runes, but all runes parse unambiguously to Nock expressions.
 
 
-\marginnote[2mm]{Binary trees are explained in more detail in Section~\ref{nock0}.}
+We call Hoon's data type specifications \emph{molds}.  Molds are more general than atoms and cells, but these form particular cases.  Hoon uses molds as a way of matching Nock tree structures (including Hoon metadata tags such as auras).
 
-Hoon values are addressed as elements in a binary tree.
 
 
 \marginnote[2mm]{

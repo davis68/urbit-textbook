@@ -61,13 +61,12 @@ It is also instructive to write these as mathematical rules:
 *_{0}&[a](b) &&:= a_{b} \\
 *_{1}&[a](b) &&:= b \\
 *_{2}&[a](b,c) &&:= *({*[a](b)}, {*[a](c)}) \\
-*_{3}&[a](b) &&:= \left\{\begin{matrix} 0 & \text{if cell} \\ 1 & \text{if atom} \end{matrix} \right. \\
+*_{3}&[a](b) &&:= \left\{\begin{matrix} \textrm{true} & \text{if cell} \\ \textrm{false} & \text{if atom} \end{matrix} \right. \\
 *_{4}&[a](b) &&:= {*(a,b) + 1} \\
 *_{5}&[a](b,c) &&:= ({*(a,b)} \stackrel{?}{=} {*(a,c)})
 \end{alignat*}
 
-where $*$ is the generic evaluate operator.
-
+where $*$ is the generic evaluate operator.  Furthermore, \textrm{true} is the integer $0$ while \textrm{false} is the integer $1$.
 Each rule is referred to by its number; \eg~"Nock 3" refers to the cell test rule.
 
 Nock operates on unsigned integers, with zero $0$ expressing the null or empty value.  Frequently this is written as a tilde, $\textasciitilde$ or \nullchr.  This value plays a complex role similar to \texttt{NULL} and \texttt{'\textbackslash 0'} in C and other programming languages—although, critically, it is still numeric.
@@ -157,6 +156,7 @@ $$
 
 Nock Three
 zero as true (because there is one way to be right and many ways to be wrong).
+loobean
 
 %-------------------------------------------------------------------------------
 \subsubsection[Nock 4]{Nock 4, Increment}
@@ -198,9 +198,9 @@ As mathematical rules, these would be:
 *_{8}&[a](b,c) &&:= *[*[*[a](b)](a)](c) \\  %TODO CHECKME
 *_{9}&[a](b,c) &&:= \left\{\begin{matrix} 0 & \text{if cell} \\ 1 & \text{if atom} \end{matrix} \right. \\
 *_{10}&[a](b,c,d) &&:= {*(a,b) + 1} \\
-*_{11}&[a](b,c,d) &&:= ({*(a,b)} \stackrel{?}{=} {*(a,c)})
+*_{11}&[a](b,c,d) &&:= ({*(a,b)} \stackrel{?}{=} {*(a,c)}) \\
 *_{11}&[a](b,c) &&:= ({*(a,b)} \stackrel{?}{=} {*(a,c)})
-\end{alignat}
+\end{alignat*}
 
 where $*$ is the generic evaluate operator.
 
@@ -317,7 +317,7 @@ Next, a Rule Six.  This is an `if`/`then`/`else` clause, so we expect a test and
 
 - The test is calculated with Rule Five, an equality test between the address `30` of the subject and the increment of the `sample`.  In Hoon, `=(a +(b))`.
 
-- The `[0 6]` returns the `sample` address.
+- The \texttt{[0 6]} returns the `sample` address.
 
 - The other branch is a Rule Nine reboot of the subject via Rule Ten.  Note the `[4 0 6]` increment of the `sample`.
 
@@ -325,14 +325,15 @@ Finally, Rule Nine is invoked with `[9 2 0 1]`, which grabs a particular arm of 
 
 Contrast the built-in `++dec` arm:
 
-```nock
+\begin{lstlisting}
 > !=((dec 1))
 [8 [9 2.398 0 1.023] 9 2 10 [6 7 [0 3] 1 1] 0 2]
-```
+\end{lstlisting}
 
 for which the Hoon is:
 
-```hoon
+
+\begin{lstlisting}
 ++  dec
   |=  a=@
   ?<  =(0 a)
@@ -340,13 +341,13 @@ for which the Hoon is:
   |-  ^-  @
   ?:  =(a +(b))  b
   $(b +(b))
-```
+\end{lstlisting}
 
 Scan for pieces you recognize:  the beginning of a cell is frequently the rule being applied.
 
 In tall form,
 
-```hoon
+\begin{lstlisting}
 [8
   [9
     [2.398 [0 1.023]]
@@ -358,7 +359,7 @@ In tall form,
        ]
   ]
 ]
-```
+\end{lstlisting}
 
 What's going on with the above \texttt{++dec} is that the Arvo-shaped subject is being addressed into at `2.398`, then some internal Rule Nine/Ten/Six/Seven processing happens.
 

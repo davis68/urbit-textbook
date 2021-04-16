@@ -17,7 +17,7 @@ https://github.com/fmarotta/kaobook
 
 https://third-bit.com/2021/01/27/essence-of-teaching/
 
-
+- set up chapter author footnote and endnotes so each chapter stands alone
 
 https://github.com/Fang-/Urbit-By-Doing/blob/master/talkbot/4.md
 

@@ -87,5 +87,16 @@ As of Arvo XXX K, the
 \section[Azimuth]{Azimuth, Address Space Management}
 \labsec{azimuth2}
 
+Urbit HD wallet
+
+
+\paragraph{Comet keys}.  Comets do not have an associated Urbit HD wallet, and their keys work slightly differently.
+
+> yeah thats how comet mining works. so you'd just put the private key you generated for a comet on the card, and this would be the ames DH exchange private key. i suppose you could still obfuscate it with a master ticket @q, by just picking a 128 bit hash, but it would be used differently than a normal azimuth master key, which is a @q used to derive a bunch of ethereum wallets private keys (and ultimately the initial network key, but that isnt required).
+9:15
+>and yeah whether a key works at the time it is mined is dependent on whether the routing node automatically assigned to the comet public key is currently working
+>~lagrev-nocfep: the comets name is its public key
+
+
 \section[Hoon Parser]{The Hoon Parser}
 \labsec{hoonparse}
