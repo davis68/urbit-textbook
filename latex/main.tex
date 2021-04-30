@@ -46,6 +46,7 @@
 }
 \lstdefinestyle{numbers}{numbers=left, stepnumber=1, numberstyle=\tiny, numbersep=10pt}
 \lstdefinestyle{nonumbers}{numbers=none}
+% https://tex.stackexchange.com/questions/261748/filename-in-line-0-of-a-lstlisting#262294
 
 \graphicspath{{examples/documentation/images/}{images/}} % Paths in which to look for images
 
@@ -55,8 +56,15 @@
 
 \makenomenclature % Make LaTeX produce the files required to compile the nomenclature
 
+% English adjutants
 \renewcommand{\eg}{\emph{e.g.,}}
 
+% keystrokes
+\newcommand{\CtrlC}{\texttt{Ctrl}+\texttt{C}}
+\newcommand{\CtrlD}{\texttt{Ctrl}+\texttt{D}}
+\newcommand{\CtrlZ}{\texttt{Ctrl}+\texttt{Z}}
+
+% vanes
 \newcommand{\ames}{\texttt{\%ames}}
 \newcommand{\behn}{\texttt{\%behn}}
 \newcommand{\clay}{\texttt{\%clay}}
@@ -69,21 +77,30 @@
 \newcommand{\lull}{\texttt{\%lull}}
 \newcommand{\zuse}{\texttt{\%zuse}}
 
+% common referents
 \newcommand{\ask}{\texttt{\%ask}}
+\newcommand{\chome}{\texttt{\%home}}
+\newcommand{\ckids}{\texttt{\%kids}}
 \newcommand{\graphstore}{\texttt{\%graph-store}}
 \newcommand{\mock}{\texttt{++mock}}
 \newcommand{\say}{\texttt{\%say}}
 \newcommand{\unix}{\texttt{\%unix}}
+\newcommand{\zod}{\texttt{\textasciitilde zod}}
 
+% Hoon auras
 \newcommand{\nullchr}{\texttt{\textasciitilde}}
 \newcommand{\patc}{\texttt{@c}}
 \newcommand{\patp}{\texttt{@p}}
 \newcommand{\patt}{\texttt{@t}}
+\newcommand{\patta}{\texttt{@ta}}
+\newcommand{\pattas}{\texttt{@tas}}
 \newcommand{\patub}{\texttt{@ub}}
 \newcommand{\patud}{\texttt{@ud}}
 \newcommand{\patux}{\texttt{@ux}}
 
 \newcommand{\ub}{${0b}$}
+\newcommand{\uc}{${0c}$}
+\newcommand{\ui}{${0i}$}
 \newcommand{\ux}{${0x}$}
 
 \newcommand{\yes}{\texttt{\%.y}}
@@ -91,13 +108,45 @@
 
 \newcommand{\irrtis}{\texttt{=(a b)}}
 
+% core types
 \newcommand{\gold}{\texttt{\%gold}}
 \newcommand{\iron}{\texttt{\%iron}}
 \newcommand{\lead}{\texttt{\%lead}}
 \newcommand{\zinc}{\texttt{\%zinc}}
 
-\newcommand{\wut}{\texttt{?}}
+% ++move
+\newcommand{\pass}{\texttt{\%pass}}
+\newcommand{\give}{\texttt{\%give}}
+\newcommand{\slip}{\texttt{\%slip}}
+\renewcommand{\unix}{\texttt{\%unix}}
 
+% rune families
+\renewcommand{\bar}{\texttt{|}}
+\newcommand{\buc}{\texttt{\$}}
+\newcommand{\cen}{\texttt{\%}}
+\newcommand{\col}{\texttt{:}}
+\renewcommand{\dot}{\texttt{.}}
+\newcommand{\ket}{\texttt{\^}}
+\newcommand{\mic}{\texttt{;}}
+\newcommand{\sig}{\texttt{\textasciitilde}}
+\newcommand{\tis}{\texttt{=}}
+\newcommand{\wut}{\texttt{?}}
+\newcommand{\zap}{\texttt{!}}
+
+\newcommand{\pbar}{\texttt{|} “bar”}
+\newcommand{\pbuc}{\texttt{\$} “buc”}
+\newcommand{\pcen}{\texttt{\%} “cen”}
+\newcommand{\pcol}{\texttt{:} “col”}
+\newcommand{\pdot}{\texttt{.} “dot”}
+\newcommand{\pket}{\texttt{\^} “ket”}
+\newcommand{\pmic}{\texttt{;} “mic”}
+\newcommand{\psig}{\texttt{\textasciitilde} “sig”}
+\newcommand{\ptis}{\texttt{=} “tis”}
+\newcommand{\pwut}{\texttt{?} “wut”}
+\newcommand{\pzap}{\texttt{!} “zap”}
+
+% individual runes
+\newcommand{\pbartis}{\texttt{|=} "bartis"} % TODO “”
 \newcommand{\pcenhep}{\texttt{\%-} "cenhep"}
 \newcommand{\pdotket}{\texttt{.\^} "dotket"}
 \newcommand{\pdottar}{\texttt{.*} "dottar"}
@@ -113,6 +162,7 @@
 \newcommand{\sigpam}{\texttt{~\&}}
 \newcommand{\wuttis}{\texttt{?=}}
 \newcommand{\zapzap}{\texttt{!!}}
+
 
 % Reset sidenote counter at chapters
 %\counterwithin*{sidenote}{chapter}

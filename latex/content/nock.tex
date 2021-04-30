@@ -4,35 +4,61 @@
 
 
 \section{Primitive rules and the combinator calculus}
-\labsec{primitive}
+\labsec{nk:primitive}
 
+\subsection{Objectives}
+\labsec{nk:objectives}
 
-A combinator calculus is one way of writing primitive computational systems.  Combinatory logic allows one to eliminate the need for variables (unknown quantities like $x$) and thus deal exclusively (?) with pure functions.
+The goals of this chapter are for you to be able to:
+
+\begin{enumerate}
+  \item  Interpret Nock code as a combinator calculus.
+  \item  Annotate Nock programs interpretively.
+\end{enumerate}
+
+\subsection{Combinator Calculus}
+\labsec{nk:combinator}
+
+A combinator calculus is one way of writing primitive computational systems.  Combinatory logic allows one to eliminate the need for variables (unknown quantities like $x$) and thus deal with pure functions on numeric quantities.
 
 one combinator calculus
+SKEW
 
 
 
-To understand how Nock expressions produce nouns as pure stateless functions, we need to introduce the \emph{subject}.  The subject is somewhat analogous to a namespace in other programming languages; it encompasses the computational context and the arguments.  Another way to put it is that the subject \emph{is} the argument to the Nock formula:  not all of the subject may be used in evaluating the formula, but it is all present.
+\subsection{Nock as Combinator Calculus}
+
+To understand how Nock expressions produce nouns as pure stateless functions, we need to introduce the \emph{subject}.  The subject is somewhat analogous to a namespace in other programming languages:  the subject, or rather \emph{a subject}, encompasses the computational context and the arguments.  Another way to put it is that the subject \emph{is} the argument to the Nock formula:  not all of the subject may be used in evaluating the formula, but it is all present.
 
 
 Nock is a crash-only language; that is, while it can emit events that are interpretable by the runtime as errors that can be handled, Nock itself fails when an invalid operation occurs.
 
-Nock is a standard of behavior, not necessarily an actual machine.  (It is an actual machine, of course, as a fallback, but the point is that any Nock virtual machine should implement the same behavior.)  We like to think of this analogous to solving a matrix.  Formally, given an equation
+Nock \emph{qua} virtual machine is a standard of behavior, not necessarily an actual machine.  (It is an actual machine, of course, as a fallback, but the point is that any Nock virtual machine should implement the same behavior.)  We like to think of this relationship as analogous to solving a matrix.  Formally, given an equation
 
 $$
-A \vec{x} = \vec{b}
+\underline{\underline{A}} \vec{x} = \vec{b}
 $$
 
 the solution should be obtained as
 
 $$
-A^{-1} A \vec{x} = A^{-1} \vec{b} \rightarrow \vec{x} = A^{-1} \vec{b}
+\underline{\underline{A}}^{-1} \underline{\underline{A}} \vec{x}
+=
+\underline{\underline{A}}^{-1} \vec{b} \rightarrow \vec{x}
+\rightarrow
+\underline{\underline{I}} \vec{x}
+=
+\underline{\underline{A}}^{-1} \vec{b}
+\rightarrow
+\vec{x}
+=
+\underline{\underline{A}}^{-1} \vec{b}
 $$
 
-This is correct, but often computationally inefficient to achieve.  Therefore we use this behavior as a standard definition for $\vec{x}$, but may actually obtain $\vec{x}$ using other more efficient methods.  Keep this in mind with Nock:  one has to know the specification but doesn't have to follow suit to implement it this way (thus, jet-accelerated Nock, Section~\ref{jetting}).
+This is correct, but is quite often computationally inefficient to achieve.  Therefore we use this behavior as a standard definition for $\vec{x}$, but may actually obtain $\vec{x}$ using other more efficient methods.  Keep this in mind with Nock:  one has to know the specification but doesn't have to follow suit to implement it this way (thus, we use jet-accelerated Nock, a computationally optimized interpreter for the particular machine on which Nock is running, covered in Section~\ref{jetting}).
 
 \subsection{Nock 4K}
+\labsec{nk:4k}
 
 The current version of Nock, Nock 4K, consists of six primitive rules as well as a handful of compound adjuncts.  The primitive rules are conventionally written in an explanatory pseudocode:
 
@@ -45,7 +71,7 @@ The current version of Nock, Nock 4K, consists of six primitive rules as well as
 *[a 5 b c]          =[*[a b] *[a c]]
 \end{lstlisting}
 
-with the following operations:
+subject to the following operations:
 
 \begin{itemize}
   \item  \texttt{*} is the \emph{evaluate} operator, which operates on a cell of \texttt{[subject formula]};
@@ -67,12 +93,15 @@ It is also instructive to write these as mathematical rules:
 \end{alignat*}
 
 where $*$ is the generic evaluate operator.  Furthermore, \textrm{true} is the integer $0$ while \textrm{false} is the integer $1$.
-Each rule is referred to by its number; \eg~"Nock 3" refers to the cell test rule.
+
+\marginnote[2mm]{This convention helps us distinguish a Nock version, such as Nock 5K, from a Nock rule, such as Nock Five.}
+
+Each rule is referred to by its number written out in prose; \eg~"Nock Three" refers to the cell test rule.
 
 Nock operates on unsigned integers, with zero $0$ expressing the null or empty value.  Frequently this is written as a tilde, $\textasciitilde$ or \nullchr.  This value plays a complex role similar to \texttt{NULL} and \texttt{'\textbackslash 0'} in C and other programming languages—although, critically, it is still numeric.
 
 %-------------------------------------------------------------------------------
-\subsubsection[Nock 0]{Nock 0, Addressing}
+\subsubsection[Nock Zero]{Nock Zero, Addressing}
 \labsec{nock0}
 
 \begin{lstlisting}[style=nonumbers]
@@ -87,10 +116,10 @@ Nock Zero allows the retrieval of nouns against the Nock subject.  Data access r
 
 Every structure in Nock is a binary tree.  Elements are enumerated left-to-right starting at $1$ for the entire tree.
 
+\marginnote[2mm]{The address of a value in the Nock binary tree has no direct correspondence to its address in physical memory.  This latter is handled by the Nock runtime, avoiding the use of pointers in Nock code.}
 
 One common convention is to store values at the leftward leaves of rightward branches; this produces a cascade of values at addresses $2^{n}-2$.
 
-\marginnote[2mm]{The address of a value in the Nock binary tree has no direct correspondence to its address in physical memory.  This latter is handled by the Nock runtime, avoiding the use of pointers in Nock code.}
 
 
 
@@ -121,7 +150,7 @@ virtualization arm computes a formula.  `++mock` is Nock in Nock, however, so it
 `++mock` is used in Gall and Hoon to virtualize Nock calculations and intercept scrys.  It is also used in Aqua, the testnet infrastructure of virtual ships.
 
 %-------------------------------------------------------------------------------
-\subsubsection[Nock 1]{Nock 1, Constant Reduction}
+\subsubsection[Nock One]{Nock One, Constant Reduction}
 \labsec{nock1}
 
 \begin{lstlisting}[style=nonumbers]
@@ -135,7 +164,7 @@ $$
 Nock One simply returns the constant value of noun \texttt{b}.
 
 %-------------------------------------------------------------------------------
-\subsubsection[Nock 2]{Nock 2, Evaluate}
+\subsubsection[Nock Two]{Nock Two, Evaluate}
 \labsec{nock2}
 
 \begin{lstlisting}[style=nonumbers]
@@ -147,7 +176,7 @@ $$
 $$
 
 %-------------------------------------------------------------------------------
-\subsubsection[Nock 3]{Nock 3, Test Cell}
+\subsubsection[Nock Three]{Nock Three, Test Cell}
 \labsec{nock3}
 
 \marginnote[2mm]{
@@ -159,10 +188,10 @@ zero as true (because there is one way to be right and many ways to be wrong).
 loobean
 
 %-------------------------------------------------------------------------------
-\subsubsection[Nock 4]{Nock 4, Increment}
+\subsubsection[Nock Four]{Nock Four, Increment}
 \labsec{nock4}
 %-------------------------------------------------------------------------------
-\subsubsection[Nock 5]{Nock 5, Test Equivalence}
+\subsubsection[Nock Five]{Nock Five, Test Equivalence}
 \labsec{nock5}
 
 Let us examine some Nock samples by hand and see if we can reconstruct what they do.  We will then create some new short programs and apply them by hand via the Nock rules.
@@ -205,26 +234,26 @@ As mathematical rules, these would be:
 where $*$ is the generic evaluate operator.
 
 %-------------------------------------------------------------------------------
-\subsubsection[Nock 6]{Nock 6, Conditional Branch}
+\subsubsection[Nock Six]{Nock Six, Conditional Branch}
 \labsec{nock6}
 %-------------------------------------------------------------------------------
-\subsubsection[Nock 7]{Nock 7, Compose}
+\subsubsection[Nock Seven]{Nock Seven, Compose}
 \labsec{nock7}
 %-------------------------------------------------------------------------------
-\subsubsection[Nock 8]{Nock 8, Declare Variable}
+\subsubsection[Nock Eight]{Nock Eight, Declare Variable}
 \labsec{nock8}
 %-------------------------------------------------------------------------------
-\subsubsection[Nock 9]{Nock 9, Produce Arm of Core}
+\subsubsection[Nock Nine]{Nock Nine, Produce Arm of Core}
 \labsec{nock9}
 %-------------------------------------------------------------------------------
-\subsubsection[Nock 10]{Nock 10, Replace}
+\subsubsection[Nock Ten]{Nock Ten, Replace}
 \labsec{nock10}
 %-------------------------------------------------------------------------------
-\subsubsection[Nock 11]{Nock 11, Hint to Interpreter}
+\subsubsection[Nock Eleven]{Nock Eleven, Hint to Interpreter}
 \labsec{nock11}
 
 \marginnote[2mm]{
-There's also a "fake Nock" Rule Twelve, \pdotket, which exposes a namespace into Arvo.  More details on this follow in Section~\ref{TODO}.
+There's also a "fake Nock" Rule Twelve, \pdotket, which exposes a namespace into Arvo.  More details on this follow in Section~\ref{ha:dot}.
 }
 
 With Nock under your belt, many of the quirks of Hoon become more legible.  For instance, since everything in Nock is a binary tree, so also everything in Hoon.  Nock also naturally gives rise to cores, which are a way of pairing operations and data in a cell.

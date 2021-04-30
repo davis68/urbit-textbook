@@ -11,13 +11,17 @@ operation function (or hosted operating system).  But what does any of this mean
 
 \subsection{A Series of Unfortunate Events}
 
-\paragraph{Centralization}.  For most contemporary corporations, whether enterprise-scale or startup, the driving factor for growth and revenue became the number of customers (users) they were able to attract to their platform or app.  Services like \texttt{del.icio.us} (founded 2003) and Flickr (founded 2004) betokened a wave of massive centralization, cemented by Facebook, Google, and Apple in the late aughts.  TODO XXX number of users on each in 2010
+\paragraph{Centralization}
+
+For most contemporary corporations, whether enterprise-scale or startup, the driving factor for growth and revenue became the number of customers (users) they were able to attract to their platform or app.  Services like \texttt{del.icio.us} (founded 2003) and Flickr (founded 2004) betokened a wave of massive centralization, cemented by Facebook, Google, and Apple in the late aughts.  TODO XXX number of users on each in 2010
 
 As users jostled onto burgeoning social media platforms, their patterns of behavior changed, and more and more social interactions of significance took place within "walled gardens," service platforms that interfaced only poorly with the exterior web.  Vendor lock-in and the nonportability of user data between platforms meant that consumer choice became a byword.  It became (and remains) difficult for any user to find out just what a corporation or even an app knows about them, particularly given the rise of surveilling cookies and data trackers.
 
 The shift to mobile computing starting with the 2007 launch of Apple's iPhone drove a rise in cloud computing and cloud storage.  To many users, the data storage and access permissions on their data became largely illegible.  Sometimes this led to poor assumptions, such as that the custodial corporation would never allow a leak, or that the data would always be backed up safely.  As projects failed (like \texttt{del.icio.us}) or unilaterally changed policies (Tumblr), users permanently lost data.  Given the effort involved in curating tags, bookmarks, images, contacts, and research data, these outcomes frequently amounted in the loss of years of human effort.
 
-\paragraph{Data leaks}.  During the 2000s and 2010s, data leaks became so common as to hardly merit notice.  As users flocked to corporate platforms for social media, publishing, photography, dating, and every other aspect of digital life, insufficient attention was given by corporations to both the practical security of user data and the potential fallout of leaks.  Data breaches grew in number ever year, and affected corporations of every size in every industry.
+\paragraph{Data leaks}
+
+During the 2000s and 2010s, data leaks became so common as to hardly merit notice.  As users flocked to corporate platforms for social media, publishing, photography, dating, and every other aspect of digital life, insufficient attention was given by corporations to both the practical security of user data and the potential fallout of leaks.  Data breaches grew in number ever year, and affected corporations of every size in every industry.
 
 \begin{itemize}
   \item  2013:  Evernote, 50 million records
@@ -32,7 +36,9 @@ The shift to mobile computing starting with the 2007 launch of Apple's iPhone dr
 ("Records" does not equal "people" or even "accounts," of course, rendering these numbers mutually incommensurable.  Regardless, the scale staggers the mind.)  Sometimes these breaches were the result of clever social engineering; more frequently, someone forgot to properly salt password hashes or just stored or transmitted them in unencrypted plaintext.  Occasionally, the data were even just left available at a deprecated or forgotten API endpoint.  Identity security is challenging to get right, and those who had custody of user data were frequently subject to moral hazard.
 %Data are from [Juliana de Groot, "The History of Data Breaches"](https://digitalguardian.com/blog/history-data-breaches) and [Wikipedia, "List of Data Breaches"](https://en.wikipedia.org/wiki/List_of_data_breaches).
 
-\paragraph{The looming software stack}.  A combination of practical manufacturing limits ending Moore's law and a complexifying operating system and software stack led to a long-term stagnation in the perceived speed and fluidity of user experience with computers.  For the most part, even as multicore CPUs become more widespread, software bloat grows more acute with each new operating system version.  For many enterprise developers, there have been insufficient incentives to simplify software rather than to continue making it more complex.  Minimalist software by and large remained the demesne of hackers and code golf enthusiasts.
+\paragraph{The looming software stack}
+
+A combination of practical manufacturing limits ending Moore's law and a complexifying operating system and software stack led to a long-term stagnation in the perceived speed and fluidity of user experience with computers.  For the most part, even as multicore CPUs become more widespread, software bloat grows more acute with each new operating system version.  For many enterprise developers, there have been insufficient incentives to simplify software rather than to continue making it more complex.  Minimalist software by and large remained the demesne of hackers and code golf enthusiasts.
 
 For instance,
 TODO MS Word menu structure and file bloat
@@ -48,13 +54,17 @@ a
 - Optional Reading: \href{http://marktarver.com/thecathedralandthebizarre.html}{Mark Tarver, "The Cathedral and the Bizarre"}
 
 
-\paragraph{Security breaches}.  As the softwar stack grows, dependencies become opaque to downstream developers and users.  Upstream vulnerabilities have led to zero-day exploits and security breaches.  For instance, in 2014 the popular OpenSSL cryptography package had a bug of two years' standing revealed, Heartbleed.  This flaw in the Transport Layer Security (TLS) exposed memory buffers adjacent to
+\paragraph{Security breaches}
+
+As the softwar stack grows, dependencies become opaque to downstream developers and users.  Upstream vulnerabilities have led to zero-day exploits and security breaches.  For instance, in 2014 the popular OpenSSL cryptography package had a bug of two years' standing revealed, Heartbleed.  This flaw in the Transport Layer Security (TLS) exposed memory buffers adjacent to
 
 Instant-messaging protocols relying on the \texttt{libpurple} were impacted by an out-of-bounds write flaw in 2017, potentially permitting denial-of-service attacks or arbitrary code execution.
 
 These two examples are not cherry-picked:  other examples abound.  The point stands that security breaches in the software stack render reliant software vulnerable in unpredictable ways.
 
-\paragraph{Morbidity in open-source software projects}.  The rise of the free and open-source software (FOSS) movement has been enormously influential on software development and the end-user experience.  Spearheaded by Richard Stallman's GNU Project and Linus Torvalds' Linux operating system, FOSS rapidly overtook enterprise software offerings in terms of feature parity and upstream utilization.
+\paragraph{Morbidity in open-source software projects}
+
+The rise of the free and open-source software (FOSS) movement has been enormously influential on software development and the end-user experience.  Spearheaded by Richard Stallman's GNU Project and Linus Torvalds' Linux operating system, FOSS rapidly overtook enterprise software offerings in terms of feature parity and upstream utilization.
 
 Unfortunately, open-source software products are frequently broken in ways that are opaque to relatively nontechnical users:
 
@@ -69,7 +79,9 @@ Even companies that loudly proclaimed support for "data liberation" used this FO
 
 Given the cascading stack of legacy software and strange interdependencies, actually getting the secure functionality a user wants often requires a proprietary platform anyway, undermining the aims of FOSS end-user applications and libraries.
 
-\paragraph{Identity is cheap}.  Identity itself is cheap:  it costs botnets and spammers nothing to spin up new email addresses and new false identities.  Game-theoretically, spammers thrive in an environment where identity is close to free.
+\paragraph{Identity is cheap}
+
+Identity itself is cheap:  it costs botnets and spammers nothing to spin up new email addresses and new false identities.  Game-theoretically, spammers thrive in an environment where identity is close to free.
 
 Identity is also dear:  losing a password in a breach can cause at best hours of resetting service logins and at worst the trauma and legal process of recovering from identity theft.
 
@@ -86,9 +98,11 @@ The Urbit project intends to cut the Gordian knot of user autonomy and privacy. 
 \marginnote[2mm]{"[Urbit is] ultimately a hosted OS ([residing] on top of Linux) with an immutable file system with the additional purpose that you build applications distributed-first in a manner where clients store their own data."  ([`scarejunba`](https://news.ycombinator.com/item?id=21672481))}
 Your Urbit is a personal server built as a functional-as-in-language operating system that runs as a virtual machine on top of whatever.  (Sometimes the developers refer to this arrangement as a "hosted OS," but they don't mean as in VMWare or VirtualBox or even containerization.)  The Urbit vision is the unification of services and data around a scarce futureproof identity on an innately secure platform.  Briefly put, Urbit requires you to have an \emph{Urbit OS} (which runs your code, stores your data, etc.) and an \emph{Urbit ID} (which secures your ownership of said code and data).
 
-Urbit provides an excellent example of a visionary complex system which is radical (returning to the roots of computing) and forward-looking—and yet still small enough for us to grok all of the major moving parts in the system.  As a "hundred-year computer," Urbit represents how computing could work when computing power approaches negligible cost and bandwidth becomes effectively unlimited (or at least not limiting), instead focusing on the quality of user experience and user security.  We have found that Urbit is worthy of study in its own right as a compelling clean-state architecture embracing several innovative ideas at its base.
+Urbit provides an excellent example of a visionary complex system which is radical (returning to the roots of computing) and forward-looking—and yet still small enough for us to grok all of the major moving parts in the system.  As a "hundred-year computer," Urbit represents how computing could work when computing power approaches negligible cost and bandwidth becomes effectively unlimited (or at least not limiting TODO Ted disagrees), instead focusing on the quality of user experience and user security.  We have found that Urbit is worthy of study in its own right as a compelling clean-state architecture embracing several innovative ideas at its base.
 
-\paragraph{Legible future-proof program stack}.  The core of Urbit is an \emph{operating function}, or a functional-as-in-language operating system.  That is, there is a lifecycle function which receives a state and an event, processes the event, and yields a new state.
+\paragraph{Legible future-proof program stack}
+
+The core of Urbit is an \emph{operating function}, or a functional-as-in-language operating system.  That is, there is a lifecycle function which receives a state and an event, processes the event, and yields a new state.
 
 $$
 L
@@ -98,13 +112,13 @@ L
 \textrm{.}
 $$
 
-This is called the Urbit OS to distinguish it from other aspects of the Urbit project when ambiguity is present.  The Urbit OS lifecycle function is written in a language called Nock and provides operational affordances through the Arvo operating core.  A schematic representation is frequently used:
+The lifecycle function and state are sometimes called the Urbit OS to distinguish them from other aspects of the Urbit project when ambiguity is present.  The Urbit OS lifecycle function is written in a language called Nock and provides operational affordances through the Arvo operating core.  A schematic representation is frequently used:
 
 ![](repo:./img/00-urbit-all.png){: width=25%}
 
-At its base, Arvo is an encrypted event log yielding a particular state.  The Nock virtual machine is like Urbit's version of assembler language, and it may in principle be implemented on top of any hardware.  Hoon is Urbit's equivalent of C, a higher-level language with useful macros and APIs for building out software.  Arvo runs atop these definitions.
+At its base, Arvo is an encrypted event log yielding a particular state.  The Nock virtual machine is like Urbit's version of assembler language, and it may in principle be implemented on top of any hardware.  Hoon is Urbit's equivalent of C, a higher-level language with useful macros and APIs for building out software.  Arvo runs atop these definitions.  The Nock VM runs on a binary interpreter layer on top of actual hardware.
 
-The user can think of Urbit OS as a virtual machine which allows everything upstack to be agnostic to the hardware, and handles everything downstack.  Urbit has sometimes been described as an operating function, and this is what that means.  Everything is implemented as a stateful instance, called a "ship."
+The user can think of Urbit OS as a virtual machine which allows everything upstack to be agnostic to the hardware, and handles everything downstack.  (Urbit has sometimes been described as an operating function, and this is what that means.)  Everything is implemented as a unique stateful instance, called a “ship”.
 
 ![](repo:./img/00-urbit-exploded.png){: width=50%}
 
@@ -117,16 +131,18 @@ As a "hosted OS," Urbit doesn't seek to replace mainline operating systems.  Ind
 
 Urbit was designed on the principle that inheriting old platform code is a developer antipattern, given the complexities, vagaries, and vulnerabilities of legacy OSs.  In other words, things must break to be fixed.  Thus Urbit interfaces with other systems, but is a world unto itself internally.
 
-\paragraph{Data security}.  TODO
+\paragraph{Data security}
 
-\paragraph{Cryptographic ownership}.  We noted above that Urbit OS is an encrypted event log.  Urbit also acts as a universal \href{https://en.wikipedia.org/wiki/Single_sign-on}{single sign-on (SSO)} for the platform and for services instrumented to work with Urbit calls.  Since the Urbit address space is finite, each Urbit ID has inherent value within the system and should be a closely guarded secret.  An instantiation of your Urbit ID is frequently called a \emph{ship}, which lodges on your filesystem at a folder called a \emph{pier}.
+TODO
+
+\paragraph{Cryptographic ownership}
+
+We noted above that Urbit OS is an encrypted event log.  Urbit also acts as a universal \href{https://en.wikipedia.org/wiki/Single_sign-on}{single sign-on (SSO)} for the platform and for services instrumented to work with Urbit calls.  Since the Urbit address space is finite, each Urbit ID has inherent value within the system and should be a closely guarded secret.  An instantiation of your Urbit ID is frequently called a \emph{ship}, which lodges on your filesystem at a folder called a \emph{pier}.
 
 \marginnote[2mm]{See Section~\ref{azimuth}~for more details.}
 Following in the footsteps of other blockchain technologies, Urbit secures ownership of unique access points in the Urbit address space using Azimuth.  Currently Azimuth is deployed on top of the Ethereum blockchain.
 
 Urbit IDs have mnemonic names attached to them, although fundamentally they are only a number in the address space.  For instance, one example address on Urbit is \texttt{~dopzod-binfyr}, the unique ID one user owns, corresponding to the 32-bit address \texttt{0xeb2a.5a32} in hexadecimal.
-
-% Write like SeeTee shareholder letter but for Urbit, demolish all objections
 
 On this network-oriented platform, users provide data to service endpoints, retaining their data rather than farming it out.  While no control can be exercised over data once sent out, a proposed reputation system can penalize bad actors in the system with reduced network access and other sanctions.
 
@@ -159,7 +175,7 @@ Urbit address points are allocated sequentially from $0$ to $2^{128} = 340\,282\
 
 Urbit is structured with a hierarchy of addressable points, and bands of smaller values have more ``heft'' in the system and broker access for higher-addressed points.  The structure of the address space reveals the governance structure of the Urbit project itself:
 
-\begin{tabular}{lll}
+\begin{tabular}{llll}
 	Bit width & Total number & Title & Role \\ \hline \\
   8-bit points & $256$ & Galaxies & Provide peer discovery and packet routing as well as network protocol governance.  Allocate star address space. \\
 	16-bit points & $2^{16}-256 = 65\,280$ & Stars & Routing \& Allocate peer discovery services, handle distribution of software updates, and allocate planet address space. \\
@@ -184,7 +200,7 @@ This trilemma, dubbed Zooko's triangle, laid down a challenge to cryptographic r
 
 The Urbit ID system resolves Zooko's triangle by using peer-to-peer routing after discovery, by strictly limiting identity as a scarce and reputation-bearing good, and by assigning each addressable point of the 128-bit address space a unique and memor(iz)able name.
 
-Each point receives a unique pronounceable name constructed from a list of 256 prefixes and 256 suffixes.  For instance, point $0$ is \texttt{~zod}, the root sponsoring galaxy of the \ames~network.  In fact, today on Urbit you frequently see the mnemonic address used as the primary pseudonymous identity and username.  The identity problem is thereby solved without restrictive username requirements and collision-avoidance strategies.
+Each point receives a unique pronounceable name constructed from a list of 256 prefixes and 256 suffixes.  For instance, point $0$ is \zod, the root sponsoring galaxy of the \ames~network.  In fact, today on Urbit you frequently see the mnemonic address used as the primary pseudonymous identity and username.  The identity problem is thereby solved without restrictive username requirements and collision-avoidance strategies.
 
 Urbit uses a system of mnemonic syllables to uniquely identify each address point.  These mnemonic names, called "`patp`s" after their Hoon representation `@p`, occur in a set of 256 suffixes (such as "zod") and 256 prefixes (such as "lit").  They were selected to be pronounceable but not meaningful.
 
@@ -202,14 +218,17 @@ Urbit uses a system of mnemonic syllables to uniquely identify each address poin
 The first 256 points (the galaxies) simply take their name from the suffix of their address point.  Subsequent points combine values:  for instance, point 256 is ~marzod, point 480 is ~marrem, and point 67,985 is ~fogfel-folden.  (Conventionally, a sigma `~` is used in front of an address.)
 
 \marginnote[2mm]{Sigils are a visual corollary to the mnemonic patp.  Each 32-bit or lower address has a unique sigil, based on the 512 component syllables.  Sigils are not intrinsic to Urbit, but they form part of the metatextual environment that Urbit inhabits and they are frequently used as a means of ready differentiation and identity.  TODO images}
+
 The 256 galaxies have suffix-only names, and all higher addresses have prefix–suffix names.  Two-syllable names always mean the point is a star; four-syllable names are planets.  Comets have rather cumbersome names:  67,985,463,345,234,345 corresponds to ~doztes-nodbel-palleg-ligbep with eight syllables.
 
 The stars which correspond to a galaxy are suffixed with the galaxy's name; planet names are mangled so that one cannot tell which star or galaxy a planet corresponds to at a glance.
 
-If a planet needs to change its sponsor, there is [support for changing one's sponsor](https://urbit.org/using/operations/using-your-ship/#escaping-a-sponsor), in which another star can assume the role of peer discovery in case a star goes offline (a "dark star").
+If a planet needs to change its sponsor, \href{https://urbit.org/using/operations/using-your-ship/#escaping-a-sponsor}{there is support for changing one's sponsor}, in which another star can assume the role of peer discovery in case a star goes offline (a "dark star").
 
-TODO we in principle care about address when dealing with a strange star or planet for the first time.  A reputation system is under development, but hasn't yet seemed to be necessary.  This is called [`Censures`](https://urbit.org/docs/glossary/censure/).  Plus, at this point, identity _is_ fairly cheap, abundant if not infinite.  (Notably, not so cheap that spammers can thrive.)
+TODO we in principle care about address when dealing with a strange star or planet for the first time.  A reputation system is under development, but hasn't yet seemed to be necessary.  This is called [`Censures`](https://urbit.org/docs/glossary/censure/).  Plus, at this point, identity is fairly cheap, abundant if not infinite.  (Notably, not so cheap that spammers can thrive.)
+
 Peer discovery, the primary role of stars besides planet allocation, is an important step in responsibly controlling network traffic.  "The basic idea is, you need someone to sponsor your membership on the network. An address that can't find a sponsor is probably a bot or a spammer" ([docs](https://urbit.org/understanding-urbit/)).
+
 A reputation system is available called [`Censures`](https://urbit.org/docs/glossary/censure/).  As spammers and bots are not yet present on the Urbit network in any significant quantity, Censures is not heavily used today.  Galaxies and stars can censure (or lower the reputation of) lower-ranked points as a deterrent to bad behavior (defined as spamming, scamming, and spreading malware).  Since good behavior is the default, only lowering reputation is supported.
 
 - Reading: [Philip Monk `~wicdev-wisryt`, "Designing a Permanent Personal Identity"](https://urbit.org/blog/pki-maze/)
@@ -241,9 +260,9 @@ To be clear, we do not herein promote Urbit or ownership of any part thereof as 
 - Resource: [Urbit Live, "Urbit Network Stats"](https://urbit.live/stats) (set the dates to a much broader range and the currency type to ETH)
 
 
-### Galaxy Ownership and Star Access
+\paragraph{Galaxy Ownership and Star Access}
 
-The sale of galaxies formed a role in initially funding Urbit, but to prevent too early sale and to modulate access to the network, most stars are locked by Ethereum smart contracts and unsellable until their unlock date.  Star contracts will unlock through January 2025, at which point the full address space will be available (but of course not activated).  Galaxy owners can sell or distribute stars as they see fit, and star owners can parcel out planets.  However, since a star provides peer discovery services, it is imperative that a star with daughter planets remain online and up-to-date.
+The sale of galaxies formed a role in initially funding Urbit, but to prevent too early sale and to modulate access to the network, most stars are locked by Ethereum smart contracts and unsellable until their unlock date.  Star contracts will unlock through January 2025, at which point the full address space will be available (but not necessarily activated).  Galaxy owners can sell or distribute stars as they see fit, and star owners can parcel out planets.  However, since a star provides peer discovery services, it is imperative that a star with daughter planets remain online and up-to-date.
 
 Much of the Urbit address space is locked and unspawnable to provide an artificial brake on supply and prevent overrunning the available address space.  See "The Value of Urbit Address Space, Part 3" for extensive details on star and planet limitations and the associated Ethereum smart contracts.
 
@@ -267,14 +286,15 @@ The philosophy underlying Urbit bears a strange resemblance to mathematics:  rat
 From [the docs](https://web.archive.org/web/20140424223249/http://urbit.org/community/articles/martian-computing/):
 
 \begin{quote}
-Normally, when normal people release normal software, they count by fractions, and they count up. Thus, they can keep extending and revising their systems incrementally. This is generally considered a good thing. It generally is.
-
-In some cases, however, specifications needs to be permanently frozen. This requirement is generally found in the context of standards. Some standards are extensible or versionable, but some are not. ASCII, for instance, is perma-frozen. So is IPv4 (its relationship to IPv6 is little more than nominal - if they were really the same protocol, they'd have the same ethertype). Moreover, many standards render themselves incompatible in practice through excessive enthusiasm for extensibility. They may not be perma-frozen, but they probably should be.
-
-The true, Martian way to perma-freeze a system is what I call Kelvin versioning. In Kelvin versioning, releases count down by integer degrees Kelvin. At absolute zero, the system can no longer be changed. At 1K, one more modification is possible. And so on.
-\end{quote}
+Normally, when normal people release normal software, they count by fractions, and they count up.  Thus, they can keep extending and revising their systems incrementally.  This is generally considered a good thing.  It generally is.
 
 \marginnote[2mm]{Urbit is not, of course, the only system to adopt an asymptotic approach to its final outcome.  \href{http://www.texfaq.org/FAQ-TeXfuture}{Donald Knuth, famous for many reasons but in this particular instance for the typesetting system \TeX, has specified that \TeX~versions incrementally approach $\pi$.}  \TeX~will reach $\pi$ definitively upon the date of Knuth's death, at which point all remaining bugs are instantly transformed into features and the version becomes $\pi$.  The current version of TeX is 3.14159265.}
+
+In some cases, however, specifications needs to be permanently frozen.  This requirement is generally found in the context of standards.  Some standards are extensible or versionable, but some are not.  ASCII, for instance, is perma-frozen.  So is IPv4 (its relationship to IPv6 is little more than nominal—if they were really the same protocol, they'd have the same ethertype).  Moreover, many standards render themselves incompatible in practice through excessive enthusiasm for extensibility.  They may not be perma-frozen, but they probably should be.
+
+The true, Martian way to perma-freeze a system is what I call Kelvin versioning.  In Kelvin versioning, releases count down by integer degrees Kelvin.  At absolute zero, the system can no longer be changed.  At 1K, one more modification is possible.  And so on.  (\cite{Yarvin2017})
+\end{quote}
+
 In other words, Urbit is intended to cool towards absolute zero, at which point its specification is locked in forever and no further changes are countenanced.  This doesn't apply to everything in the system—"there simply isn't that much that needs to be versioned with a kelvin" (~nidsut-tomdun)—but it does apply to the most core components in the system.
 
 \marginnote[2mm]{Think of the hypothetical structure of Jupiter:  clouds over a sea of metallic hydrogen over a diamond as big as Earth.
@@ -300,7 +320,6 @@ Urbit development can be divided into three cases:
 	\item  Userspace development, client-side (Urbit API)
 \end{enumerate}
 
-dojo ships fakezods
 
 This guide focuses on getting the reader up to speed on the second development case early, then branches out into the two others.  With a solid foundation in \gall, the reader will be well-equipped to handle demands in either of the other domains.  We encourage the reader to approach each example and exercise in the following spirit:
 
@@ -311,11 +330,127 @@ This guide focuses on getting the reader up to speed on the second development c
 	\item  Devise and compose a suitable test suite.
 \end{enumerate}
 
+\subsection{Practicalities}
+\labsec{in:practicalities}
+
+We recommend organizing all development work discussed in this textbook into a single folder containing code folders, version control repositories of code, data, and so forth.  For convenience, we locate this folder at \texttt{\textasciitilde/urbit}.  Should you choose to install Urbit in this location, you should use the folder \texttt{\textasciitilde/urbit/bin} to contain the Urbit executables.
+
+\paragraph[Development Ships (Fakezods)]
+
+When started directly by the user, Urbit enters a read-evaluate-print loop (REPL) immediately after booting.  This interface, called Dojo, can process many Hoon expressions and provides some support for administering apps, interacting with command-line interface (CLI) agents, and working with the Unix file system and input/output processes.
+
+Urbit ships are commonly divided into \emph{live ships} and \emph{fakezods} (after \zod, the parent galaxy).  Live ships are end-user instances operating on live \ames.  Fakezods are disconnected and keyless ships frequently used in development.  Most of our work in this book should be completed using fakezods, as one can lobotomize one's personal live ship by committing bad agent code to the Urbit file system.
+
+To create a fakezod, one passes the \texttt{urbit} executable the \texttt{-F} ‘fake keys’ flag:
+
+\lstset{language=bash}
+\begin{lstlisting}[style=nonumbers]
+$ urbit -F zod
+\end{lstlisting}
+
+As downloading a boot sequence or \emph{pill} can take some time, we recommend downloading the current pill once, storing it locally, and using it to boot fakezods for a while until it becomes outdated.  The URL for the current pill can be found by starting a fakezod, observing the URL indicated in the boot sequence, and aborting the boot sequence before retrieving the pill using a tool like \texttt{wget} or a web browser.  (Use \CtrlZ~to abort the process.)
+
+\begin{lstlisting}[style=nonumbers]
+$ urbit -F tex
+~
+urbit 1.0
+boot: home is /home/davis68/tex
+loom: mapped 2048MB
+lite: arvo formula 79925cca
+lite: core 59f6958
+lite: final state 59f6958
+boot: downloading pill https://bootstrap.urbit.org/urbit-v1.0.pill
+
+[received keyboard stop signal, exiting]
+$ https://bootstrap.urbit.org/urbit-v1.0.pill
+\end{lstlisting}
+
+Once the boot sequence has completed on a new fakezod, one can use the \texttt{-B} ‘pill file’ flag to start the fakezod:
+
+\begin{lstlisting}[style=nonumbers]
+$ urbit -F zod -B urbit-v1.0.pill
+\end{lstlisting}
+
+\marginnote[2mm]{We will discuss the boot sequence in detail in Section~\ref{kr:boot}.}
+After a few minutes of boot sequence, the Dojo REPL prompt appears.
+
+\begin{lstlisting}[style=nonumbers]
+$ urbit -F zod -B urbit-v1.0.pill
+~
+urbit 1.0
+boot: home is /home/davis68/tex
+loom: mapped 2048MB
+lite: arvo formula 79925cca
+lite: core 59f6958
+lite: final state 59f6958
+boot: loading pill urbit-v1.0.pill
+loom: mapped 2048MB
+boot: protected loom
+live: logical boot
+boot: installed 286 jets
+boot: parsing %brass pill
+---------------- playback starting ----------------
+...
+---------------- playback complete ----------------
+vere: checking version compatibility
+ames: live on 31455 (localhost only)
+http: web interface live on http://localhost:8080
+http: loopback live on http://localhost:12321
+pier (20): live
+ames: metamorphosis
+~zod:dojo>
+\end{lstlisting}
+
+\marginnote[2mm]{The Dojo automatically parses input for validity, so attempting to type some sequences may fail.  This is confusing at first but soon becomes an indispensable validation of newly minted code.}
+To verify that the fakezod has loaded correctly, the reader should type some simple primitives:
+
+\begin{lstlisting}[style=nonumbers]
+> 1
+1
+> 'hello mars'
+'hello mars'
+> "Hello Mars"
+"Hello Mars"
+\end{lstlisting}
+
+Since an Urbit ship is presumably always-on, shutting down the ship is simply a special case of suspending computation.  Press \CtrlD~to stop the fakezod from running, or \CtrlZ~to force stop.  To start the fakezod again, use the \texttt{urbit} executable with the pier name (the name of the folder created for the fakezod):
+
+\begin{lstlisting}[style=nonumbers]
+$ urbit zod
+\end{lstlisting}
+
+Since the behavior of a ship is determined by its state, and its state is determined by its boot sequence, a live ship or a fakezod will remain as such perpetually (although one can run a live ship disconnected from the network).  Unless otherwise specified, we assume all development to take place on a fakezod.
+
+\paragraph{Persistent sessions}
+
+When running a ship to which one wishes to connect repeatedly without shutdown (the standard case for usage and an occasional case in development), one should employ a tool such as \texttt{screen} to persist sessions even when a terminal session is not actively connected.
+
+One way to set up this situation is as follows:
+
+\begin{enumerate}
+  \item  Download and install \href{TODO}{\texttt{screen}} if it is not already available on your OS platform.
+  \item  Start a new screen session with appropriate name:
+    \begin{lstlisting}
+screen -S sampel-palnet
+    \end{lstlisting}
+  \item  In this terminal session, start the Urbit ship, whether a fakezod or a live ship.
+    \begin{lstlisting}
+urbit sampel-palnet
+    \end{lstlisting}
+  \item  Once the ship is running correctly, once you are ready to detach from the session, press \texttt{Ctrl}+\texttt{A}, then \texttt{d} to disconnect.
+  \item  \marginnote[2mm]{Be careful not to start multiple sessions with the same name at the same time or you will need to access your target session via a unique session number as well.}  To connect to the session again, use
+    \begin{lstlisting}
+screen -r sampel-palnet
+    \end{lstlisting}
+\end{enumerate}
+
+Sessions do not persist past system shutdown.
+
 
 \section{Exercises}
 \labsec{intro:exercises}
 
 \begin{enumerate}
-	\item  Obtain an Urbit ID and set up your Urbit OS.  Use the current installation procedure outlined at \href{https://urbit.org/}{\texttt{urbit.org}}.  You do not need to use a hosting service if you prefer to run Urbit on your own hardware, but maintaining your ship in an always-connected state will improve your experience.
-	\item  Set up a fakezod for software development.
+	\item  Obtain an Urbit ID and set up the Urbit OS.  Use the current installation procedure outlined at \href{https://urbit.org/}{\texttt{urbit.org}}.  One does not need to use a hosting service if one prefers to run Urbit on one's own hardware, but maintaining the live ship in an always-connected state will improve the experience.
+	\item  Set up a fakezod for software development.  (We further recommend creating a copy of the pier so that a new fakezod can be started quickly in case of catastrophic failure.)
 \end{enumerate}

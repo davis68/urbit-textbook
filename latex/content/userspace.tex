@@ -2,45 +2,218 @@
 \chapter{Userspace}
 \labch{Userspace}
 
-
 \section{\gall, A Runtime Agent}
-\labsec{gall}
+\labsec{us:gall}
+
+Userspace applications are conceptually (but not architecturally) divisible into three categories.  It is recommended as a burgeoning best practice that new apps hew to this division for clarity and forward compatibility.
+
+\begin{enumerate}
+  \item  \textbf{Stores}.  Independent local collections of data exposed to other apps.  Think of Groups for Landscape.
+  \item  \textbf{Hooks}.  Store manipulations.  Think of subscriptions.
+  \item  \textbf{Views}.  User-interface applications.  Think of Landscape itself (the browser interface).
+\end{enumerate}
+
+\href{https://docs.google.com/document/d/1hS_UuResG1S4j49_H-aSshoTOROKBnGoJAaRgOipf54/edit}{Logan Allen, Matt, Matilde Park `~haddef-sigwen`, "Userspace Architecture"}
 
 \marginnote[2mm]{
 Modern \gall~is sometimes called "static Gall," in contrast to an earlier specification "dynamic Gall."  Dynamic Gall did not specify the arms and permitted each agent its own structure; in practice, this proved to be difficult for programmers to maintain in a consistent manner, leading to code refactors and maintenance of defunct arms for backwards compatibility of agents.
 }
 
+All userspace apps are mediated by \gall, which provides a standard set of operations to interface with userspace applications.  \gall's domain essentially consists of user-visible state machines.  Almost everything you interact with as a user is mediated through \gall:  Chat, Publish, Dojo, and so forth.
 
-\subsection{Factory Patterns}
-\labsec{factories}
+% TODO diagrams etc.
+
+Every complex structure in Hoon is a core; a \gall~agent structurally requires ten arms in its main core with an optional helper core.  The agent itself is a door with two components in its subject:
+
+\begin{enumerate}
+  \item  \texttt{bowl:gall} defined \gall-standard tools and data structures.
+  \item  Agent state information (with version number)
+\end{enumerate}
+
+A \gall~agent can use default arms provided by the \texttt{default-agent} library in case they are not needed.  For instance, a minimalist \gall~agent looks like this:
+
+\begin{lstlisting}
+/+  default-agent
+^-  agent:gall
+=|  state=@  :: TODO still valid?
+|_  =bowl:gall
++*  this      .
+    default   ~(. (default-agent this %|) bowl)
+::
+++  on-init   on-init:default
+++  on-save   on-save:default
+++  on-load   on-load:default
+++  on-poke
+  |=  [=mark =vase]
+  ~&  >  state=state
+  ~&  got-poked-with-data=mark
+  =.  state  +(state)
+  `this
+::
+++  on-watch  on-watch:default
+++  on-leave  on-leave:default
+++  on-peek   on-peek:default
+++  on-agent  on-agent:default
+++  on-arvo   on-arvo:default
+++  on-fail   on-fail:default
+\end{lstlisting}
+
+
+\marginnote[2mm]{
+Compare this to other core structures:  a gate is `[battery [sample context]]`; a move is `[bone [tag noun]]`.
+}
+
+For \gall, a standard move is a pair \texttt{[bone card]}.  A \texttt{bone} is a cause while a \texttt{card} is an action.  (\texttt{[cause action]}, it's always \texttt{[cause action]}.)  A \texttt{card}, in turn, is a pair \texttt{[tag noun]}.  The tag is a \pattas token to indicate which event is being triggered while the \texttt{noun} contains any necessary information.
+
+\gall~apps run like services, so they can always talk to each other.  This leads to a very high potential for app interactivity rather than siloization.
+
+\subsection{Scrying into \gall}
+\labsec{us:g:scry}
+
+
+\gall~possesses several scry types, although not as rich as \clay:
+
+\begin{table}
+  \begin{center}
+    \caption{\gall~\dotket~Calls.}
+    \label{ha:gall}
+    \begin{tabular}{lll}
+      Symbol & Meaning & Example \\
+      \hline \\
+      \texttt{\%e} &  & \\
+      \texttt{\%x} & ; returns a \texttt{vase} compatible with the mark at the end of the scry request. & \\
+      \texttt{\%y} & ; returns a \texttt{cage} with a mark of \texttt{\%arch} and a \texttt{vase} of \texttt{\%arch}. & \\
+    \end{tabular}
+  \end{center}
+\end{table}
+
+
+\subsection{Patterns and Factories}
+\labsec{us:patterns}
+
+\emph{Factories} are code patterns that are commonly employed in creating
+In object-oriented programming, these are object-constructing objects.  In subject-oriented programming, one uses wet cores to create the appropriate newly patterned core.
+
+One simple constructed example (that is, not a true factory) is the use of \texttt{default} core to produce \gall~agents.
+
+TODO
 
 \section{Deep Dives in \gall}
 
-Each of the following case studies is drawn from published code, most of it incorporated into the Urbit userspace.  In some cases, the original code uses conventions we have not yet introduced; we have simplified these to rely on the runes introduced in the main text through Chapter~\ref{advancedhoon}.
+Several of the following case studies is drawn from published code, most of it incorporated into the Urbit userspace.  In some cases, the original code uses conventions we have not yet introduced; we have simplified these to rely on the runes introduced in the main text through Chapter~\ref{advancedhoon}.  Other examples are new to this chapter.
 
 \subsection{Chat CLI}
-\labsec{wchat}
+\labsec{us:chat}
 
-\subsection{Drum and Helm}
-\labsec{wdrum}
+\subsection{Drum, Helm, Hood, and Herb}
+\labsec{us:drum}
+
+Collectively, these agents are components of or adjacent to Dojo which permit text input (from the keyboard via \dill~or through a plaintext API).
 
 \subsection{Bitcoin API}
-\labsec{wbtc}
+\labsec{us:btc}
+
+\subsection{Ranked Voting}
+\labsec{us:voting}
+
+Ranked voting describes a class of voting systems wherein participants can designate primary, secondary, and perhaps more votes in an election, ranked by preference.  Various schemes consolidate these votes into a final assessment of the winning item.  In this example, we will create a \gall~agent to implement a \emph{positional voting} algorithm.  We permit voters to rank three choices of many, with the first choice receiving 3 points, the second receiving 2 points, and the third choice receiving 1 point.  Other choices receive no points.  (This variant is called a Borda count.)  There are two roles in the system:  a \emph{sponsor} \texttt{\%sponsor} who proposes a ballot, including populating the selection candidates and finalizing the vote; and one or more \emph{voters} \texttt{\%voter}, possibly including the sponsor, who vote on the items.
+
+\begin{example}
+
+The \gall~agent
+
+Furthermore, the agent needs to interact with an external browser-based interface or CLI.  In this case, we elect to compose a CLI.
+
+\lstset{title=\texttt{ranked-choice}}
+\begin{lstlisting}
+/+  default-agent, dbug
+|%
++$  versioned-state
+    $%  state-0
+    ==
++$  state-0  [%0 counter=@]
+--
+%-  agent:dbug
+=|  state-0
+=*  state  -
+^-  agent:gall
+|_  =bowl:gall
++*  this      .
+    default   ~(. (default-agent this %|) bowl)
+::
+++  on-init   >  'on-init'
+  `this(state [%0 3])
+++  on-save  ^-  vase  !>(state)
+++  on-load
+  ~&  >  'on-load'
+  on-load:default
+++  on-poke
+  |=  [=mark =vase]
+  ~&  >  state=state
+  ~&  got-poked-with-data=mark
+  =.  state  +(state)
+  `this
+  :: =/  vote
+  :: ?:  (in '')
+  ::
+::
+++  on-watch  on-watch:default
+++  on-leave  on-leave:default
+++  on-peek   on-peek:default
+++  on-agent  on-agent:default
+++  on-arvo   on-arvo:default
+++  on-fail   on-fail:default
+\end{lstlisting}
+
+\end{example}
+
 
 \subsection{Bots}
-\labsec{wbots}
+\labsec{us:bots}
 
 \section{Threading with Spider}
+\labsec{us:spider}
 
 \section{Urbit API}
+\labsec{us:api}
 
 \section{Deep Dives with Urbit API}
+\labsec{us:api-deep}
 
 \subsection{Time (Clock)}
-\labsec{wtime}
+\labsec{us:time}
 
 \subsection{Publish}
-\labsec{wpublish}
+\labsec{us:publish}
 
 \subsection{\graphstore}
-\labsec{wgraph}
+\labsec{us:graph}
+
+\subsection{WebRTC Applications}
+\labsec{us:webrtc}
+
+Initialize Urbit airlock http-api
+Create UrbitRTCApp instance
+Register handler for incomingcall event
+  reject/answer
+Call initialize()
+Place calls using call()
+or Start with peer connection from answer()
+Create Icepond instance
+Register handler for iceserver events
+Add media or data streams
+Call initialize on Icepond and peer connection
+
+commoditizes external infrastructure dependencies
+unifies personal identity and address
+removes centralized coordination for call negotiation (peer-to-peer media calls)
+(bootstrapping from Urbit peer-to-peer cnxn)
+
+
+\section{Exercises}
+\labsec{us:exercises}
+
+\begin{enumerate}
+  \item  Produce a ranked-choice voting agent which implements instant-runoff voting.  In this version, voters rank all items.  A majority item wins outright ($>50\%$); otherwise all votes for the item with the fewest first choices are redistributed based on which item is next on each voter's ballot.  This proceeds until a winner is determined.
+  \item  Produce a command-line calculator which may be accessed by anyone.
+\end{enumerate}

@@ -90,6 +90,13 @@ Some of the supporting material, like the Urbit API and Aqua, may be useful to i
 
 ---
 
+https://github.com/timlucmiptev/gall-guide/blob/master/workflow.md
+https://github.com/timlucmiptev/gall-guide/blob/master/lifecycle.md
+https://github.com/timlucmiptev/gall-guide/blob/master/ford.md
+https://github.com/famousj/gentle-gall-intro
+
+---
+
 what do yall do for debugging hoon? the only thing i have in my toolbox is ~& and i figure there must be other tools
 ~master-morzod
 5:16 PM

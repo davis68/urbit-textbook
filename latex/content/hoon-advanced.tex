@@ -1,46 +1,159 @@
 \setchapterpreamble[u]{\margintoc}
 \chapter{Advanced Hoon}
-\labch{advancedhoon}
+\labch{ha}
 
 
 \section{Cores}
-\labsec{cores}
+\labsec{ha:cores}
 
 \subsection{Variadicity}
-\labsec{variadicity}
+\labsec{ha:metals}
 
 \subsection{Genericity}
-\labsec{genericity}
+\labsec{ha:wetness}
 
 \section{Molds}
-\labsec{molds2}
+\labsec{ha:molds}
 
 As we saw when discussing auras, molds are the most general category of type in Hoon.
 
 \marginnote[2mm]{hard/soft atoms, seeing atoms, etc. TODO}
 
 \subsection{Polymorphism}
-\labsec{polymorphism}
+\labsec{ha:poly}
 
 \section{Rune Families}
-\labsec{runefamilies}
+\labsec{ha:families}
+
+\marginnote[2mm]{These runes are up-to-date as of Hoon \texttt{\%140}.}
+
+Runes play the role of structural keywords in Hoon.  Somewhat conveniently, runes are classified into semantic families by their first character.  (The second character rarely carries specific information, and only occasionally do “opposite” characters like \texttt{+} and \texttt{-} correspond.)  When reading or composing Hoon code, the ability to identify runes by family can quickly help you structure a program.
+
+It can be helpful to think of runes in two ways:  as branch points in binary trees or as modifiers and thence yielders of new subjects or expressions.  (Almost all runes except \pzapzap~and the \psig~runes can be considered in both ways.)
+
+\subsection{\texttt{|} “bar”:  Core Definition}
+\labsec{ha:bar}
+
+\pbar~runes produce cores.
+
+\subsection{\texttt{\S} “buc”:  Mold Definition}
+\labsec{ha:buc}
+
+\pbuc~runes produce mold definitions
+
+\subsection{\texttt{\%} “cen”:  Core Evaluation}
+\labsec{ha:cen}
+
+\subsection{\texttt{:} “col”:  Cell Construction}
+\labsec{ha:col}
+
+\subsection{\texttt{.} “dot”:  Nock Evaluation}
+\labsec{ha:dot}
+
+\pdot~runes allow direct evaluation of certain Nock expressions.  These are variously useful for direct operations such as atom increment, fast equality checking, and cell/atom differentiation.
+
+\subsubsection{\pdotket}
+\labsec{ha:dotket}
+
+Although Nock itself has twelve rules denominated from Zero to Eleven, a fake Nock Twelve rules allows Arvo to \emph{scry} or request out-of-subject information directly.
+
+Each vane has its own unique set of scry types; a few of these are briefly demonstrated here but scrys discussed in depth in the section on each vane.
+
+\begin{lstlisting}
+
+\end{lstlisting}
+
+Most scrys are requests to \clay~or \gall~for state information, such as subscription data.
+
+
+~master-morzod:
+
+from the inside out:
+- a (working) .^ means you're being virtualized (+mock)
+- .^ ("mock" opcode \%12) simply calls the "scry-handler" gate provided to the virtual nock interpreter
+- so .^ is just a way to read state from your caller
+- arvo implements a namespace over its state (+peek:le)
+- significant portions of that namespace are deferred to vanes (`+scry)
+- to read arvo's namespace from outside: arvo's external +peek arm
+- to read from within arvo proper: +peek:le
+- to read from within a vane, call the provided \$roof
+- to wire up arvo's namespace to .^, invoke +mock with (look roof) as the scry handler
+
+
+\subsubsection{\pdotlus}
+\labsec{ha:dotlus}
+
+Irregular form:  \texttt{+(a)}
+
+\subsubsection{\pdottar}
+\labsec{ha:dottar}
+
+\subsubsection{\pdottis}
+\labsec{ha:dottis}
+
+Irregular form:  \texttt{=(a1 a2)}
+
+\subsubsection{\pdotwut}
+\labsec{ha:dotwut}
+
+\subsection{\texttt{\^} “ket”:  Core Typecasting}
+\labsec{ha:ket}
+
+\subsection{\texttt{\textasciitilde} “sig”:  Hinting}
+\labsec{ha:sig}
+
+\marginnote[2mm]{Compare \texttt{\#pragma} expressions in C-family languages.}
+
+\psig~runes represent directives to the runtime.  Nock Eleven provides a way for the
+
+
+\subsection{\texttt{;} “mic”:  Macro}
+\labsec{ha:mic}
+
+\mic~runes are mainly utilized to produce calling structures (mainly monadic binds) and XML elements.
+
+
+\subsection{\texttt{=} “tis”:  Subject Alteration}
+\labsec{ha:tis}
+
+\tis~runes modify the subject and yield a new subject with the specified changes.
+
+\subsection{\texttt{?} “wut”:  Comparison}
+\labsec{ha:wut}
+
+\subsection{\texttt{!} “zap”:  Wildcard}
+\labsec{ha:zap}
+
+Like \mic~runes, \pzap~runes constitute a miscellany of effects.
 
 \section{Marks and Structures}
-\labsec{marks}
+\labsec{ha:marks}
 
 \section{Helpful Tools}
-\labsec{tools}
+\labsec{ha:tools}
 
 \marginnote[2mm]{See also Section~\ref{factories} which discusses common "factory patterns" in subject-oriented programming.}
 
+"so =- is inverted =+ so the second part of the expression actually executes before the first part"
+
+\begin{lstlisting}
+=-  (~(put by some-map) key -)
+... really long product that goes into the map
+\end{lstlisting}
+
+
 \section{Deep Dives}
-\labsec{deepdives}
+\labsec{ha:deep}
 
 \subsection{Text Stream Parsing}
-\labsec{text}
+\labsec{ha:text}
 
 \subsection{JSON Parsing}
-\labsec{json}
+\labsec{ha:json}
+
+JavaScript Object Notation (JSON) data structures have become a \emph{lingua franca} of the modern Web.  More compact than XML and related languages, natively parsed by Javascript, Python, and several other languages, and readily human-readable, JSON data are provided and processed by many APIs.
+
+
 
 \subsection{HTML/XML Parsing}
-\labsec{sail}
+\labsec{ha:sail}

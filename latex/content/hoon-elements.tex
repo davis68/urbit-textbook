@@ -4,13 +4,17 @@
 
 
 \section{Reading the Runes}
-\labsec{reading}
+\labsec{he:reading}
 
-The goals of this section are for you to be able to:
+\subsection{Objectives}
+\labsec{he:objectives}
+
+The goals of this chapter are for you to be able to:
 
 \begin{enumerate}
   \item  Identify Hoon runes and children in both inline and long-form syntax.
   \item  Trace a short Hoon expression to its final result.
+  \item  Execute Hoon code within a running ship.
   \item  Produce output as a side effect using the \sigpam~rune.
 \end{enumerate}
 
@@ -140,31 +144,32 @@ Following Nock's lead, Hoon uses loobeans ($0$ = $\textrm{true}$) rather than bo
 
 \begin{tabular}{lll}
   Operation & Function & Example \\ \hline \\
-  Greater than & \texttt{++gth} & \texttt{(gth 5 6)} $\rightarrow$ \no \\
-  Greater than or equal to & \texttt{++gte} & \texttt{(gte 5 6)} $\rightarrow$ \no \\
-  Less than & \texttt{++lth} & \texttt{(lth 5 6)} $\rightarrow$ \yes \\
-  Less than or equal to & \texttt{++lte} & \texttt{(lte 5 6)} $\rightarrow$ \yes \\
-  Equals & \texttt{=} & \texttt{=(5 5)} $\rightarrow$ \yes \\
-  Logical \texttt{AND}, $^TODO$ & \texttt{\&} & \texttt{\&(\%.y \%.n)} $\rightarrow$ \no \\
-  Logical \texttt{OR}, $v$ & \texttt{|} & \texttt{|(\%.y \%.n)} $\rightarrow$ \yes \\
+  Greater than, $>$ & \texttt{++gth} & \texttt{(gth 5 6)} $\rightarrow$ \no \\
+  Greater than or equal to, $\geq$ & \texttt{++gte} & \texttt{(gte 5 6)} $\rightarrow$ \no \\
+  Less than, $<$ & \texttt{++lth} & \texttt{(lth 5 6)} $\rightarrow$ \yes \\
+  Less than or equal to, $\leq$ & \texttt{++lte} & \texttt{(lte 5 6)} $\rightarrow$ \yes \\
+  Equals, $=$ & \texttt{=} & \texttt{=(5 5)} $\rightarrow$ \yes \\
+  Logical \texttt{AND}, $\land$ & \texttt{\&} & \texttt{\&(\%.y \%.n)} $\rightarrow$ \no \\
+  Logical \texttt{OR}, $\lor$ & \texttt{|} & \texttt{|(\%.y \%.n)} $\rightarrow$ \yes \\
+  Logical \texttt{NOT}, $\neg$ & \texttt{!} & \texttt{!\%.y} $\rightarrow$ \no \\
 \end{tabular}
 
-Operators can be grouped for precedence; \eg,
+Since all operations are explicitly invoked Lisp-style within nested parentheses, there is no need for explicit operator precedence rules.
 
 $$
-TODO
+(a < b) \land ((b \geq c) \lor d)
 $$
 
 \begin{lstlisting}
-\&()
+\&((lth a b) (|((gte b c) d)))
 \end{lstlisting}
 
-The Hoon standard library, largely in \zuse, further defines bitwise operations, arithmetic for integers and floating-point values (half-width, single-precision, double-precision, and quadruple-precision), TODO
-These are introduced incidentally as necessary and listed in more detail in Appendix~\ref{stdlib}.
+The Hoon standard library, largely in \zuse, further defines bitwise operations, arithmetic for both integers and floating-point values (half-width, single-precision, double-precision, and quadruple-precision), string operations, and more.  These are introduced incidentally as necessary and listed in more detail in Appendix~\ref{stdlib}.
 
 \subsection{Cells}
 \labsec{cells}
 
+Just as all structures in Nock are binary trees, so too with Hoon.  This can occasionally lead to some awkward addressing when composing tetchy library code segments that need to interface with many different kinds of gates, but by and large is an extremely helpful discipline of thought.
 
 
 binary tree format
@@ -181,6 +186,32 @@ Finally, the most general mold is \texttt{*} which simply matches any noun—and
 \labsec{macro}
 
 The point of employing Hoon is, of course, that Hoon compiles to Nock.  Rather than even say \emph{compile}, however, we should really just say Hoon is a \emph{macro} of Nock.  Each Hoon rune, data structure, and effect corresponds to a well-defined Nock primitive form.  We may say that Hoon is to Nock as C is to assembler, except that the Hoon-to-Nock transformation is completely specified and portable.  Hoon is ultimately defined in terms of Nock; many Hoon runes are defined in terms of other more fundamental Hoon runes, but all runes parse unambiguously to Nock expressions.
+
+
+Hoon expands on Nock primarily through the introduction of metadata
+
+
+Each Hoon rune has an unambiguous mapping to a Nock representation.  Furthermore, each rune has a well-defined binary tree structure and produces a similarly well-structured abstract syntax tree (AST).  As we systematically introduce runes, we will expand on what this means in each case:  for now, let's examine two runes without regard for their role.
+
+\begin{enumerate}
+  \item  \pbartis~produces a \emph{gate} or function.  Every gate has the same shape, which means certain assumptions about data access and availability can be made.
+
+    \begin{lstlisting}
+::  XOR two binary atoms
+|=  [a=@ub b=@ub]
+`@ub`(mix a b)
+    \end{lstlisting}
+
+    maps to the Nock code
+
+    \begin{lstlisting}
+[8 [1 0 0] [1 8 [9 1.494 0 4.095] 9 2 10 [6 [0 28] 0 29] 0 2] 0 1]
+    \end{lstlisting}
+
+    This Nock code is fully annotated in Example~\ref{ex:nock:xor}.
+
+  \item  TODO
+\end{enumerate}
 
 
 We call Hoon's data type specifications \emph{molds}.  Molds are more general than atoms and cells, but these form particular cases.  Hoon uses molds as a way of matching Nock tree structures (including Hoon metadata tags such as auras).
@@ -259,16 +290,52 @@ but has probably never been used
 \labsec{macro}
 
 \section{Generators}
-\labsec{generators}
+\labsec{he:generators}
+
+Generators are standalone Hoon expressions that evaluate and may produce side effects, as appropriate.  They are closely analogous to simple scripts in languages such as Bash or Python.  By using generators, one is able to develop more involved Hoon code and run it repeatedly without awkwardness.
+
+\marginnote[2mm]{You may also see commands beginning with \texttt{|}; these are TODO commands instead.}
+
+To run a generator on a ship, prefix its name with \texttt{+}.  Arguments may be required or optional.
+
+\begin{lstlisting}[style=nonumbers]
++moon TODO
+\end{lstlisting}
+
+\subsection{Running Developer Code on an Urbit Ship}
+\labsec{he:running}
+
+Since the Urbit file system, called \clay, is independent of the Unix file system on which it is hosted, you must commit your Unix-side code into your pier.
+
+If we \texttt{cd} into the ship's pier in Unix and \texttt{ls} the directory contents, by default we see nothing.  With \texttt{ls -l}, a \texttt{.urb/} directory containing the ship's configuration and contents in obfuscated format becomes visible.  This directory is not interpretable by us now, so we leave it until a later discussion of the Urbit binary.  To move files into \clay, we must synchronize Urbit and Unix together.  We initiate this inside of the running ship; run the Urbit system command:
+
+\begin{lstlisting}[style=nonumbers]
+|mount %
+\end{lstlisting}
+
+where \texttt{\%} represents the current (home) path in \clay.  Unix-side, run \texttt{ls} again and a \texttt{home/} directory appears with a number of children:  \texttt{app/}, \texttt{gen/}, \texttt{lib/}, \texttt{mar/}, and so forth.  This is the internal esoteric structure of \clay~made manifest to Unix.
+
+\marginnote[2mm]{\clay~implements several \emph{desks}, which are like branches in version control systems; the most important of these are \chome~and \ckids.}
+Generally speaking, we compose \emph{generators}, which are short Hoon scripts.  These are created in or copied into the \texttt{home/mar/} directory, and then must be synchronized with Urbit's \clay.  Commit the change:
+
+\begin{lstlisting}[style=nonumbers]
+|commit %home
+\end{lstlisting}
+
+and the generator is now available within \clay.
 
 \subsection{Naked Generators}
-\labsec{naked}
+\labsec{he:naked}
+
+As we start to compose generators,
+
+A naked generator is so called because it contains no metadata for the Arvo interpreter.
 
 \subsection{\say~generators}
-\labsec{say}
+\labsec{he:say}
 
 \subsection{\ask~generators}
-\labsec{ask}
+\labsec{he:ask}
 
 \section{Libraries}
 \labsec{libraries}
@@ -278,3 +345,18 @@ but has probably never been used
 
 \section{Building Code}
 \labsec{building}
+
+\section{Exercises}
+
+The vertical direction presents a six-step process that prompts students to
+read the problem statement, figure out the data that is needed to represent the information of interest, and illustrate their insight with concrete examples;
+
+articulate a purpose statement that concisely describes what the function or program is supposed to compute, including a signature;
+
+work through functional examples, that is, explain what the function or program is supposed to produce when given certain inputs, based on steps 1 and 2;
+
+create an outline of the program, based on steps 1 and 2;
+
+fill in the outline from step 4, using steps 2 and 3; and
+
+turn the examples from step 2 into a test suite for the program from step 5.
