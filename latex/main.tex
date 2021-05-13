@@ -13,6 +13,8 @@
 \usepackage[english]{babel} % Load characters and hyphenation
 \usepackage[english=british]{csquotes} % English quotes
 \usepackage[utf8]{inputenc}
+\usepackage{palatino}
+\setmonofont{Ubuntu Mono}
 
 % Load packages for testing
 \usepackage{blindtext}
@@ -29,12 +31,44 @@
 
 \usepackage{color}
 
+\usepackage{hhline}
+
 \usepackage{listings}
+\lstdefinelanguage{Hoon}
+{
+  alsoletter={
+    ~!@\#\$\%^&*-_=+:;<>\,.?/|`"'\\
+  },
+  keywords={
+    |_, |\%, |@, |:, |., |-, |^, |~, |*, |=, |?, |\$,
+    \$@, \$_, \$:, \$\%, \$<, \$>, \$|, \$\&, \$^, \$~, \$-, \$=, \$?, \$;,
+    \%_, \%., \%^, \%+, \%-, \%:, \%~, \%*, \%=,
+    :_, :^, :+, :-, :~, :*,
+    .+, .*, .=, .?, .^,
+    --, ==,
+    ^|, ^., ^-, ^+, ^\&, ^~, ^=, ^?, ^*, ^:,
+    ~|, ~\$, ~_, ~\%, ~/, ~<, ~>, ~+, ~\&, ~?, ~=, ~!,
+    ;:, ;/, ;<, ;~, ;;, ;+, ;*, ;=,
+    =|, =., =?, =^, =:, =/, =;, =<, =>, =-, =*, =\,, =+, =~,
+    ?|, ?:, ?., ?<, ?>, ?-, ?^, ?=, ?\#, ?+, ?\&, ?@, ?~, ?!,
+    !:, !., !\,, !;, !>, !<, !@, !=, !?, !!,
+    /?, /-, /+, /=, /\%, /\$, /*,
+    +|, +\$, ++, +*,
+  },
+  morekeywords={
+    @, @c, @d, @da, @dr, @f, @i, @if, @is, @n, @p, @q, @r, @rh, @rs, @rd, @rq, @s, @sb, @sd, @sv, @sw, @sx, @t, @ta, @tas, @u, @ub, @uc, @ud, @uv, @uw, @ux
+    unit, cord, arch, tape, list, map, set
+  },
+  sensitive=true,
+  morecomment=[l]{::},
+  morestring=[b]",
+  morestring=[d]'
+}
 \lstset{ % General setup for the package
     language=Perl,
-    basicstyle=\small\sffamily,
+    basicstyle=\small\ttfamily,
     numbers=left,
-    numberstyle=\tiny,
+    numberstyle=\tiny\sffamily,
     frame=tb,
     tabsize=4,
     columns=fixed,
@@ -84,18 +118,53 @@
 \newcommand{\graphstore}{\texttt{\%graph-store}}
 \newcommand{\mock}{\texttt{++mock}}
 \newcommand{\say}{\texttt{\%say}}
+\newcommand{\shoe}{\texttt{\%shoe}}
 \newcommand{\unix}{\texttt{\%unix}}
 \newcommand{\zod}{\texttt{\textasciitilde zod}}
+
+\newcommand{\czar}{\texttt{\%czar}}
+\newcommand{\king}{\texttt{\%king}}
+\newcommand{\duke}{\texttt{\%duke}}
+\newcommand{\earl}{\texttt{\%earl}}
+\newcommand{\lord}{\texttt{\%lord}}
+\newcommand{\pawn}{\texttt{\%pawn}}
+\newcommand{\wolf}{\texttt{\%wolf}}
 
 % Hoon auras
 \newcommand{\nullchr}{\texttt{\textasciitilde}}
 \newcommand{\patc}{\texttt{@c}}
+\newcommand{\patd}{\texttt{@d}}
+\newcommand{\patda}{\texttt{@da}}
+\newcommand{\patdr}{\texttt{@dr}}
+\newcommand{\patf}{\texttt{@f}}
+\newcommand{\pati}{\texttt{@i}}
+\newcommand{\patif}{\texttt{@if}}
+\newcommand{\patis}{\texttt{@is}}
+\newcommand{\patn}{\texttt{@n}}
 \newcommand{\patp}{\texttt{@p}}
+\newcommand{\patq}{\texttt{@q}}
+\newcommand{\patr}{\texttt{@r}}
+\newcommand{\patrd}{\texttt{@rd}}
+\newcommand{\patrh}{\texttt{@rh}}
+\newcommand{\patrq}{\texttt{@rq}}
+\newcommand{\patrs}{\texttt{@rs}}
+\newcommand{\pats}{\texttt{@s}}
+\newcommand{\patsb}{\texttt{@sb}}
+\newcommand{\patsd}{\texttt{@sd}}
+\newcommand{\patsv}{\texttt{@sv}}
+\newcommand{\patsw}{\texttt{@sw}}
+\newcommand{\patsx}{\texttt{@sx}}
 \newcommand{\patt}{\texttt{@t}}
 \newcommand{\patta}{\texttt{@ta}}
 \newcommand{\pattas}{\texttt{@tas}}
+\newcommand{\patu}{\texttt{@u}}
 \newcommand{\patub}{\texttt{@ub}}
+\newcommand{\patuc}{\texttt{@uc}}
 \newcommand{\patud}{\texttt{@ud}}
+\newcommand{\patui}{\texttt{@ui}}
+\newcommand{\patuv}{\texttt{@uv}}
+\newcommand{\patuvJ}{\texttt{@uvJ}}  % entropy
+\newcommand{\patuw}{\texttt{@uw}}
 \newcommand{\patux}{\texttt{@ux}}
 
 \newcommand{\ub}{${0b}$}
@@ -138,7 +207,7 @@
 \newcommand{\pcen}{\texttt{\%} “cen”}
 \newcommand{\pcol}{\texttt{:} “col”}
 \newcommand{\pdot}{\texttt{.} “dot”}
-\newcommand{\pket}{\texttt{\^} “ket”}
+\newcommand{\pket}{\texttt{\^{}} “ket”}
 \newcommand{\pmic}{\texttt{;} “mic”}
 \newcommand{\psig}{\texttt{\textasciitilde} “sig”}
 \newcommand{\ptis}{\texttt{=} “tis”}
@@ -146,21 +215,287 @@
 \newcommand{\pzap}{\texttt{!} “zap”}
 
 % individual runes
-\newcommand{\pbartis}{\texttt{|=} "bartis"} % TODO “”
-\newcommand{\pcenhep}{\texttt{\%-} "cenhep"}
-\newcommand{\pdotket}{\texttt{.\^} "dotket"}
-\newcommand{\pdottar}{\texttt{.*} "dottar"}
-\newcommand{\psigpam}{\texttt{~\&} "sigpam"}
-\newcommand{\pwuttis}{\texttt{?=} "wuttis"}
-\newcommand{\pzapzap}{\texttt{!!} "zapzap"}
-\newcommand{\pzaptis}{\texttt{!=} "zaptis"}
-\newcommand{\pzapcom}{\texttt{!,} "zapcom"}
-
+\newcommand{\pbarbuc}{\texttt{|\$} “barbuc”}
+\newcommand{\pbarcab}{\texttt{|\_} “barcab”}
+\newcommand{\pbarcen}{\texttt{|\%} “barcen”}
+\newcommand{\pbarcol}{\texttt{|:} “barcol”}
+\newcommand{\pbardot}{\texttt{|.} “bardot”}
+\newcommand{\pbarhep}{\texttt{|-} “barhep”}
+\newcommand{\pbarket}{\texttt{|\^{}} “barket”}
+\newcommand{\pbarpat}{\texttt{|\@} “barpat”}
+\newcommand{\pbarsig}{\texttt{|\textasciitilde} “barsig”}
+\newcommand{\pbartar}{\texttt{|*} “bartar”}
+\newcommand{\pbartis}{\texttt{|=} “bartis”}
+\newcommand{\pbarwut}{\texttt{|?} “barwut”}
+%
+\newcommand{\pbucbar}{\texttt{\$|} “bucbar”}
+\newcommand{\pbuccab}{\texttt{\$\_} “buccab”}
+\newcommand{\pbuccen}{\texttt{\$\%} “buccen”}
+\newcommand{\pbuccol}{\texttt{\$:} “buccol”}
+\newcommand{\pbucdot}{\texttt{\$.} “bucdot”}
+\newcommand{\pbucgal}{\texttt{\$<} “bucgal”}
+\newcommand{\pbucgar}{\texttt{\$>} “bucgar”}
+\newcommand{\pbuchep}{\texttt{\$-} “buchep”}
+\newcommand{\pbucket}{\texttt{\$\^{}} “bucket”}
+\newcommand{\pbucmic}{\texttt{\$} “bucmic”}
+\newcommand{\pbucpam}{\texttt{\$\&} “bucpam”}
+\newcommand{\pbucpat}{\texttt{\$\@} “bucpat”}
+\newcommand{\pbucsig}{\texttt{\$\textascitilde} “bucsig”}
+\newcommand{\pbuctis}{\texttt{\$=} “buctis”}
+\newcommand{\pbucwut}{\texttt{\$?} “bucwut”}
+%
+\newcommand{\pcencab}{\texttt{\%\_} “cencab”}
+\newcommand{\pcencol}{\texttt{\%:} “cencol”}
+\newcommand{\pcendot}{\texttt{\%.} “cendot”}
+\newcommand{\pcenhep}{\texttt{\%-} “cenhep”}
+\newcommand{\pcenket}{\texttt{\%\^{}} “cenket”}
+\newcommand{\pcenlus}{\texttt{\%+} “cenlus”}
+\newcommand{\pcensig}{\texttt{\%\textasciitilde} “censig”}
+\newcommand{\pcentar}{\texttt{\%*} “centar”}
+\newcommand{\pcentis}{\texttt{\%=} “centis”}
+%
+\newcommand{\pcolcab}{\texttt{:\_} “colcab”}
+\newcommand{\pcolcol}{\texttt{::} “colcol”}
+\newcommand{\pcolhep}{\texttt{:-} “colhep”}
+\newcommand{\pcolket}{\texttt{:\^{}} “colket”}
+\newcommand{\pcollus}{\texttt{:+} “collus”}
+\newcommand{\pcolsig}{\texttt{:\textasciitilde} “colsig”}
+\newcommand{\pcoltar}{\texttt{:*} “coltar”}
+%
+\newcommand{\pdotlus}{\texttt{.+} “dotlus”}
+\newcommand{\pdotket}{\texttt{.\^} “dotket”}
+\newcommand{\pdottar}{\texttt{.*} “dottar”}
+\newcommand{\pdottis}{\texttt{.=} “dottis”}
+\newcommand{\pdotwut}{\texttt{.?} “dotwut”}
+%
+\newcommand{\pfasbuc}{\texttt{/\$} “fasbuc”}
+\newcommand{\pfascen}{\texttt{/\%} “fascen”}
+\newcommand{\pfashep}{\texttt{/-} “fashep”}
+\newcommand{\pfaslus}{\texttt{/+} “faslus”}
+\newcommand{\pfastar}{\texttt{/*} “fastar”}
+\newcommand{\pfastis}{\texttt{/=} “fastis”}
+\newcommand{\pfaswut}{\texttt{/?} “faswut”}
+%
+\newcommand{\phephep}{\texttt{--} “hephep”}
+%
+\newcommand{\pketbar}{\texttt{\^{}|} “ketbar”}
+\newcommand{\pketcol}{\texttt{\^{}:} “ketcol”}
+\newcommand{\pketdot}{\texttt{\^{}.} “ketdot”}
+\newcommand{\pkethep}{\texttt{\^{}-} “kethep”}
+\newcommand{\pketlus}{\texttt{\^{}+} “ketlus”}
+\newcommand{\pketpam}{\texttt{\^{}\&} “ketpam”}
+\newcommand{\pketsig}{\texttt{\^{}\textasciitilde} “ketsig”}
+\newcommand{\pkettar}{\texttt{\^{}*} “kettar”}
+\newcommand{\pkettis}{\texttt{\^{}=} “kettis”}
+\newcommand{\pketwut}{\texttt{\^{}?} “ketwut”}
+%
+\newcommand{\plusbar}{\texttt{+|} “lusbar”}
+\newcommand{\plusbuc}{\texttt{+\$} “lusbuc”}
+\newcommand{\pluslus}{\texttt{++} “luslus”}
+\newcommand{\plustar}{\texttt{+*} “lustar”}
+%
+\newcommand{\pmiccol}{\texttt{;:} “miccol”}
+\newcommand{\pmicfas}{\texttt{;/} “micfas”}
+\newcommand{\pmicgal}{\texttt{;<} “micgal”}
+\newcommand{\pmiclus}{\texttt{;+} “miclus”}
+\newcommand{\pmicmic}{\texttt{;;} “micmic”}
+\newcommand{\pmicsig}{\texttt{;\textasciitilde} “micsig”}
+\newcommand{\pmictar}{\texttt{;*} “mictar”}
+\newcommand{\pmictis}{\texttt{;=} “mictis”}
+%
+\newcommand{\psigbar}{\texttt{\textasciitilde|} “sigbar”}
+\newcommand{\psigbuc}{\texttt{\textasciitilde\$} “sigbuc”}
+\newcommand{\psigcab}{\texttt{\textasciitilde\_} “sigcab”}
+\newcommand{\psigcen}{\texttt{\textasciitilde\%} “sigcen”}
+\newcommand{\psigfas}{\texttt{\textasciitilde/} “sigfas”}
+\newcommand{\psiggal}{\texttt{\textasciitilde<} “siggal”}
+\newcommand{\psiggar}{\texttt{\textasciitilde>} “siggar”}
+\newcommand{\psiglus}{\texttt{\textasciitilde+} “siglus”}
+\newcommand{\psigpam}{\texttt{\textasciitilde\&} “sigpam”}
+\newcommand{\psigtis}{\texttt{\textasciitilde=} “sigtis”}
+\newcommand{\psigwut}{\texttt{\textasciitilde?} “sigwut”}
+\newcommand{\psigzap}{\texttt{\textasciitilde!} “sigzap”}
+%
+\newcommand{\ptisbar}{\texttt{=|} “tisbar”}
+\newcommand{\ptiscol}{\texttt{=:} “tiscol”}
+\newcommand{\ptiscom}{\texttt{=,} “tiscom”}
+\newcommand{\ptisdot}{\texttt{=.} “tisdot”}
+\newcommand{\ptisfas}{\texttt{=/} “tisfas”}
+\newcommand{\ptisgal}{\texttt{=<} “tisgal”}
+\newcommand{\ptisgar}{\texttt{=>} “tisgar”}
+\newcommand{\ptishep}{\texttt{=-} “tishep”}
+\newcommand{\ptisket}{\texttt{=\^{}} “tisket”}
+\newcommand{\ptislus}{\texttt{=+} “tislus”}
+\newcommand{\ptismic}{\texttt{=;} “tismic”}
+\newcommand{\ptistar}{\texttt{=*} “tistar”}
+\newcommand{\ptissig}{\texttt{=\textasciitilde} “tissig”}
+\newcommand{\ptistis}{\texttt{==} “tistis”}
+\newcommand{\ptiswut}{\texttt{=?} “tiswut”}
+%
+\newcommand{\pwutbar}{\texttt{?|} “wutbar”}
+\newcommand{\pwutcol}{\texttt{?:} “wutcol”}
+\newcommand{\pwutdot}{\texttt{?.} “wutdot”}
+\newcommand{\pwutgal}{\texttt{?<} “wutgal”}
+\newcommand{\pwutgar}{\texttt{?>} “wutgar”}
+\newcommand{\pwuthax}{\texttt{?\#} “wuthax”}
+\newcommand{\pwuthep}{\texttt{?-} “wuthep”}
+\newcommand{\pwutket}{\texttt{?\^{}} “wutket”}
+\newcommand{\pwutlus}{\texttt{?+} “wutlus”}
+\newcommand{\pwutpam}{\texttt{?\&} “wutpam”}
+\newcommand{\pwutsig}{\texttt{?\textasciitilde} “wutsig}
+\newcommand{\pwutzap}{\texttt{?!} “wutzap”}
+%
+\newcommand{\pzapcol}{\texttt{!:} “zapcol”}
+\newcommand{\pzapcom}{\texttt{!,} “zapcom”}
+\newcommand{\pzapdot}{\texttt{!.} “zapdot”}
+\newcommand{\pzapgal}{\texttt{!<} “zapgal”}
+\newcommand{\pzapgar}{\texttt{!>} “zapgar”}
+\newcommand{\pzapmic}{\texttt{!;} “zapmic”}
+\newcommand{\pzappat}{\texttt{!\@} “zappat”}
+\newcommand{\pzaptis}{\texttt{!=} “zaptis”}
+\newcommand{\pzapwut}{\texttt{!?} “zapwut”}
+\newcommand{\pzapzap}{\texttt{!!} “zapzap”}
+%
+\newcommand{\barbuc}{\texttt{|\$}}
+\newcommand{\barcab}{\texttt{|\_}}
+\newcommand{\barcen}{\texttt{|\%}}
+\newcommand{\barcol}{\texttt{|:}}
+\newcommand{\bardot}{\texttt{|.}}
+\newcommand{\barhep}{\texttt{|-}}
+\newcommand{\barket}{\texttt{|\^{}}}
+\newcommand{\barpat}{\texttt{|\@}}
+\newcommand{\barsig}{\texttt{|\textasciitilde}}
+\newcommand{\bartar}{\texttt{|*}}
+\newcommand{\bartis}{\texttt{|=}}
+\newcommand{\barwut}{\texttt{|?}}
+%
+\newcommand{\bucbar}{\texttt{\$|}}
+\newcommand{\buccab}{\texttt{\$\_}}
+\newcommand{\buccen}{\texttt{\$\%}}
+\newcommand{\buccol}{\texttt{\$:}}
+\newcommand{\bucdot}{\texttt{\$.}}
+\newcommand{\bucgal}{\texttt{\$<}}
+\newcommand{\bucgar}{\texttt{\$>}}
+\newcommand{\buchep}{\texttt{\$-}}
+\newcommand{\bucket}{\texttt{\$\^{}}}
+\newcommand{\bucmic}{\texttt{\$}}
+\newcommand{\bucpam}{\texttt{\$\&}}
+\newcommand{\bucpat}{\texttt{\$\@}}
+\newcommand{\bucsig}{\texttt{\$\textascitilde}}
+\newcommand{\buctis}{\texttt{\$=}}
+\newcommand{\bucwut}{\texttt{\$?}}
+%
+\newcommand{\cencab}{\texttt{\%\_}}
+\newcommand{\cencol}{\texttt{\%:}}
+\newcommand{\cendot}{\texttt{\%.}}
 \newcommand{\cenhep}{\texttt{\%-}}
+\newcommand{\cenket}{\texttt{\%\^{}}}
+\newcommand{\cenlus}{\texttt{\%+}}
+\newcommand{\censig}{\texttt{\%\textasciitilde}}
+\newcommand{\centar}{\texttt{\%*}}
+\newcommand{\centis}{\texttt{\%=}}
+%
+\newcommand{\colcab}{\texttt{:\_}}
+\newcommand{\colcol}{\texttt{::}}
+\newcommand{\colhep}{\texttt{:-}}
+\newcommand{\colket}{\texttt{:\^{}}}
+\newcommand{\collus}{\texttt{:+}}
+\newcommand{\colsig}{\texttt{:\textasciitilde}}
+\newcommand{\coltar}{\texttt{:*}}
+%
+\newcommand{\dotlus}{\texttt{.+}}
+\newcommand{\dotket}{\texttt{.\^}}
 \newcommand{\dottar}{\texttt{.*}}
 \newcommand{\dottis}{\texttt{.=}}
-\newcommand{\sigpam}{\texttt{~\&}}
+\newcommand{\dotwut}{\texttt{.?}}
+%
+\newcommand{\fasbuc}{\texttt{/\$}}
+\newcommand{\fascen}{\texttt{/\%}}
+\newcommand{\fashep}{\texttt{/-}}
+\newcommand{\faslus}{\texttt{/+}}
+\newcommand{\fastar}{\texttt{/*}}
+\newcommand{\fastis}{\texttt{/=}}
+\newcommand{\faswut}{\texttt{/?}}
+%
+\newcommand{\hephep}{\texttt{--}}
+%
+\newcommand{\ketbar}{\texttt{\^{}|}}
+\newcommand{\ketcol}{\texttt{\^{}:}}
+\newcommand{\ketdot}{\texttt{\^{}.}}
+\newcommand{\kethep}{\texttt{\^{}-}}
+\newcommand{\ketlus}{\texttt{\^{}+}}
+\newcommand{\ketpam}{\texttt{\^{}\&}}
+\newcommand{\ketsig}{\texttt{\^{}\textasciitilde}}
+\newcommand{\kettar}{\texttt{\^{}*}}
+\newcommand{\kettis}{\texttt{\^{}=}}
+\newcommand{\ketwut}{\texttt{\^{}?}}
+%
+\newcommand{\lusbar}{\texttt{+|}}
+\newcommand{\lusbuc}{\texttt{+\$}}
+\newcommand{\luslus}{\texttt{++}}
+\newcommand{\lustar}{\texttt{+*}}
+%
+\newcommand{\miccol}{\texttt{;:}}
+\newcommand{\micfas}{\texttt{;/}}
+\newcommand{\micgal}{\texttt{;<}}
+\newcommand{\miclus}{\texttt{;+}}
+\newcommand{\micmic}{\texttt{;;}}
+\newcommand{\micsig}{\texttt{;\textasciitilde}}
+\newcommand{\mictar}{\texttt{;*}}
+\newcommand{\mictis}{\texttt{;=}}
+%
+\newcommand{\sigbar}{\texttt{\textasciitilde|}}
+\newcommand{\sigbuc}{\texttt{\textasciitilde\$}}
+\newcommand{\sigcab}{\texttt{\textasciitilde\_}}
+\newcommand{\sigcen}{\texttt{\textasciitilde\%}}
+\newcommand{\sigfas}{\texttt{\textasciitilde/}}
+\newcommand{\siggal}{\texttt{\textasciitilde<}}
+\newcommand{\siggar}{\texttt{\textasciitilde>}}
+\newcommand{\siglus}{\texttt{\textasciitilde+}}
+\newcommand{\sigpam}{\texttt{\textasciitilde\&}}
+\newcommand{\sigtis}{\texttt{\textasciitilde=}}
+\newcommand{\sigwut}{\texttt{\textasciitilde?}}
+\newcommand{\sigzap}{\texttt{\textasciitilde!}}
+%
+\newcommand{\tisbar}{\texttt{=|}}
+\newcommand{\tiscol}{\texttt{=:}}
+\newcommand{\tiscom}{\texttt{=,}}
+\newcommand{\tisdot}{\texttt{=.}}
+\newcommand{\tisfas}{\texttt{=/}}
+\newcommand{\tisgal}{\texttt{=<}}
+\newcommand{\tisgar}{\texttt{=>}}
+\newcommand{\tishep}{\texttt{=-}}
+\newcommand{\tisket}{\texttt{=\^{}}}
+\newcommand{\tislus}{\texttt{=+}}
+\newcommand{\tismic}{\texttt{=;}}
+\newcommand{\tissig}{\texttt{=\textasciitilde}}
+\newcommand{\tistar}{\texttt{=*}}
+\newcommand{\tistis}{\texttt{==}}
+\newcommand{\tiswut}{\texttt{=?}}
+%
+\newcommand{\wutbar}{\texttt{?|}}
+\newcommand{\wutcol}{\texttt{?:}}
+\newcommand{\wutdot}{\texttt{?.}}
+\newcommand{\wutgal}{\texttt{?<}}
+\newcommand{\wutgar}{\texttt{?>}}
+\newcommand{\wuthax}{\texttt{?\#}}
+\newcommand{\wuthep}{\texttt{?-}}
+\newcommand{\wutket}{\texttt{?\^{}}}
+\newcommand{\wutlus}{\texttt{?+}}
+\newcommand{\wutpam}{\texttt{?\&}}
+\newcommand{\wutsig}{\texttt{?\textasciitilde}}
 \newcommand{\wuttis}{\texttt{?=}}
+\newcommand{\wutzap}{\texttt{?!}}
+%
+\newcommand{\zapcol}{\texttt{!:}}
+\newcommand{\zapcom}{\texttt{!,}}
+\newcommand{\zapdot}{\texttt{!.}}
+\newcommand{\zapgal}{\texttt{!<}}
+\newcommand{\zapgar}{\texttt{!>}}
+\newcommand{\zapmic}{\texttt{!;}}
+\newcommand{\zappat}{\texttt{!\@}}
+\newcommand{\zaptis}{\texttt{!=}}
+\newcommand{\zapwut}{\texttt{!?}}
 \newcommand{\zapzap}{\texttt{!!}}
 
 
@@ -227,7 +562,7 @@
 	\medskip
 
 	\textbf{Publisher} \\
-	First printed in July 2022 by \@publishers
+	First published in the year of our Lord 2021 by \@publishers.
 }
 \makeatother
 

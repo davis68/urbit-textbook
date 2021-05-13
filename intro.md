@@ -97,6 +97,16 @@ https://github.com/famousj/gentle-gall-intro
 
 ---
 
+|ota (snag (~(rad og eny) 5) `(list @p)`~[~wanzod ~marzod ~binzod ~litzod ~samzod]) %kids
+
+---
+
+>They are: tutorials, how-to guides, technical reference and explanation. They represent four different purposes or functions, and require four different approaches to their creation. Understanding the implications of this will help improve most documentation - often immensely.
+
+https://documentation.divio.com/
+
+---
+
 what do yall do for debugging hoon? the only thing i have in my toolbox is ~& and i figure there must be other tools
 ~master-morzod
 5:16 PM

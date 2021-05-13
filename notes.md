@@ -22,7 +22,7 @@ https://third-bit.com/2021/01/27/essence-of-teaching/
 https://github.com/Fang-/Urbit-By-Doing/blob/master/talkbot/4.md
 
 
-```
+```c
 ' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~';
 ```
 

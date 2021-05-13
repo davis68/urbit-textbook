@@ -4,16 +4,87 @@
 
 
 \section{Cores}
-\labsec{ha:cores}
+\labsec{ha:core}
+
+\subsection{Type Definition}
+\labsec{ha:core:type}
+
+Cores are defined in Hoon as
+
+\begin{lstlisting}
+[$core p=type q=coil]
++$  coil
+  $:
+    p=[p=(unit term) q=?(%wet %dry) r=?($gold $iron $lead $zinc)]
+    q=type
+    r=[p=seminoun q=(map term (pair what (map term hoon))]
+\end{lstlisting}
+
+where a \texttt{+\$type} is any or zero nouns.  (The rest we will discuss in this section.)
 
 \subsection{Variadicity}
-\labsec{ha:metals}
+\labsec{ha:core:metals}
+
+Variadicity describes how an object TODO
+
+Cores can hew to a variety of variadic models:
+
+\begin{enumerate}
+  \item  \textbf{\gold~cores} are covariant, meaning that they allow universal reading from and writing to the core.  \gold~cores are ubiquituous as they are the default core variadic model.
+  \item  \textbf{\iron~cores}
+  \item  \textbf{\lead~cores}
+  \item  \textbf{\zinc~cores} are rarely used in practice, but complete the system of variadic relationships.
+\end{enumerate}
+
+> anyway you can explicitly set the sample in an iron core
+but you can't use it with +roll
+New messages below
+11:54 (~master-morzod)
+\gold~is the default, read/write everything; \iron~is for functions (write to the sample with a contravariant nest check), \lead~is "hide the whole payload", \zinc~completes the matrix
+but has probably never been used
+\iron~lets you refer to a typed gate (without wetness), without depending on all the details of the subject it was defined against
+\lead~lets you export a library interface but hide the implementation details
 
 \subsection{Genericity}
-\labsec{ha:wetness}
+\labsec{ha:core:wetness}
+
+\marginnote[2mm]{TODO Hoon koan about boiling tea}
+Similar to how cores vary by variadicity (the metal type), some cores (gates) can also differ by \emph{genericity} or their type analysis behavior.  Gates can be classified as either \emph{dry} or \emph{wet}:
+
+\begin{enumerate}
+  \item  \textbf{Dry gates} perform type analysis at the call site.  When arguments are passed to the gate, the compiler attempts to cast each argument to the type specified by the gate.  In a sense, a strong typing system is enforced, although nesting rules apply (\eg, \patud~nests in \patu).
+
+    The \pbartis~rune produces a dry gate as a pair of a specification and a resulting value:  that is, a cell containing the arguments and the operative binary tree (\texttt{battery} specifying values, \texttt{payload} specifying operations).
+
+  \item  \textbf{Wet gates} perform type analysis at the gate definition.  When arguments are passed to the gate, the argument types are preserved and the compiler carries out type analysis at the definition of the gate.  This allows wet gates to be much more flexible (and correspondingly dangerous!) in parsing arbitrary inputs.
+
+    \marginnote[2mm]{Wet gates can be thought of as C-style macros while dry gates are like C-style functions.}
+    The \bartar~rune produces wet gates
+
+    \marginnote[2mm](Wet arms and wet cores behave a bit like C++ overloaded operators and templates or Haskell typeclasses.  However, there is no multiple dispatch (as with C++) so there's not a way to, \eg, just make `++add` and `++add:rs` compatible.)
+\end{enumerate}
+
+Hearken back to the type definition of a core.
+
+\begin{lstlisting}
+[$core p=type q=coil]
++$  coil
+  $:
+    p=[p=(unit term) q=?(%wet %dry) r=?($gold $iron $lead $zinc)]
+    q=type
+    r=[p=seminoun q=(map term (pair what (map term hoon))]
+\end{lstlisting}
+
+Here one can see that
+
+\begin{quote}
+The full core stores both payload types.  The type that describes the payload currently in the core is \texttt{p}.  The type that describes the payload the core was compiled with is \texttt{q.q}.  (Documentation, “Cores”)
+\end{quote}
+
+
 
 \section{Molds}
-\labsec{ha:molds}
+\labsec{ha:mold}
 
 As we saw when discussing auras, molds are the most general category of type in Hoon.
 
@@ -31,10 +102,20 @@ Runes play the role of structural keywords in Hoon.  Somewhat conveniently, rune
 
 It can be helpful to think of runes in two ways:  as branch points in binary trees or as modifiers and thence yielders of new subjects or expressions.  (Almost all runes except \pzapzap~and the \psig~runes can be considered in both ways.)
 
+Below, we discuss the most significant runes in each family and give examples of their usage.  In subsequent discussion, you should refer back to this discussion in order to interpret kernel and userspace code containing unfamiliar runes.  We defer a comprehensive catalogue of runes to Appendix~\ref{ap:runes}.
+
 \subsection{\texttt{|} “bar”:  Core Definition}
 \labsec{ha:bar}
 
 \pbar~runes produce cores.
+
+The \barhep~rune expands to an evaluated \bardot~trap and thence to a one-armed \barcen~core with \buc~arm.
+
+\begin{lstlisting}[style=nonumbers]
+=<  $  |.  a=hoon
+=<  $  |%  ++  $  a=hoon
+\end{lstlisting}
+
 
 \subsection{\texttt{\S} “buc”:  Mold Definition}
 \labsec{ha:buc}
@@ -47,7 +128,7 @@ It can be helpful to think of runes in two ways:  as branch points in binary tre
 \subsection{\texttt{:} “col”:  Cell Construction}
 \labsec{ha:col}
 
-\subsection{\texttt{.} “dot”:  Nock Evaluation}
+\subsection{\pdot:  Nock Evaluation}
 \labsec{ha:dot}
 
 \pdot~runes allow direct evaluation of certain Nock expressions.  These are variously useful for direct operations such as atom increment, fast equality checking, and cell/atom differentiation.
@@ -69,15 +150,15 @@ Most scrys are requests to \clay~or \gall~for state information, such as subscri
 ~master-morzod:
 
 from the inside out:
-- a (working) .^ means you're being virtualized (+mock)
-- .^ ("mock" opcode \%12) simply calls the "scry-handler" gate provided to the virtual nock interpreter
-- so .^ is just a way to read state from your caller
+- a (working) \dotket~means you're being virtualized (+mock)
+- \dotket~("mock" opcode \%12) simply calls the "scry-handler" gate provided to the virtual nock interpreter
+- so \dotket~is just a way to read state from your caller
 - arvo implements a namespace over its state (+peek:le)
 - significant portions of that namespace are deferred to vanes (`+scry)
 - to read arvo's namespace from outside: arvo's external +peek arm
 - to read from within arvo proper: +peek:le
 - to read from within a vane, call the provided \$roof
-- to wire up arvo's namespace to .^, invoke +mock with (look roof) as the scry handler
+- to wire up arvo's namespace to \dotket, invoke +mock with (look roof) as the scry handler
 
 
 \subsubsection{\pdotlus}
@@ -96,10 +177,10 @@ Irregular form:  \texttt{=(a1 a2)}
 \subsubsection{\pdotwut}
 \labsec{ha:dotwut}
 
-\subsection{\texttt{\^} “ket”:  Core Typecasting}
+\subsection{\ket:  Core Typecasting}
 \labsec{ha:ket}
 
-\subsection{\texttt{\textasciitilde} “sig”:  Hinting}
+\subsection{\psig:  Hinting}
 \labsec{ha:sig}
 
 \marginnote[2mm]{Compare \texttt{\#pragma} expressions in C-family languages.}

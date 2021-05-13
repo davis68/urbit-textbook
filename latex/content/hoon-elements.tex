@@ -24,7 +24,7 @@ Although not a compiled language, the binary-tree structure of Hoon can lead to 
 \begin{enumerate}
   \item  The Dojo REPL, which offers some convenient shortcuts to modify the subject for subsequent commands.
   \item  A tight loop of text editor and running fakezod.
-  \item  The online interactive sandbox at \url{https://approaching-urbit.com}{\texttt{https://approaching-urbit.com}}
+  \item  The online interactive sandbox at \url{https://approaching-urbit.com}{\texttt{approaching-urbit.com}}
 \end{enumerate}
 }
 
@@ -33,8 +33,7 @@ For the first several exercises, we will suggest that you utilize one of these m
 
 The terminology used is often unfamiliar.  Sometimes this means that you are dealing with a truly new concept (and overloading an older word like "subroutine" or "function" would obfuscate), and sometimes you are dealing with an internal aspect that doesn't really map well to other systems.  The strangeness can be frustrating.  The strangeness can make concepts fresh again.  You'll encounter both as you move ahead.
 
-
-Each rune accepts at least one child, except for \pzapzap.
+Each rune accepts at least one child, except for \pzapzap~(crash).  Most runes accept a definite number of children, but a few can accept a variable number; these use \tistis~or \hephep~digraphs to indicate termination of the running series.
 
 \section{Irregular Forms}
 \labsec{irregular}
@@ -43,30 +42,38 @@ Many runes in common currency are not written in their regular form (tall or wid
 
 For instance, \pcenhep~is most frequently written using parentheses \texttt{()} which permits a Lisp-like calling syntax:
 
-\begin{lstlisting}
+\begin{lstlisting}[language=hoon,
+                   style=nonumbers]
 (add 1 2)
 \end{lstlisting}
 
 is equivalent to
 
-\begin{lstlisting}
+\begin{lstlisting}[language=hoon,
+                   style=nonumbers]
 %-  add  [1 2]
 \end{lstlisting}
 
-is also equivalent to
+which in turn is also equivalent to
 
-\begin{lstlisting}
+\begin{lstlisting}[language=hoon,
+                   style=nonumbers]
 %-(add [1 2])
 \end{lstlisting}
 
-
+Developers balance expressiveness, comprehensibility, and pattern-matching in deciding how lapidary to compose a runic expression.  Many extremely common patterns were soon subsumed by a sugar rune.
 
 Hoon parses to an abstract syntax tree (AST), which includes cleaning up all of the sugar syntax and non-primitive runes.  To see the AST of any given Hoon expression, use \pzapcom.
 
-\begin{lstlisting}[style=nonumbers]
-> !,(*hoon TODO)
-TODO
+\marginnote[2mm]{
+While parsing this AST is beyond the text at this point, note significant features like \texttt{\%tsfs} for \tisfas~and \texttt{\%sand} for aura-castable values.
+}
+\begin{lstlisting}[language=hoon,
+                   style=nonumbers]
+> !,(*hoon =/(n 4 +(n)))
+[%tsfs p=term=%n q=[%sand p=%ud q=4] r=[%dtls p=[%wing p=~[%n]]]]
 \end{lstlisting}
+
 
 \section{Nouns}
 \labsec{nouns}
@@ -83,7 +90,8 @@ Atoms have auras which are tagged types.  In other words, an aura is a bit of me
 
 For instance, to a machine there is no fundamental difference between binary $\ub 1101\,1001$, decimal $217$, and hexadecimal $\ux d9$.  A human coder recognizes them as different encoding schemes and associates tacit information with each:  an assembler instruction, an integer value, a memory address.  Hoon offers two ways of designating values with auras:  either directly by the formatting of the number (such as \texttt{0b1101.1001}) or using the irregular syntax \texttt{`@`}:
 
-\begin{lstlisting}
+\begin{lstlisting}[language=hoon,
+                   style=nonumbers]
 0b1101.1001
 `@ud`0b1101.1001  :: yields 217
 `@ux`0b1101.1001  :: yields 0xd9
@@ -92,7 +100,7 @@ For instance, to a machine there is no fundamental difference between binary $\u
 \begin{example}
 Try the following auras.  See if you can figure out how each one is behaving.
 
-\begin{lstlisting}
+\begin{lstlisting}[language=hoon]
 `@ud`0x1001.1111
 `@ub`0x1001.1111
 `@ux`0x1001.1111
@@ -160,7 +168,8 @@ $$
 (a < b) \land ((b \geq c) \lor d)
 $$
 
-\begin{lstlisting}
+\begin{lstlisting}[language=hoon,
+                   style=nonumbers]
 \&((lth a b) (|((gte b c) d)))
 \end{lstlisting}
 
@@ -196,7 +205,8 @@ Each Hoon rune has an unambiguous mapping to a Nock representation.  Furthermore
 \begin{enumerate}
   \item  \pbartis~produces a \emph{gate} or function.  Every gate has the same shape, which means certain assumptions about data access and availability can be made.
 
-    \begin{lstlisting}
+    \begin{lstlisting}[language=hoon,
+                       style=nonumbers]
 ::  XOR two binary atoms
 |=  [a=@ub b=@ub]
 `@ub`(mix a b)
@@ -204,7 +214,8 @@ Each Hoon rune has an unambiguous mapping to a Nock representation.  Furthermore
 
     maps to the Nock code
 
-    \begin{lstlisting}
+    \begin{lstlisting}[language=hoon,
+                       style=nonumbers]
 [8 [1 0 0] [1 8 [9 1.494 0 4.095] 9 2 10 [6 [0 28] 0 29] 0 2] 0 1]
     \end{lstlisting}
 
@@ -216,17 +227,23 @@ Each Hoon rune has an unambiguous mapping to a Nock representation.  Furthermore
 
 We call Hoon's data type specifications \emph{molds}.  Molds are more general than atoms and cells, but these form particular cases.  Hoon uses molds as a way of matching Nock tree structures (including Hoon metadata tags such as auras).
 
+\section{Subject-Oriented Programming}
 
+TODO
+arms legs basics
 
 \marginnote[2mm]{
 Be careful to not confuse \irrtis, which evaluates to \dottis, with the various \wut~runes like \wuttis.
 }
 
 \section{Key Data Structures}
-\labsec{keydata}
+\labsec{he:structures}
 
 \subsection{Lists}
-\labsec{lists}
+\labsec{he:lists}
+
+
+Lests
 
 \subsection{Text}
 \labsec{text}
@@ -239,7 +256,8 @@ Hoon recognizes two basic text types:  the \emph{cord} or \patt~and the \emph{ta
 
 Cords are useful as a compact primary storage and data transfer format, but frequently parsing and processing involves converting the text into tape format.  There are more utilities for handling tapes, as they are already broken up in a legible manner.
 
-\begin{lstlisting}
+\begin{lstlisting}[language=hoon,
+                   style=nonumbers]
 ++  trip
   |=  a=@  ^-  tape
   ?:  =(0 (met 3 a))  ~
@@ -268,33 +286,255 @@ For instance, \texttt{trip} converts a cord to a tape; \texttt{crip} does the op
 }
 
 
-All text in Urbit is UTF-8 (\emph{a fortiori} ASCII).  The \patc~UTF-32 aura is only used by \dill and Hood (the Dojo terminal agent).
+All text in Urbit is UTF-8 (and typically just 8-bit ASCII).  The \patc~UTF-32 aura is only used by \dill and Hood (the Dojo terminal agent).
 
 
-\subsection{Cores, Gates, Doors}
-\labsec{doors}
+\subsection{Cores and Derived Structures}
+\labsec{he:cores-derived}
 
-> anyway you can explicitly set the sample in an iron core
-but you can't use it with +roll
-New messages below
-11:54 (~master-morzod)
-\gold~is the default, read/write everything; \iron~is for functions (write to the sample with a contravariant nest check), \lead~is "hide the whole payload", \zinc~completes the matrix
-but has probably never been used
-\iron~lets you refer to a typed gate (without wetness), without depending on all the details of the subject it was defined against
-\lead~lets you export a library interface but hide the implementation details
+\subsubsection{Cores}
+\labsec{he:core}
+
+The core is the primary nontrivial data structure of Nock:  atoms, cells, cores.  A core is defined as a cell of \texttt{battery payload}; in the abstract this simply divides the \texttt{battery} or code from the \texttt{payload} or data.  Cores can be thought of as similar to objects in object-oriented programming languages, but possess a completely standard structure which allows for detailed introspection and “hot-swapping” of core elements.  Everything in standard Hoon and Arvo that cannot be reduced to an atom or a cell is \emph{de facto} a core.  (Indeed, if one wished to separate code and data in a structure, the only other logical choice one would have available is to flip the order of battery and payload.)
+
+Conventionally, most cores are either produced by the \pbarcen~rune or are instances of a more complex form (such as a door).  Cores are a “live” type; they are not simply holders of data but are expected to operate on data, just as it is uncommon to see a C++ object which only holds data.  (The role of a C \texttt{struct} is approximated by the \buccen~tagged union.)
+
+Some terminology is in order, to be expanded on subsequently.  An \emph{arm} is a Hoon expression to be evaluated against the
+arms
+legs
+Arms and legs are both \emph{limbs}.  (These must be distinguished from \emph{wings}, which are resolution paths pointing to a limb.)
+
+
+\subsubsection{Traps}
+\labsec{he:trap}
+
+The trap creates the basic looping mechanism in Hoon, a special instance of a core which is capable of concisely recursing into itself.  The trap is formally a core with one arm named \buc, and it is either created with \pbarhep~(for instant evaluation) or \pbardot~(for deferred evaluation).
+
+In practice, traps are used almost exclusively as recursion points, much like loops in an imperative language.  For instance, the following program counts from 5 down to 1, emitting output via \psigpam~at each iteration, then return \sig.
+
+\begin{lstlisting}[language=hoon,
+                   style=nonumbers]
+=/  count  5
+|-
+  ?:  =(count 0)  ~
+~&  count
+$(count (dec count))
+\end{lstlisting}
+
+\marginnote[2mm]{
+The \texttt{\$()} notation is shorthand for \pcentis, which evaluates a wing given a set of changes.
+}
+The final line \texttt{\$(count (dec count))} serves to modify the subject (at \texttt{count}) then to pull the \buc~arm again.  In practice the tree unrolls as follows, with indentation indicating code running “inside” of another rune.
+
+\begin{lstlisting}[language=hoon,
+                   style=nonumbers]
+=/  count  5
+|-
+  ?:  =(count 0)  ~
+  ~&  count
+  =/  count  (dec count)
+  ?:  =(count 0)
+  TODO think about how to unroll this in a visually pleasing manner that isn't
+  a total lie
+$(count (dec count))
+\end{lstlisting}
+
+
+recursive
+
+
+\subsubsection{Gates}
+\labsec{he:gate}
+
+Similar to how a trap is a core with one arm, a gate is a core with one arm and a sample.  This means that new per-invocation data are available in the gate's subject.
+
+
+A gate can recurse into itself like a trap when necessary.  In this example, the gate accepts a value \texttt{n} (the gate's \texttt{spec}) and applies an arm (implicitly named \buc) which carries out the calculation.  (Say it with me:  \texttt{sample}/\texttt{payload}.)  When the \texttt{\$()} recursion point is reached, the entire \buc~arm is re-evaluated with the specified change of $\texttt{n} \rightarrow \texttt{n} - 1$.
+
+\begin{lstlisting}[language=hoon,
+                   caption={Calculating a factorial using recursion.  (Example from Tlon documentation.)}]
+|=  n=@ud             :: accept a single value n for n!
+?:  =(n 1)  1         :: check n ≟ 1; if so, return 1
+(mul n $(n (dec n)))  :: multiply n times the product of this arm w/ n-1
+\end{lstlisting}
+
+That is, when one reads this program, one reads it falling into two components:
+
+\begin{lstlisting}[language=hoon,
+                   style=nonumbers]
+|=  n=@ud             :: accept a single value n for n!
+?:  =(n 1)  1         :: check n ≟ 1; if so, return 1
+(mul n $(n (dec n)))  :: multiply n times the product of this arm w/ n-1
+\end{lstlisting}
+
+
+
+\subsubsection{Doors}
+\labsec{he:door}
+
+\barcab
+
+The \pbarcen~rune produces a dry core, thus all arms it contains are dry.
+
+The \pbarpat~rune produces a wet core, so it can contain wet arms.
+
+Doors are superficially similar to gates, but calling an arm in a door is more general:  the calling convention for a gate replaces the sample then pulls the \buc~arm, while the calling convention for a door replaces the sample then pulls whichever arm has been requested.
+
+Since \dot~refers to the subject TODO:expand, this yields the ability to manipulate the sample without calling any arm directly.  The following examples illustrate:
+
+\begin{lstlisting}[language=hoon,
+                   style=nonumbers]
+> (add [1 5]})              :: call a gate
+6
+> ~($ add [1 5])            :: call the $ arm in the door
+6
+> ~(. add [1 5])            :: update the sample (arguments) but don't evaluate
+<1.otf [[@ud @ud] <45.xig 1.pnw %140>]>
+> =<  $  ~(. add [1 5])     :: call the $ arm of the door with updated sample
+6
+> =/  addd  ~(. add [1 5])  :: do the same thing but in two steps
+  =<  $  addd
+6
+\end{lstlisting}
+
+
+At this point, we need to step back and contextualize the power afforded by the use of cores.  In another language, such as C or Python, we specify a behavior but have relatively little insight into the instantiation effected by the compiler:
+
+\begin{lstlisting}[language=python,
+                   caption={Python loop to sum the length of several strings.}]
+metals = ['gold', 'iron', 'lead', 'zinc']
+total = 0
+for metal in metals:
+    total = total + len(metal)
+\end{lstlisting}
+
+\begin{lstlisting}[language=jvmis,
+                   caption={Python bytecode equivalent}]
+1          0 LOAD_CONST               0 ('gold')
+           2 LOAD_CONST               1 ('iron')
+           4 LOAD_CONST               2 ('lead')
+           6 LOAD_CONST               3 ('zinc')
+           8 BUILD_LIST               4
+          10 STORE_NAME               0 (metals)
+
+2         12 LOAD_CONST               4 (0)
+          14 STORE_NAME               1 (total)
+
+3         16 LOAD_NAME                0 (metals)
+          18 GET_ITER
+     >>   20 FOR_ITER                16 (to 38)
+          22 STORE_NAME               2 (metal)
+
+4         24 LOAD_NAME                1 (total)
+          26 LOAD_NAME                3 (len)
+          28 LOAD_NAME                2 (metal)
+          30 CALL_FUNCTION            1
+          32 BINARY_ADD
+          34 STORE_NAME               1 (total)
+          36 JUMP_ABSOLUTE           20
+     >>   38 LOAD_CONST               5 (None)
+          40 RETURN_VALUE
+\end{lstlisting}
+
+Many popular programming languages specify \emph{behavior} rather than \emph{implementation}.  By specifying Hoon as a macro language over Nock, the Urbit developers collapse this distinction.
+
+For Hoon (like Lisp), the structure of execution is always front-and-center, or at least only thinly disguised.  When one creates a core with a given behavior, one can immediately envision the shape of the underlying Nock.  This affords one immense power to craft efficient, effective, graceful programs.
+
+\begin{lstlisting}[language=hoon,
+                   caption={Hoon trap to sum the length of several tapes.}]
+=/  metals  `(list tape)`~["gold" "iron" "lead" "zinc"]
+=/  count  0
+=/  total  0
+|-
+  ?:  =(count (lent metals))  total
+  =/  metal  `tape`(snag count metals)
+$(total (add total (lent metal)), count +(count))
+\end{lstlisting}
+
+\begin{lstlisting}[language=hoon,
+                   caption={Nock equivalent}]
+\end{lstlisting}
 
 \subsection{Molds}
-\labsec{molds}
+\labsec{he:molds}
+
+
+
+Most software programs require—or at least are greatly simplified by—custom type definitions.  These are customarily defined with a \barcen~core preceding the \barcab~door definition.  We commonly see three runes supporting this structure:
+
+\begin{itemize}
+  \item  \lusbuc~creates a type constructor arm to define and validate type definitions.
+  \item  \buccen~creates a collection of named values (type members).
+  \item  \bucwut~defines a union, a set validating membership across a defined collection of items.
+\end{itemize}
+
+%TODO one without type union, then one with
+
+To illustrate these, we serially consider several ways to define a vehicle.  In the first, we employ only \lusbuc~to capture key vehicle characteristics.  Using only \lusbuc, it's hard to say much of interest:
+
+\begin{lstlisting}[style=nonumbers]
++$  vehicle  tape               :: vehicle identification number
+\end{lstlisting}
+
+By permitting collections of named type values with \buccen, we can produce more complicated structures:
+
+\begin{lstlisting}[style=nonumbers]
++$  vehicle
+  $%  vin=tape                  :: vehicle identification number
+      owner=tape                :: car owner's name
+      license=tape              :: license plate
+  ==
+\end{lstlisting}
+
+Type definition arms can rely on other type definition arms available in the subject:
+
+\begin{lstlisting}[style=nonumbers]
++$  vehicle
+  $%  vin=tape                  :: vehicle identification number
+      owner=tape                :: car owner's name
+      license=tape              :: license plate
+      kind=kind                 :: vehicle manufacture details
+  ==
++$  kind
+  $%  make=tape                 :: vehicle make
+      model=tape                :: vehicle model
+      year=@da                  :: nominal year of manufacture (use Jan 1)
+  ==
+\end{lstlisting}
+
+\marginnote[2mm]{ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\
+In general, Hoon style does not require you to be careful about masking variable names in the subject.  Rarely, this introduces surprising bugs but is typically contextually apparent to the developer.
+}
+Finally, by introducing unions with \bucwut, a type definition arm can validate possible values:
+
+\begin{lstlisting}[style=nonumbers]
++$  vehicle
+  $%  vin=tape                  :: vehicle identification number
+      owner=tape                :: car owner's name
+      license=tape              :: license plate
+      kind=kind                 :: vehicle manufacture details
+  ==
++$  kind
+  $%  make=tape                 :: vehicle make
+      model=tape                :: vehicle model
+      year=@da                  :: nominal year of manufacture (use Jan 1)
+  ==
++$  make                        :: permitted vehicle makes
+  ?(%acura %chrysler %delorean %dodge %jeep %tesla %toyota)
+\end{lstlisting}
+
 
 \subsection{Maps, Sets, Tree}
 \labsec{macro}
+
+units
 
 \section{Generators}
 \labsec{he:generators}
 
 Generators are standalone Hoon expressions that evaluate and may produce side effects, as appropriate.  They are closely analogous to simple scripts in languages such as Bash or Python.  By using generators, one is able to develop more involved Hoon code and run it repeatedly without awkwardness.
 
-\marginnote[2mm]{You may also see commands beginning with \texttt{|}; these are TODO commands instead.}
+\marginnote[2mm]{You may also see commands beginning with a \texttt{|}~symbol; these are Hood commands instead.}
 
 To run a generator on a ship, prefix its name with \texttt{+}.  Arguments may be required or optional.
 

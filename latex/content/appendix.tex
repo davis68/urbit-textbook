@@ -4,19 +4,176 @@
 
 
 \section{Comprehensive table of Hoon runes}
-\labsec{table}
+\labsec{ap:runes}
 
+These runes are up-to-date as of Hoon \texttt{\%140}.  Runes are ordered by alphabetical pronunciation of Urbit-standard aural ASCII.  Standard definitions (such as \texttt{+\$map} and \texttt{+\$unit}) are defined in Section~\ref{he:structures}.  Of those remaining, the most common is \texttt{+\$hoon}, which is used as a shorthand for any valid Hoon expression.  A \texttt{+\$term} is TODO tome spec value
+
+Digraphs
+
+\begin{table}
+  \caption{Aural ASCII Pronunciation}
+  \label{}
+  \begin{tabular}{clclclcl}
+    \texttt{\textasciitilde} & “sig” &
+    \texttt{!} & “zap” &
+    \texttt{\@} & “pat” \\
+  \end{tabular}
+\end{table}
+
+\subsection{\texttt{|} “bar”:  Core Definition}
+\labsec{ap:bar}
+
+\pbar~runes produce cores.
+
+\begin{tabular}{l}
+\hline \\ \hline \\
+\textbf{\barbuc\texttt{~(lest term) spec}}
+\\
+\pbarbuc~produces a mold from a TODO.
+\\
+\begin{lstlisting}[style=nonumbers]
+TODO
+\end{lstlisting}
+\\
+\begin{lstlisting}[style=nonumbers]
+::  $mk-item: constructor for +ordered-map item type
+++  mk-item  |$  [key val]  [key=key val=val]
+\end{lstlisting}
+\\
+\hhline{=} \\
+\textbf{\barcab\texttt{~spec alas (map term tome)}}
+\\ \hline
+\\
+\pbarcab produces a door (a core with sample) given XYZ
+\\
+\hline \\ \hline \\
+\textbf{\barcen\texttt{~(unit term) (map term tome)}}
+\\
+produces a core (battery and payload)
+\\
+\hhline{=} \\
+\textbf{\barcol\texttt{[hoon hoon]}}
+\\
+produces a gate with a custom sample
+\hhline{=} \\
+\textbf{\bardot\texttt{~hoon}}
+\\
+produces a trap (a core with one arm)
+\hhline{=} \\
+\textbf{\barhep\texttt{~hoon}}
+\\
+produces a trap (a core with one arm) and evaluates it
+\hhline{=} \\
+\textbf{\barket\texttt{~hoon (map term tome)}}
+\\
+produces a core whose battery includes a \$ arm and computes the latter
+\hhline{=} \\
+\textbf{\barpat\texttt{~(unit term) (map term tome)}}
+\\
+produces a wet core (battery and payload)
+\hhline{=} \\
+\textbf{\barsig\texttt{~[spec value]}}
+\\
+produces an iron gate
+\hhline{=} \\
+\textbf{\bartar\texttt{~[spec value]}}
+\\
+produces a wet gate (a one-armed core with sample)
+\hhline{=} \\
+\textbf{\bartis\texttt{~[spec value]}}
+\\
+produces a dry gate (a one-armed core with sample)
+\\
+\hhline{=} \\
+\textbf{\barwut\texttt{~hoon}}
+\\
+produces a lead trap
+
+\end{tabular}
+
+%------------------------------------------------------------------------------%
+\subsection{\texttt{\S} “buc”:  Mold Definition}
+\labsec{ap:buc}
+
+\pbuc~runes produce mold definitions.
+
+%------------------------------------------------------------------------------%
+\subsection{\texttt{\%} “cen”:  Core Evaluation}
+\labsec{ap:cen}
+
+\pcen~runes evaluate cores (similar to function calls in other languages).
+
+\begin{lstlisting}
+(~(rad og eny) 5)
+(rad:og 5)  :: TODO figure out tersest working equivalent here
+\end{lstlisting}
+
+%------------------------------------------------------------------------------%
+\subsection{\texttt{:} “col”:  Cell Construction}
+\labsec{ap:col}
+
+\pcol~runes produce cells of various structures.
+
+%------------------------------------------------------------------------------%
+\subsection{\texttt{.} “dot”:  Nock Evaluation}
+\labsec{ap:dot}
+
+\pdot~runes directly evaluate as Nock expressions.
+
+%------------------------------------------------------------------------------%
+\subsection{\texttt{\^} “ket”:  Core Typecasting}
+\labsec{ap:ket}
+
+\pket~runes are used to alter cores.
+
+%------------------------------------------------------------------------------%
+\subsection{\texttt{\textasciitilde} “sig”:  Hinting}
+\labsec{ap:sig}
+
+\psig~runes represent directives to the runtime.
+
+%------------------------------------------------------------------------------%
+\subsection{\texttt{;} “mic”:  Macro}
+\labsec{ap:mic}
+
+\mic~runes produce calling structures (mainly monadic binds) and XML elements.
+
+%------------------------------------------------------------------------------%
+\subsection{\texttt{=} “tis”:  Subject Alteration}
+\labsec{ap:tis}
+
+\tis~runes modify the subject.
+
+%------------------------------------------------------------------------------%
+\subsection{\texttt{?} “wut”:  Comparison}
+\labsec{ap:wut}
+
+\wut~runes compare subtrees.
+
+%------------------------------------------------------------------------------%
+\subsection{\texttt{!} “zap”:  Wildcard}
+\labsec{ap:zap}
+
+\zap~runes perform a miscellaneous set of auxiliary operations.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Hoon versions}
-\labsec{hoonversions}
+\labsec{ap:hoonversions}
 
+%------------------------------------------------------------------------------%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Nock versions}
-\labsec{nockversions}
+\labsec{ap:nockversions}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Hoon comparison with other languages}
-\labsec{comparison}
+\labsec{ap:comparison}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{\zuse/\lull~versions}
-\labsec{zuseversions}
+\labsec{ap:zuseversions}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Textbook changelog}
-\labsec{changelog}
+\labsec{ap:changelog}

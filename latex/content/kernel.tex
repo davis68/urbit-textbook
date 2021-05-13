@@ -80,7 +80,7 @@ subject wrapped
 \section{Arvo Vanes}
 \labsec{kr:vanes}
 
-Each vane has a characteristic structure which identifies it as a vane to Arvo and allows it to handle \move s consistently.
+Each vane has a characteristic structure which identifies it as a vane to Arvo and allows it to handle moves consistently.
 
 \section[\ames]{\ames, A Network}
 \labsec{kr:ames}
@@ -186,7 +186,7 @@ i.e. can you do the same warp on the local ship?
     \begin{tabular}{lll}
       Symbol & Meaning & Example \\
       \hline \\
-      \texttt{\%a} & Expose file build into namespace. & \texttt{.\^(vase \%ca /\~zod/home/1/lib/generators/hoon} \\
+      \texttt{\%a} & Expose file build into namespace. & \texttt{.\^{}(vase \%ca /\~zod/home/1/lib/generators/hoon} \\
       \texttt{\%b} & Expose mark build into namespace. & \\
       \texttt{\%c} & Expose cast build into namespace. & \\
       %\texttt{\%d} & & \\
@@ -298,16 +298,50 @@ importing with \texttt{*} is w/o face, foo=bar
 \labsec{jael}
 
 \marginnote[2mm]{
-\jael is named after Jael, the wife of Heber, who kept mum and slew fleeing enemy general Sisera in Judges 4.
+\jael is named after Jael, the wife of Heber, who kept mum and slew fleeing enemy general Sisera in Judges 4.  It also puns on “jail”.
 }
 
-\jael~keeps secrets, the cryptographic keys that make it possible to securely control your Urbit.
+\jael~keeps secrets, the cryptographic keys that make it possible to securely control your Urbit.  Among other cryptographic facts, \jael~keeps track of the following:
 
-\jael~weighs in as one of the shorter vanes
+\begin{enumerate}
+  \item  Subscription to \texttt{\%azimuth-tracker}, the current state of the Azimuth PKI.
+  \item  Initial public and private keys for the ship.
+  \item  Public keys of all galaxies.
+  \item  Record of Ethereum registration for Azimuth.
+\end{enumerate}
+
+\jael~weighs in as one of the shorter vanes, but is critical to Urbit as a secure network-first operating system.  \jael~is in fact the first vane loaded after \dill~when bootstrapping Arvo on a new instance.
 
 \begin{lstlisting}
 
 \end{lstlisting}
+
+
+record the Ethereum block the public key is registered to,
+record the URL of the Ethereum node used,
+save the signature of the parent planet (if the ship is a moon),
+load the initial public and private keys for the ship,
+set the DNS suffix(es) used by the network (currently just arvo.network),
+save the public keys of all galaxies,
+set Jael to subscribe to %azimuth-tracker,
+%slip a %init task to Ames, Clay, Gall, Dill, and Eyre, and %give an %init gift to Arvo, which then informs Unix that the initialization process has concluded.
+
+~master-morzod
+1:00 PM
+the private key (ring) is 64 bytes, plus a tag byte
+1:00
+(met 3 sec:ex:(pit:nu:crub:crypto 512 eny))
+65
+the ship is up to 64 bits (or 128, if you want to support comet keypairs, which you could)
+\begin{lstlisting}
+=/  ,seed:jael  [who=`@p`0 lyf=1 sek=(bex 520) ~]  (met 3 (scot %uw (jam -)))
+=/  ,seed:jael  [who=`@p`(bex 127) lyf=(bex 31) sek=(bex 520) ~]  (met 3 (scot %uw (jam -)))
+\end{lstlisting}
+likely lower and upper bounds
+
+
+\href{https://urbit.org/docs/arvo/jael/jael-api/}{\jael~API Reference}
+
 
 
 \subsection{Scrying into \jael}
@@ -334,6 +368,149 @@ Sometimes residual elements of vane development leak into release code and yield
 \end{table}
 
 
+\subsection{Launching a Moon}
+\labsec{kr:j:moon}
+
+It is instructive, as a brief examination of how \jael~works, to see how to launch and operate a moon (a 64-bit identity tied to a parent planet).  We begin our enquiry with an examination of Hood's \texttt{moon} generator.  This generator optionally accepts a particular moon name.  When run, \texttt{|moon} returns a private key appropriate to registering a new moon ship with the planet's \jael.  This key is then used to launch the moon ship using \jael to authenticate against the planet.
+
+\begin{lstlisting}
+~sampel-palnet:dojo> |moon ~fosfyr-dinler-sampel-palnet
+moon: ~fosfyr-dinler-sampel-palnet
+0wayzmv.OyFW6.FL6bt.GYKeZ.tPPfc.vJ7av.nFvA0.210dK.iAHiq.cSOGh.MCTuz.RiDIV.A3Pd8.pPZcV.djykA.kzrxV.P6M0s.~oZge.Nsjpr.K-WAh.QoUOP
+\end{lstlisting}
+
+Let's take a look at \texttt{|moon}:
+
+\begin{lstlisting}[caption={\texttt{gen/hood/moon.hoon}, 🄯Tlon}]
+::  Create a private key-file for a random (or specified) moon
+::
+::::  /hoon/moon/hood/gen
+  ::
+/-  *sole
+/+  *generators
+::
+::::
+  ::
+:-  %say
+|=  $:  [now=@da eny=@uvJ bec=beak]
+        arg=?(~ [mon=@p ~])
+        public-key=pass
+    ==
+:-  %helm-moon
+^-  (unit [=ship =udiff:point:jael])
+=*  our  p.bec
+=/  ran  (clan:title our)
+?:  ?=([?(%earl %pawn)] ran)
+  %-  %-  slog  :_  ~
+      leaf+"can't create a moon from a {?:(?=(%earl ran) "moon" "comet")}"
+  ~
+=/  mon=ship
+  ?^  arg
+    mon.arg
+  (add our (lsh 5 (end 5 (shaz eny))))
+=/  seg=ship  (sein:title our now mon)
+?.  =(our seg)
+  %-  %-  slog  :_  ~
+      :-  %leaf
+      "can't create keys for {(scow %p mon)}, which belongs to {(scow %p seg)}"
+  ~
+=/  =pass
+  ?.  =(*pass public-key)
+    public-key
+  =/  cub  (pit:nu:crub:crypto 512 (shaz (jam mon life=1 eny)))
+  =/  =seed:jael
+    [mon 1 sec:ex:cub ~]
+  %-  %-  slog
+      :~  leaf+"moon: {(scow %p mon)}"
+          leaf+(scow %uw (jam seed))
+      ==
+  pub:ex:cub
+`[mon *id:block:jael %keys 1 1 pass]
+\end{lstlisting}
+
+TODO
+
+The \texttt{\%helm-moon} tag tells Helm to invoke its \texttt{++poke-moon} arm and cycle the keys of the moon (or create them).
+
+\begin{lstlisting}[style=nonumbers,
+                   caption={\texttt{lib/hood/helm.hoon}, line 211}]
+%helm-moon             =;(f (f !<(_+<.f vase)) poke-moon)
+\end{lstlisting}
+
+\begin{lstlisting}[style=nonumbers,
+                   caption={\texttt{lib/hood/helm.hoon}, lines 75–80}]
+++  poke-moon                                        ::  rotate moon keys
+  |=  sed=(unit [=ship =udiff:point:jael])
+  =<  abet
+  ?~  sed
+    this
+  (emit %pass / %arvo %j %moon u.sed)
+\end{lstlisting}
+
+where \texttt{++emit} is the Helm event processor:
+
+\begin{lstlisting}[style=nonumbers,
+                   caption={\texttt{lib/hood/helm.hoon}, line 21–24, 29}]
+|=  [=bowl:gall sat=state]
+=|  moz=(list card)
+|%
+++  this  .
+++  emit  |=(card this(moz [+< moz]))
+\end{lstlisting}
+
+\marginnote[2mm]{
+Azimuth points underwent several shifts in nomenclature.  Although currently organized into the intuitive hierarchical galaxy/star/planet/moon/comet syntax, the original scheme involved \duke/\earl/\lord/\pawn/\wolf.  Sometimes this terminology remains visible in internal kernel types such as \texttt{\%earl} for moon; this is from the \czar/\king/\duke/\earl/\pawn~phase, which itself predates the carrier/cruiser/destroyer/yacht/submarine period.
+}
+
+When a new moon is launched as a ship, as part of the Arvo bootstrapping sequence the moon's status as a daughter point of the given planet is checked.  First, whether the sponsoring point is validly a moon (as \texttt{\%earl}); then whether said moon can in fact be validated as belonging to a planet we control (\texttt{sein:title} checks for sponsorship).  If both of these checks pass, then the private-key update event is issued using the \texttt{++new-event} arm of \jael.  The most salient part of this code, from a cryptographic standpoint, is \texttt{udiff}, a non-invertible \texttt{diff} or the new public key.
+
+\marginnote[2mm]{
+Note the \sig~call format to invoke an arm in a door, last line of this code snippet.  \texttt{new-event} is an arm in \texttt{su} (part of \jael) invoked along with the duct \texttt{hen}, the time \texttt{now}, the current public-key state \texttt{pki}, and the Ethernet node \texttt{etn}.
+}
+
+\begin{lstlisting}
+::
+::  update private keys
+::
+    %moon
+  ?.  =(%earl (clan:title ship.tac))
+    ~&  [%not-moon ship.tac]
+    +>.$
+  ?.  =(our (^sein:title ship.tac))
+    ~&  [%not-our-moon ship.tac]
+    +>.$
+  %-  curd  =<  abet
+  (~(new-event su hen now pki etn) [ship udiff]~:tac)
+\end{lstlisting}
+
+As for the rest—please see Section~\ref{su:boot} for more information on the boot sequence of a new ship.
+
+A moon can scry into \jael
+
+\begin{lstlisting}
+::
+    %earl
+  ?.  ?=([@ @ ~] tyl)  [~ ~]
+  ?.  =([%& our] why)
+    [~ ~]
+  =/  who  (slaw %p i.tyl)
+  =/  lyf  (slaw %ud i.t.tyl)
+  ?~  who  [~ ~]
+  ?~  lyf  [~ ~]
+  ?:  (gth u.lyf lyf.own.pki.lex)
+    ~
+  ?:  (lth u.lyf lyf.own.pki.lex)
+    [~ ~]
+  :: XX check that who/lyf hasn't been booted
+  ::
+  =/  sec  (~(got by jaw.own.pki.lex) u.lyf)
+  =/  moon-sec  (shaf %earl (sham our u.lyf sec u.who))
+  =/  cub  (pit:nu:crub:crypto 128 moon-sec)
+  =/  =seed  [u.who 1 sec:ex:cub ~]
+  ``[%seed !>(seed)]
+\end{lstlisting}
+
+(Now that you have a moon, what can you do with it?)
 
 
 \section[Azimuth]{Azimuth, Address Space Management}
