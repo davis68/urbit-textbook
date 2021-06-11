@@ -2,11 +2,7 @@
 \chapter{Elements of Hoon}
 \labch{hoonelemens}
 
-
-\section{Reading the Runes}
-\labsec{he:reading}
-
-\subsection{Objectives}
+\section{Objectives}
 \labsec{he:objectives}
 
 The goals of this chapter are for you to be able to:
@@ -17,6 +13,10 @@ The goals of this chapter are for you to be able to:
   \item  Execute Hoon code within a running ship.
   \item  Produce output as a side effect using the \sigpam~rune.
 \end{enumerate}
+
+\section{Reading the Runes}
+\labsec{he:reading}
+
 
 \marginnote[2mm]{
 Although not a compiled language, the binary-tree structure of Hoon can lead to fairly involved programs which are difficult to type and parse as directly as some other languages afford.  We instead encourage you to use one of three methods to run Hoon programs:
@@ -380,6 +380,9 @@ The \pbarpat~rune produces a wet core, so it can contain wet arms.
 
 Doors are superficially similar to gates, but calling an arm in a door is more general:  the calling convention for a gate replaces the sample then pulls the \buc~arm, while the calling convention for a door replaces the sample then pulls whichever arm has been requested.
 
+\marginnote[2mm]{
+Doors and other cores frequently include custom type definitions; these are discussed below in Section~\ref{he:mold}.
+}
 Since \dot~refers to the subject TODO:expand, this yields the ability to manipulate the sample without calling any arm directly.  The following examples illustrate:
 
 \begin{lstlisting}[language=hoon,
@@ -396,6 +399,8 @@ Since \dot~refers to the subject TODO:expand, this yields the ability to manipul
   =<  $  addd
 6
 \end{lstlisting}
+
+
 
 
 At this point, we need to step back and contextualize the power afforded by the use of cores.  In another language, such as C or Python, we specify a behavior but have relatively little insight into the instantiation effected by the compiler:
@@ -456,21 +461,21 @@ $(total (add total (lent metal)), count +(count))
 \end{lstlisting}
 
 \subsection{Molds}
-\labsec{he:molds}
+\labsec{he:mold}
 
 
 
 Most software programs require—or at least are greatly simplified by—custom type definitions.  These are customarily defined with a \barcen~core preceding the \barcab~door definition.  We commonly see three runes supporting this structure:
 
 \begin{itemize}
-  \item  \lusbuc~creates a type constructor arm to define and validate type definitions.
-  \item  \buccen~creates a collection of named values (type members).
-  \item  \bucwut~defines a union, a set validating membership across a defined collection of items.
+  \item  \plusbuc~creates a type constructor arm to define and validate type definitions.
+  \item  \pbuccen~creates a collection of named values (type members).
+  \item  \pbucwut~defines a union, a set validating membership across a defined collection of items.  (This is similar to a \texttt{typedef} or \texttt{enum} in C-related languages.)
 \end{itemize}
 
-%TODO one without type union, then one with
-
 To illustrate these, we serially consider several ways to define a vehicle.  In the first, we employ only \lusbuc~to capture key vehicle characteristics.  Using only \lusbuc, it's hard to say much of interest:
+
+% TODO check all of these
 
 \begin{lstlisting}[style=nonumbers]
 +$  vehicle  tape               :: vehicle identification number
@@ -503,7 +508,7 @@ Type definition arms can rely on other type definition arms available in the sub
 \end{lstlisting}
 
 \marginnote[2mm]{ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\
-In general, Hoon style does not require you to be careful about masking variable names in the subject.  Rarely, this introduces surprising bugs but is typically contextually apparent to the developer.
+In general, Hoon style does not require you to be careful about masking variable names in the subject (using the same name for the value as the mold).  This rarely introduces surprising bugs but is typically contextually apparent to the developer.
 }
 Finally, by introducing unions with \bucwut, a type definition arm can validate possible values:
 
@@ -523,11 +528,38 @@ Finally, by introducing unions with \bucwut, a type definition arm can validate 
   ?(%acura %chrysler %delorean %dodge %jeep %tesla %toyota)
 \end{lstlisting}
 
+\pattas-tagged text elements are extremely common in such type unions, as they afford a distinguishable human-readable categorization that is nonetheless rigorous to the machine.
 
-\subsection{Maps, Sets, Tree}
-\labsec{macro}
 
-units
+\subsection{Data Structures}
+\labsec{he:data-structures}
+
+\subsubsection{Units}
+\labsec{he:unit}
+
+Every atom in Hoon is an unsigned integer, even if interpreted by an aura.  Auras do not carry prescriptive power, however, so they cannot be used to fundamentally distinguish a \texttt{NULL}-style or \texttt{NaN}-style non-result.  That is, if one receives a \sig~back from a query, how does one distinguish a value of zero from a non-result (missing value)?
+
+Units mitigate this situation by acting as a type union of \sig~(for no result) and a cell \texttt{[\textasciitilde~u=item]} containing the returned item with face \texttt{u}.
+
+\begin{lstlisting}[style=nonumbers]
+++  unit
+  |$  [item]
+  $@(~ [~ u=item])
+\end{lstlisting}
+
+
+\subsubsection{Maps}
+\labsec{he:map}
+
+\subsubsection{Sets}
+\labsec{he:set}
+
+\subsubsection{Trees}
+\labsec{he:tree}
+
+\subsubsection{Dimes}
+\labsec{he:dime}
+
 
 \section{Generators}
 \labsec{he:generators}
@@ -573,6 +605,39 @@ A naked generator is so called because it contains no metadata for the Arvo inte
 
 \subsection{\say~generators}
 \labsec{he:say}
+
+
+---
+`++dicethrow`
+
+Write a \say~generator which simulates scoring a simple dice throw of $n$ six-sided dice.  That is, it should return the sum of $n$ dice as inputs.  You may reuse code from `mp0` or you may use entropy following the discussion in []().  If no number is specified, then only one die roll should be returned.
+
+Since Hoon is functional but random number generators stateful, you should use the \ptisket~rune to replace the current value in the RNG.  \tisket~is a kind of "one-effect monad," which allows you to change a single part of the subject.
+
+For instance, here is a generator that returns a list of probabilities from 1–100%.
+
+\begin{lstlisting}
+:-  %say
+|=  [[* eny=@uv *] [n=@ud ~] ~]
+  :-  %noun
+  =/  values  `(list @ud)`~
+  =/  count  0
+  =/  rng  ~(. og eny)
+  |-  ^-  (list @ud)
+    ?:  =(count n)  values
+    =^  r  rng  (rads:rng 100)
+  $(count +(count), values (weld values ~[(add r 1)]))
+\end{lstlisting}
+
+Your command to run this generator in the Dojo should look like this:
+
+```hoon
++dicethrow, =n 5
+```
+
+(Note the comma separating optional arguments.)
+
+---
 
 \subsection{\ask~generators}
 \labsec{he:ask}

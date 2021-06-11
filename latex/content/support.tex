@@ -2,6 +2,20 @@
 \chapter{Supporting Urbit}
 \labch{su}
 
+\section{Objectives}
+\labsec{su:objectives}
+
+The goals of this chapter are for you to be able to:
+
+\begin{enumerate}
+  \item  Outline the Urbit boot process and over-the-air live updating process.
+  \item  Explain how off-Mars calls are made with \unix~events.
+  \item  Evaluate Nock using a virtual machine.
+  \item  Distinguish king and serf processes and enumerate the responsibilities of each.
+  \item  Discuss how jet-powered code enables fast evaluation of formal Nock code.
+  \item  (Optionally) produce a jet matching Hoon/Nock code.
+\end{enumerate}
+
 
 \section{Booting and Pills}
 \labsec{su:boot}
@@ -23,6 +37,8 @@ Any new ship is a freshly created instance of Arvo, which requires creating Arvo
 \subsection{Vere (Reference C Implementation)}
 \labsec{su:vere}
 
+Loom:  https://rovnys-public.s3.us-east-1.amazonaws.com/rovnys-ricfer/2021.5.24..20.11.19-cgy-urbit-zeno-2-loom-memory-allocator.txt
+
 \subsection{King Haskell (Haskell Implementation)}
 \labsec{su:haskell}
 
@@ -35,24 +51,348 @@ Any new ship is a freshly created instance of Arvo, which requires creating Arvo
 \subsection{Jet matching and the dashboard}
 \labsec{su:dashboard}
 
----
+\subsection{Jet composition}
+\labsec{su:jetcomp}
 
-so you can literally see everything the computer is doing
-very good way to learn the internals tbh
-~sipfyn-pidmex
-5:02 PM
-looks powerful
-how do you generate this
+\begin{example}
+Given a Hoon gate, how can a developer produce a matching C jet?  Let us illustrate the process using a simple \barcen~core, then with a \barcab~door.
 
-L
-5:02 PM
-just run your urbit with urbit -j piername
-for a few minutes
-then look in .urb/put/trace folder
-you should have like 100mb of json in there
-then just move all the json out to your desktop or something
-and then open the json files in chrome://tracing in Chrome or Brave
-~sipfyn-pidmex
-5:03 PM
-oh dang
-imma try that out rn
+This library provides a few transcendental functions useful in many mathematical calculations.  The \psigcen~rune registers the jets (with explicit arguments, necessary at the highest level of inclusion).  The \psigfas~rune indicates which arms will be jetted.
+
+\begin{lstlisting}[caption={\texttt{lib/trig-rs.hoon}}]
+::  Transcendental functions library, compatible with @rs
+::
+=/  tau  .6.28318530717
+=/  pi   .3.14159265358
+=/  e    .2.718281828
+=/  rtol  .1e-5
+|%
+~%  %trig  ..part  ~
+:: Factorial, $x!$
+::
+++  factorial
+  ~/  %factorial
+  |=  x=@rs  ^-  @rs
+  =/  t=@rs  .1
+  |-  ^-  @rs
+  ?:  =(x .1)
+    t
+  $(x (sub:rs x .1), t (mul:rs t x))
+:: Absolute value, $|x|$
+::
+++  absolute
+  |=  x=@rs  ^-  @rs
+  ?:  (gth:rs x .0)
+    x
+  (sub:rs .0 x)
+:: Exponential function, $\exp(x)$
+::
+++  exp
+  ~/  %exp
+  |=  x=@rs  ^-  @rs
+  =/  rtol  .1e-5
+  =/  p   .1
+  =/  po  .-1
+  =/  i   .1
+  |-  ^-  @rs
+  ?:  (lth:rs (absolute (sub:rs po p)) rtol)
+    p
+  $(i (add:rs i .1), p (add:rs p (div:rs (pow-n x i) (factorial i))), po p)
+:: Integer power, $x^n$
+::
+++  pow-n
+  ~/  %pow-n
+  |=  [x=@rs n=@rs]  ^-  @rs
+  ?:  =(n .0)  .1
+  =/  p  x
+  |-  ^-  @rs
+  ?:  (lth:rs n .2)
+    p
+  ::~&  [n p]
+  $(n (sub:rs n .1), p (mul:rs p x))
+--
+\end{lstlisting}
+
+We will create a generator which will pull the arms and slam each gate such that we can assess the library's behavior.  Later on we will create unit tests to validate the behavior of both the unjetted and jetted code.
+
+\begin{lstlisting}[caption={\texttt{gen/trig.hoon}}]
+/+  *trig-rs
+!:
+:-  %say
+|=  [[* eny=@uv *] [x=@rs n=@ud ~] ~]
+::
+~&  (factorial n)
+~&  (absolute x)
+~&  (exp x)
+~&  (pow-n n)
+[%verb ~]
+\end{lstlisting}
+
+\paragraph {\emph{Mise en place}.}
+
+Jet development can require frequent production of new Urbit binaries and
+, so let us pay attention to our \emph{mise en place}.  We will primarily work in the fakezod on the two files just mentioned, and in the \texttt{pkg/urbit} directory of the main Urbit repository, so we need a development process that allows us to quickly access each of these, move them into the appropriate location, and build necessary components.  The basic development cycle will look like this:
+
+\begin{enumerate}
+  \item  Compose correct Hoon code.
+  \item  Hint the Hoon code.
+  \item  Register the jets in the Vere C code.
+  \item  Compose the jets.
+  \item  Compile and troubleshoot.
+  \item  Repeat as necessary.
+\end{enumerate}
+
+You should consider using a terminal utility like \texttt{tmux} or \texttt{screen} which allows you to work in several locations on your file system simultaneously:  one for file system operations (copying files in and out of the \texttt{home} directory), one for running the fakezod, and one for editing the files, or an IDE or text editor if preferred.
+
+![One recommended screen layout for jet composition and development.](TODO)
+
+To start off, you should obtain a clean up-to-date copy of the Urbit repository, available on GitHub at \url{https://github.com/urbit/urbit}{\texttt{github.com/urbit/urbit}}.  Make a working directory \texttt{\textasciitilde/tlon}.  Create a new branch within the repo named \texttt{trigjet}:
+
+\begin{lstlisting}[caption={Terminal 1 (Bash)},
+                   language=bash,
+                   style=nonumbers]
+cd
+mkdir tlon
+git clone https://github.com/urbit/urbit.git
+cd urbit
+git branch trigjet
+\end{lstlisting}
+
+Test your build process to produce a local executable binary of Vere:
+
+\begin{lstlisting}[caption={Terminal 1 (Bash)},
+                   language=bash,
+                   style=nonumbers]
+make
+\end{lstlisting}
+
+This invokes Nix to build the Urbit binary.  Take note of where that binary is located (typically in \texttt{/tmp} on your main file system) and create a new fakezod using a downloaded pill.
+
+\begin{lstlisting}[caption={Terminal 1 (Bash)},
+                   language=bash,
+                   style=nonumbers]
+cd ..
+wget https://bootstrap.urbit.org/urbit-v1.5.pill
+<Nix build path>/bin/urbit -B urbit-v1.5.pill -F zod
+\end{lstlisting}
+
+Inside of that fakezod, sync \clay~to Unix,
+
+\begin{lstlisting}[caption={Terminal 2 (Urbit)},
+                   language=bash,
+                   style=nonumbers]
+|mount %
+\end{lstlisting}
+
+Then copy the entire \texttt{home} desk out so that you can work with it and copy it back in as necessary.
+
+\begin{lstlisting}[caption={Terminal 1 (Bash)},
+                   language=bash,
+                   style=nonumbers]
+cp -r zod/home .
+\end{lstlisting}
+
+Save the foregoing library code in \texttt{home/lib} and the generator code in \texttt{home/gen}.  Whenever you work in your preferred editor, you should work on the \texttt{home} copies, then move them back into the fakezod and synchronize before execution.
+
+\begin{lstlisting}[caption={Terminal 1 (Bash)},
+                   language=bash,
+                   style=nonumbers]
+cp -r home zod
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Terminal 2 (Urbit)},
+                   language=bash,
+                   style=nonumbers]
+|commit %home
+\end{lstlisting}
+
+\paragraph{Jet composition.}
+
+Now that you have a developer cycle in place, let's examine what's necessary to produce a jet.  A jet is a C function which replicates the behavior of a Hoon (Nock) gate.  Jets have to be able to manipulate Urbit quantities within the binary, which requires both the proper affordances within the Hoon code (the interpreter hints) and support for manipulating Urbit nouns (atoms and cells) within C.
+
+Jet hints must provide a trail of symbols for the interpreter to know how to match the Hoon arms to the corresponding C code.  Think of these as breadcrumbs.  The \href{https://urbit.org/docs/vere/jetting/}{current jetting documentation} demonstrates a three-deep jet; here we have a two-deep scenario.  Specifically, we mark the outermost arm with \sigcen~and an explicit reference to the Arvo core (the parent of \texttt{part}).  We mark the inner arms with \sigfas~because their parent symbol can be determined from the context.  The \pattas~token will tell Vere which C code matches the arm.  All symbols in the nesting hierarchy must be included.
+
+\begin{lstlisting}[caption={Jet hints in \texttt{lib/trig-rs.hoon}},
+                   style=nonumbers]
+|%
+~%  %trig  ..part  ~
+++  factorial
+  ~/  %factorial
+  |=  x=@rs  ^-  @rs
+  ...
+++  exp
+  ~/  %exp
+  |=  x=@rs  ^-  @rs
+  ...
+++  pow-n
+  ~/  %pow-n
+  |=  [x=@rs n=@rs]  ^-  @rs
+  ...
+--
+\end{lstlisting}
+
+We also need to add appropriate handles for the C code.  This consists of several steps:
+
+\begin{enumerate}
+  \item  Register the jet symbols and function names in \texttt{tree.c}.
+  \item  Declare function prototypes in headers \texttt{q.h} and \texttt{w.h}.
+  \item  Produce functions for compilation and linking in the \texttt{pkg/urbit/jets/e} directory.
+\end{enumerate}
+
+The first two steps are fairly mechanical and straightforward.
+
+\textbf{Register the jet symbols and function names.}  A jet registration may be carried out at in point in \texttt{tree.c}.  The registration consists of marking the core
+
+\begin{lstlisting}[language=C,
+                   caption={Additions to \texttt{pkg/urbit/jets/tree.c}}]
+/* Jet registration of ++factorial arm under trig */
+static u3j_harm _140_hex__trig_factorial_a[] = {{".2", u3we_trig_factorial, c3y}, {}};
+/* Associated hash */
+static c3_c* _140_hex__trig_factorial_ha[] = {
+  "903dbafb8e59427eced0b35379ad617c2eb6083a235075e9cdd9dd80e732efa4",
+  0
+};
+
+/* Jet registration by token for ++factorial */
+static u3j_core _140_hex__trig_d[] =
+  { { "factorial", 7, _140_hex__trig_factorial_a, 0, _140_hex__trig_factorial_ha },
+    {}
+  };
+/* Associated hash */
+static c3_c* _140_hex__trig_ha[] = {
+  "0bac9c3c43634bb86f6721bbcc444f69c83395f204ff69d3175f3821b1f679ba",
+  0
+};
+
+/* Core registration by token for trig */
+static u3j_core _140_hex_d[] =
+{ /* ... pre-existing jet registrations ... */
+  { "trig", 31, 0, _140_hex__trig_d,  _140_hex__trig_ha  },
+  {}
+};
+\end{lstlisting}
+
+\marginnote[2mm]{
+Jet hashes are not active at the current time.
+}
+
+The numeric component of the title, \texttt{140}, indicates the Hoon Kelvin version.  Library jets of this nature are registered as \texttt{hex} jets, meaning they live within the Arvo core.  Other, more inner layers of \zuse~and \lull~utilize \texttt{pen} and other three-letter jet tokens.  The core is conventionally included here, then either a \texttt{d} suffix for the function association or a \texttt{ha} suffix for a jet hash.
+
+The particular flavor of C mandated by the Vere kernel is quite lapidary, particularly when shorthand functions (such as \texttt{u3z}) are employed.  In this code, we see the following \texttt{u3} elements:
+
+\begin{enumerate}
+  \item  \texttt{c3\_c}, the platform C 8-bit \texttt{char} type
+  \item  \texttt{c3y}, loobean yes, \texttt{\%.y}
+  \item  \texttt{u3j\_core}, C representation of Hoon/Nock cores
+  \item  \texttt{u3j\_harm}, an actual C jet (“Hoon arm”)
+\end{enumerate}
+
+The numbers \texttt{7} and \texttt{31} refer to relative core addresses.  In most cases—unless you're building a particularly complicated jet or modifying \zuse~or \lull—you can follow the pattern laid out here.  \texttt{".2"} is a label for the axis in the core \texttt{[battery sample]}, so just the battery.  The text labels for the \barcen~core and the arm are included at their appropriate points.  Finally, the jet function entry point \texttt{u3we\_trig\_factorial} is registered.
+
+\textbf{Declare function prototypes in headers.}
+
+A \texttt{u3w} function is always the entry point for a jet.  Every \texttt{u3w} function accepts a \texttt{u3noun} (a Hoon/Nock noun), validates it, and invokes the \texttt{u3q} function that implements the actual logic.  The \texttt{u3q} function needs to accept the same number of atoms as the defining arm (since these same values will be extricated by the \texttt{u3w} function and passed to it).
+
+In this case, we have cited \texttt{u3we\_trig\_factorial} in \texttt{tree.c} and now must declare both it and \texttt{u3qe\_trig\_factorial}:
+
+\begin{lstlisting}[language=C,
+                   caption={Additions to \texttt{pkg/urbit/include/w.h}}]
+u3_noun u3we_trig_factorial(u3_noun);
+\end{lstlisting}
+
+\begin{lstlisting}[language=C,
+                   caption={Additions to \texttt{pkg/urbit/include/q.h}}]
+u3_noun u3qe_trig_factorial(u3_atom);
+\end{lstlisting}
+
+\textbf{Produce functions for compilation and linking.}
+
+\marginnote[2mm]{
+Since this function deals with floating-point values, the \href{http://www.jhauser.us/arithmetic/SoftFloat-3/doc/SoftFloat.html}{SoftFloat} library is included.  This library represents \texttt{float}s as \texttt{struct}s which can be examined using a \texttt{union}.
+}
+Given these function prototype declarations, all that remains is the actual definition of the function.  Both functions will live in their own file; we find it the best convention to associate all arms of a core in a single file.  In this case, create a file \texttt{pkg/urbit/jets/e/trig.c} and define all of your \texttt{trig} jets therein.
+
+\begin{lstlisting}[language=C,
+                   caption={\texttt{pkg/urbit/jets/e/trig.c}}]
+/* jets/e/trig.c
+**
+*/
+#include "all.h"
+#include <softfloat.h>  // necessary for working with software-defined floats
+#include <stdio.h>      // helpful for debugging, removable after development
+#include <math.h>       // provides library fabs() and ceil()
+
+  union sing {
+    float32_t s;    //struct containing v, uint_32
+    c3_w c;         //uint_32
+    float b;        //float_32, compiler-native, useful for debugging printfs
+  };
+
+/* ancillary functions
+*/
+  bool isclose(float a,
+               float b)
+  {
+    float atol = 1e-6;
+    return ((float)fabs(a - b) <= atol);
+  }
+
+/* factorial of @rs single-precision floating-point value
+*/
+  u3_noun
+  u3qe_trig_factorial(u3_atom u)  /* @rs */
+  {
+    union sing a, b;
+    a.c = u3r_word(0, u);  // extricate value from atom as 32-bit word
+
+    if (ceil(a) != a) {
+      // raise an error if the float has a nonzero fractional part
+      return u3m_bail(c3__exit);
+    }
+
+    if (isclose(a.b, 1.0)) {
+      return u3i_word(a.b);
+    }
+    else {
+      // naive recursive algorithm
+      b.b = a.b - 1.0;
+      return u3i_word((c3_w)f32_mul(a.s, b.s).v);
+    }
+  }
+
+  u3_noun
+  u3w_trig_factorial(u3_noun cor)
+  {
+    u3_noun a;
+
+    if ( c3n == u3r_mean(cor, u3x_sam_2, &a, 0) ||
+         c3n == u3ud(a) )
+    {
+      return u3m_bail(c3__exit);
+    }
+    else {
+      return u3q_trig_factorial(a);
+    }
+  }
+\end{lstlisting}
+
+This code merits ample discussion.  Without focusing on the particular types used, read through the logic and look for the skeleton of a standard simple factorial algorithm.
+
+TODO got here today
+
+% TODO pills
+% TODO how to -build-file and test these live side-by-side
+
+We omit from the current discussion a few salient points:
+
+\begin{enumerate}
+  \item  Reference counting with transfer and retain semantics.  (For everything the new developer does outside of real Hoon shovel work, one will use transfer semantics.)
+  \item  The structure of memory:  the loom.  This is discussed in Section~\ref{su:vere}.
+  \item  Many details of C-side atom declaration and manipulation from the \texttt{u3} library.
+\end{enumerate}
+
+We commend to the reader the exercise of selecting particular library functions provided with the system, such as \texttt{++cut}, locating the corresponding jet code, and learning in detail how particular operations are realized in \texttt{u3} C.  Note in particular that jets do not need to follow the same solution algorithm and logic as the Hoon code; they merely need to reliably produce the same result.  Thus, you should extensively test your Hoon code and your C jet code.
+
+% TODO unit tests
+
+\end{example}

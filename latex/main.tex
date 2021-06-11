@@ -31,7 +31,7 @@
 
 \usepackage{color}
 
-\usepackage{hhline}
+%\usepackage{hhline}
 
 \usepackage{listings}
 \lstdefinelanguage{Hoon}
@@ -119,6 +119,7 @@
 \newcommand{\mock}{\texttt{++mock}}
 \newcommand{\say}{\texttt{\%say}}
 \newcommand{\shoe}{\texttt{\%shoe}}
+\newcommand{\sole}{\texttt{\%sole}}
 \newcommand{\unix}{\texttt{\%unix}}
 \newcommand{\zod}{\texttt{\textasciitilde zod}}
 
@@ -195,19 +196,26 @@
 \newcommand{\cen}{\texttt{\%}}
 \newcommand{\col}{\texttt{:}}
 \renewcommand{\dot}{\texttt{.}}
-\newcommand{\ket}{\texttt{\^}}
+\newcommand{\ket}{\texttt{\textasciicircum}}
 \newcommand{\mic}{\texttt{;}}
 \newcommand{\sig}{\texttt{\textasciitilde}}
 \newcommand{\tis}{\texttt{=}}
 \newcommand{\wut}{\texttt{?}}
 \newcommand{\zap}{\texttt{!}}
 
+% other aural ASCII symbols
+\newcommand{\cab}{\texttt{\_}}
+\newcommand{\fas}{\texttt{/}}
+\newcommand{\hep}{\texttt{-}}
+\newcommand{\lus}{\texttt{+}}
+\newcommand{\tar}{\texttt{*}}
+
 \newcommand{\pbar}{\texttt{|} “bar”}
 \newcommand{\pbuc}{\texttt{\$} “buc”}
 \newcommand{\pcen}{\texttt{\%} “cen”}
 \newcommand{\pcol}{\texttt{:} “col”}
 \newcommand{\pdot}{\texttt{.} “dot”}
-\newcommand{\pket}{\texttt{\^{}} “ket”}
+\newcommand{\pket}{\texttt{\textasciicircum} “ket”}
 \newcommand{\pmic}{\texttt{;} “mic”}
 \newcommand{\psig}{\texttt{\textasciitilde} “sig”}
 \newcommand{\ptis}{\texttt{=} “tis”}
@@ -221,7 +229,7 @@
 \newcommand{\pbarcol}{\texttt{|:} “barcol”}
 \newcommand{\pbardot}{\texttt{|.} “bardot”}
 \newcommand{\pbarhep}{\texttt{|-} “barhep”}
-\newcommand{\pbarket}{\texttt{|\^{}} “barket”}
+\newcommand{\pbarket}{\texttt{|\textasciicircum} “barket”}
 \newcommand{\pbarpat}{\texttt{|\@} “barpat”}
 \newcommand{\pbarsig}{\texttt{|\textasciitilde} “barsig”}
 \newcommand{\pbartar}{\texttt{|*} “bartar”}
@@ -236,7 +244,7 @@
 \newcommand{\pbucgal}{\texttt{\$<} “bucgal”}
 \newcommand{\pbucgar}{\texttt{\$>} “bucgar”}
 \newcommand{\pbuchep}{\texttt{\$-} “buchep”}
-\newcommand{\pbucket}{\texttt{\$\^{}} “bucket”}
+\newcommand{\pbucket}{\texttt{\$\textasciicircum} “bucket”}
 \newcommand{\pbucmic}{\texttt{\$} “bucmic”}
 \newcommand{\pbucpam}{\texttt{\$\&} “bucpam”}
 \newcommand{\pbucpat}{\texttt{\$\@} “bucpat”}
@@ -248,7 +256,7 @@
 \newcommand{\pcencol}{\texttt{\%:} “cencol”}
 \newcommand{\pcendot}{\texttt{\%.} “cendot”}
 \newcommand{\pcenhep}{\texttt{\%-} “cenhep”}
-\newcommand{\pcenket}{\texttt{\%\^{}} “cenket”}
+\newcommand{\pcenket}{\texttt{\%\textasciicircum} “cenket”}
 \newcommand{\pcenlus}{\texttt{\%+} “cenlus”}
 \newcommand{\pcensig}{\texttt{\%\textasciitilde} “censig”}
 \newcommand{\pcentar}{\texttt{\%*} “centar”}
@@ -257,13 +265,13 @@
 \newcommand{\pcolcab}{\texttt{:\_} “colcab”}
 \newcommand{\pcolcol}{\texttt{::} “colcol”}
 \newcommand{\pcolhep}{\texttt{:-} “colhep”}
-\newcommand{\pcolket}{\texttt{:\^{}} “colket”}
+\newcommand{\pcolket}{\texttt{:\textasciicircum} “colket”}
 \newcommand{\pcollus}{\texttt{:+} “collus”}
 \newcommand{\pcolsig}{\texttt{:\textasciitilde} “colsig”}
 \newcommand{\pcoltar}{\texttt{:*} “coltar”}
 %
 \newcommand{\pdotlus}{\texttt{.+} “dotlus”}
-\newcommand{\pdotket}{\texttt{.\^} “dotket”}
+\newcommand{\pdotket}{\texttt{.\textasciicircum} “dotket”}
 \newcommand{\pdottar}{\texttt{.*} “dottar”}
 \newcommand{\pdottis}{\texttt{.=} “dottis”}
 \newcommand{\pdotwut}{\texttt{.?} “dotwut”}
@@ -278,16 +286,16 @@
 %
 \newcommand{\phephep}{\texttt{--} “hephep”}
 %
-\newcommand{\pketbar}{\texttt{\^{}|} “ketbar”}
-\newcommand{\pketcol}{\texttt{\^{}:} “ketcol”}
-\newcommand{\pketdot}{\texttt{\^{}.} “ketdot”}
-\newcommand{\pkethep}{\texttt{\^{}-} “kethep”}
-\newcommand{\pketlus}{\texttt{\^{}+} “ketlus”}
-\newcommand{\pketpam}{\texttt{\^{}\&} “ketpam”}
-\newcommand{\pketsig}{\texttt{\^{}\textasciitilde} “ketsig”}
-\newcommand{\pkettar}{\texttt{\^{}*} “kettar”}
-\newcommand{\pkettis}{\texttt{\^{}=} “kettis”}
-\newcommand{\pketwut}{\texttt{\^{}?} “ketwut”}
+\newcommand{\pketbar}{\texttt{\textasciicircum|} “ketbar”}
+\newcommand{\pketcol}{\texttt{\textasciicircum:} “ketcol”}
+\newcommand{\pketdot}{\texttt{\textasciicircum.} “ketdot”}
+\newcommand{\pkethep}{\texttt{\textasciicircum-} “kethep”}
+\newcommand{\pketlus}{\texttt{\textasciicircum+} “ketlus”}
+\newcommand{\pketpam}{\texttt{\textasciicircum\&} “ketpam”}
+\newcommand{\pketsig}{\texttt{\textasciicircum\textasciitilde} “ketsig”}
+\newcommand{\pkettar}{\texttt{\textasciicircum*} “kettar”}
+\newcommand{\pkettis}{\texttt{\textasciicircum=} “kettis”}
+\newcommand{\pketwut}{\texttt{\textasciicircum?} “ketwut”}
 %
 \newcommand{\plusbar}{\texttt{+|} “lusbar”}
 \newcommand{\plusbuc}{\texttt{+\$} “lusbuc”}
@@ -324,7 +332,7 @@
 \newcommand{\ptisgal}{\texttt{=<} “tisgal”}
 \newcommand{\ptisgar}{\texttt{=>} “tisgar”}
 \newcommand{\ptishep}{\texttt{=-} “tishep”}
-\newcommand{\ptisket}{\texttt{=\^{}} “tisket”}
+\newcommand{\ptisket}{\texttt{=\textasciicircum} “tisket”}
 \newcommand{\ptislus}{\texttt{=+} “tislus”}
 \newcommand{\ptismic}{\texttt{=;} “tismic”}
 \newcommand{\ptistar}{\texttt{=*} “tistar”}
@@ -339,7 +347,7 @@
 \newcommand{\pwutgar}{\texttt{?>} “wutgar”}
 \newcommand{\pwuthax}{\texttt{?\#} “wuthax”}
 \newcommand{\pwuthep}{\texttt{?-} “wuthep”}
-\newcommand{\pwutket}{\texttt{?\^{}} “wutket”}
+\newcommand{\pwutket}{\texttt{?\textasciicircum} “wutket”}
 \newcommand{\pwutlus}{\texttt{?+} “wutlus”}
 \newcommand{\pwutpam}{\texttt{?\&} “wutpam”}
 \newcommand{\pwutsig}{\texttt{?\textasciitilde} “wutsig}
@@ -362,7 +370,7 @@
 \newcommand{\barcol}{\texttt{|:}}
 \newcommand{\bardot}{\texttt{|.}}
 \newcommand{\barhep}{\texttt{|-}}
-\newcommand{\barket}{\texttt{|\^{}}}
+\newcommand{\barket}{\texttt{|\textasciicircum}}
 \newcommand{\barpat}{\texttt{|\@}}
 \newcommand{\barsig}{\texttt{|\textasciitilde}}
 \newcommand{\bartar}{\texttt{|*}}
@@ -377,7 +385,7 @@
 \newcommand{\bucgal}{\texttt{\$<}}
 \newcommand{\bucgar}{\texttt{\$>}}
 \newcommand{\buchep}{\texttt{\$-}}
-\newcommand{\bucket}{\texttt{\$\^{}}}
+\newcommand{\bucket}{\texttt{\$\textasciicircum}}
 \newcommand{\bucmic}{\texttt{\$}}
 \newcommand{\bucpam}{\texttt{\$\&}}
 \newcommand{\bucpat}{\texttt{\$\@}}
@@ -389,7 +397,7 @@
 \newcommand{\cencol}{\texttt{\%:}}
 \newcommand{\cendot}{\texttt{\%.}}
 \newcommand{\cenhep}{\texttt{\%-}}
-\newcommand{\cenket}{\texttt{\%\^{}}}
+\newcommand{\cenket}{\texttt{\%\textasciicircum}}
 \newcommand{\cenlus}{\texttt{\%+}}
 \newcommand{\censig}{\texttt{\%\textasciitilde}}
 \newcommand{\centar}{\texttt{\%*}}
@@ -398,13 +406,13 @@
 \newcommand{\colcab}{\texttt{:\_}}
 \newcommand{\colcol}{\texttt{::}}
 \newcommand{\colhep}{\texttt{:-}}
-\newcommand{\colket}{\texttt{:\^{}}}
+\newcommand{\colket}{\texttt{:\textasciicircum}}
 \newcommand{\collus}{\texttt{:+}}
 \newcommand{\colsig}{\texttt{:\textasciitilde}}
 \newcommand{\coltar}{\texttt{:*}}
 %
 \newcommand{\dotlus}{\texttt{.+}}
-\newcommand{\dotket}{\texttt{.\^}}
+\newcommand{\dotket}{\texttt{.\textasciicircum}}
 \newcommand{\dottar}{\texttt{.*}}
 \newcommand{\dottis}{\texttt{.=}}
 \newcommand{\dotwut}{\texttt{.?}}
@@ -419,16 +427,16 @@
 %
 \newcommand{\hephep}{\texttt{--}}
 %
-\newcommand{\ketbar}{\texttt{\^{}|}}
-\newcommand{\ketcol}{\texttt{\^{}:}}
-\newcommand{\ketdot}{\texttt{\^{}.}}
-\newcommand{\kethep}{\texttt{\^{}-}}
-\newcommand{\ketlus}{\texttt{\^{}+}}
-\newcommand{\ketpam}{\texttt{\^{}\&}}
-\newcommand{\ketsig}{\texttt{\^{}\textasciitilde}}
-\newcommand{\kettar}{\texttt{\^{}*}}
-\newcommand{\kettis}{\texttt{\^{}=}}
-\newcommand{\ketwut}{\texttt{\^{}?}}
+\newcommand{\ketbar}{\texttt{\textasciicircum|}}
+\newcommand{\ketcol}{\texttt{\textasciicircum:}}
+\newcommand{\ketdot}{\texttt{\textasciicircum.}}
+\newcommand{\kethep}{\texttt{\textasciicircum-}}
+\newcommand{\ketlus}{\texttt{\textasciicircum+}}
+\newcommand{\ketpam}{\texttt{\textasciicircum\&}}
+\newcommand{\ketsig}{\texttt{\textasciicircum\textasciitilde}}
+\newcommand{\kettar}{\texttt{\textasciicircum*}}
+\newcommand{\kettis}{\texttt{\textasciicircum=}}
+\newcommand{\ketwut}{\texttt{\textasciicircum?}}
 %
 \newcommand{\lusbar}{\texttt{+|}}
 \newcommand{\lusbuc}{\texttt{+\$}}
@@ -465,7 +473,7 @@
 \newcommand{\tisgal}{\texttt{=<}}
 \newcommand{\tisgar}{\texttt{=>}}
 \newcommand{\tishep}{\texttt{=-}}
-\newcommand{\tisket}{\texttt{=\^{}}}
+\newcommand{\tisket}{\texttt{=\textasciicircum}}
 \newcommand{\tislus}{\texttt{=+}}
 \newcommand{\tismic}{\texttt{=;}}
 \newcommand{\tissig}{\texttt{=\textasciitilde}}
@@ -480,7 +488,7 @@
 \newcommand{\wutgar}{\texttt{?>}}
 \newcommand{\wuthax}{\texttt{?\#}}
 \newcommand{\wuthep}{\texttt{?-}}
-\newcommand{\wutket}{\texttt{?\^{}}}
+\newcommand{\wutket}{\texttt{?\textasciicircum}}
 \newcommand{\wutlus}{\texttt{?+}}
 \newcommand{\wutpam}{\texttt{?\&}}
 \newcommand{\wutsig}{\texttt{?\textasciitilde}}
@@ -576,6 +584,11 @@
 	A BOOK FOR 12 WISE MEN. \\
 	No More in All the World Could Comprehend It. \\
 	\flushright -- \href{https://en.wikisource.org/wiki/The_New_York_Times/Lights_All_Askew_in_the_Heavens}{\emph{The New York Times}, November 19, 1919}
+	\\
+	\\
+	\\
+	\\
+	(quotation in Spanish from JLB about “to explain (or pass judgment on) an event is to link it to another; on Tlon, that joining-together is a posterior state of the subject, and can neither affect nor illuminate the prior states”)
 }
 
 %----------------------------------------------------------------------------------------

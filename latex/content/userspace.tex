@@ -88,8 +88,41 @@ For \gall, a standard move is a pair \texttt{[bone card]}.  A \texttt{bone} is a
 \end{table}
 
 
-\subsection{Patterns and Factories}
+\subsection{Structures, Patterns, and Factories}
 \labsec{us:patterns}
+
+\emph{Structures} define common patterns of interaction which are shared across system components and agents.  A structure file lives in \texttt{/sur}, and is generally distinguished from being a \texttt{/lib} library file in that it only presents molds as type definitions, whereas a library contains operable code as gates and doors and the like.  (This is by convention not force.)  Structures are imported using the \pfaslus~rune.  For instance, consider the \texttt{/sur/file-server/hoon}, which defines \texttt{action}s, \texttt{configuration}s, and \texttt{update}s for the \texttt{\%file-server} \gall~app.
+
+\begin{lstlisting}[caption={\texttt{/sur/file-server/hoon}}]
+/-  glob
+|%
++$  action
+  $%  [%serve-dir url-base=path clay-base=path public=? spa=?]
+      [%serve-glob url-base=path =glob:glob public=?]
+      [%unserve-dir url-base=path]
+      [%toggle-permission url-base=path]
+      [%set-landscape-homepage-prefix prefix=(unit term)]
+  ==
+::
++$  configuration
+  $:  landscape-homepage-prefix=(unit term)
+  ==
+::
++$  update
+  $%  [%configuration =configuration]
+  ==
+--
+\end{lstlisting}
+
+This in turn relies on the \texttt{/sur/glob/hoon} structure defining a \texttt{glob}.  (In Unix parlance, a \emph{glob} is a collection of files, such as that obtained by matching a regular expression, such as \texttt{*.txt}.)
+
+\begin{lstlisting}[caption={\texttt{/sur/glob/hoon}}]
+|%
++$  glob  (map path mime)
+--
+\end{lstlisting}
+
+
 
 \emph{Factories} are code patterns that are commonly employed in creating
 In object-oriented programming, these are object-constructing objects.  In subject-oriented programming, one uses wet cores to create the appropriate newly patterned core.
@@ -100,7 +133,99 @@ TODO
 
 \section{Deep Dives in \gall}
 
-Several of the following case studies is drawn from published code, most of it incorporated into the Urbit userspace.  In some cases, the original code uses conventions we have not yet introduced; we have simplified these to rely on the runes introduced in the main text through Chapter~\ref{advancedhoon}.  Other examples are new to this chapter.
+Several of the following case studies is drawn from published code, most of it incorporated into the Urbit userspace.  In some cases, the original code uses conventions we have not yet introduced; we have simplified these to rely on the runes introduced in the main text through Chapter~\ref{ha}.  Other examples are new to this chapter.
+
+\subsection{\shoe/\sole~CLI Libraries}
+\labsec{us:shoe}
+
+\marginnote[2mm]{
+See also the \url{https://urbit.org/docs/hoon/guides/cli-tutorial/}{Tlon \shoe~tutorial} for an alternative explanation of these principles.
+}
+Prefatory to examining the mechanics of \texttt{\%chat-cli} and the Dojo terminal parser, we need to consider what a command-line interface is and what functionality it offers.  We will then construct a simple reverse-Polish notation (RPN) calculator as a minimal working example of a \shoe-instrumented CLI app.
+
+
+\subsubsection{Reverse-Polish Notation Calculator, \texttt{\%pyth}}
+
+We wish to create a calculator which accepts one or two numbers as input, then an operator which evaluates the one or two preceding numbers on the stack, as appropriate.  (For instance, unary negation could be input as \texttt{5 -}.)  We will implement the following operators:
+
+\begin{enumerate}
+  \item  \lus, addition (binary operator)
+  \item  \hep, subtraction (unary if only one number, else binary)
+  \item  \tar, multiplication (binary operator)
+  \item  \fas, division (binary operator)
+  \item  \ket, exponentiation (binary operator)
+  \item  \cab, square root (unary operator)
+\end{enumerate}
+
+Like Dojo, we do not need to accept any invalid input, but we do need to deal with some special cases:  automatically promoting integer input values (\patud) to double-precision floating-point numbers (\patrd), and deciding whether \texttt{-} refers to a unary or binary operation.  Input of a number should pause until completion is indicated by pressing Return, but an operator may be evaluated instantly.
+
+For instance, here is an expected session, with \texttt{\%} being the CLI prompt:
+
+\begin{lstlisting}[style=nonumbers]
+% 5
+5.0
+% 4
+5.0 4.0
+% -
+1.0
+% _
+1.0
+% -
+-1.0
+% 6
+-1.0 6.0
+% 12
+-1.0 6.0 12.0
+% *
+-1.0 72.0
+% /
+-0.013888888888888888
+\end{lstlisting}
+
+We construct \texttt{\%pyth} beginning with the default \gall~core.  Save this text as a file \texttt{app/pyth.hoon}.
+
+\begin{lstlisting}[caption={Default \gall~core for \texttt{\%pyth}}]
+/+  default-agent
+^-  agent:gall
+=|  state=@  :: TODO still valid?
+|_  =bowl:gall
++*  this      .
+    default   ~(. (default-agent this %|) bowl)
+::
+++  on-init   on-init:default
+++  on-save   on-save:default
+++  on-load   on-load:default
+++  on-poke
+  |=  [=mark =vase]
+  ~&  >  state=state
+  ~&  got-poked-with-data=mark
+  =.  state  +(state)
+  `this
+::
+++  on-watch  on-watch:default
+++  on-leave  on-leave:default
+++  on-peek   on-peek:default
+++  on-agent  on-agent:default
+++  on-arvo   on-arvo:default
+++  on-fail   on-fail:default
+\end{lstlisting}
+
+\texttt{\%pyth} needs to set the following arms to play their roles:
+
+\begin{enumerate}
+  \item  \texttt{++on-init} should initialize an empty stack.
+  \item  \texttt{++on-load} should clear the stack.
+  \item  \texttt{++on-save} should push the current state for an upgrade.
+  \item  \texttt{++on-poke}
+  \item  \texttt{++on-agent}
+\end{enumerate}
+
+Other arms may remain with their default settings.
+
+\texttt{++on-init} is responsible to set up the prompt symbol \texttt{\%} and define the parsing rules.
+
+\texttt{++on-poke} is the workhorse which takes any input and decides how to parse it, as well as either pushing numeric values onto the stack or effecting operators.
+
 
 \subsection{Chat CLI}
 \labsec{us:chat}
@@ -188,6 +313,11 @@ Furthermore, the agent needs to interact with an external browser-based interfac
 
 \subsection{\graphstore}
 \labsec{us:graph}
+
+Logan:  they’re all enumerated in the +on-peek arm of graph-store
+
+
+
 
 \subsection{WebRTC Applications}
 \labsec{us:webrtc}

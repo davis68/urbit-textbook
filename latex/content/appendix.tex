@@ -10,7 +10,7 @@ These runes are up-to-date as of Hoon \texttt{\%140}.  Runes are ordered by alph
 
 Digraphs
 
-\begin{table}
+\begin{table}[h]
   \caption{Aural ASCII Pronunciation}
   \label{}
   \begin{tabular}{clclclcl}
@@ -20,85 +20,129 @@ Digraphs
   \end{tabular}
 \end{table}
 
-\subsection{\texttt{|} “bar”:  Core Definition}
+\subsection{\pbar:  Core Definition}
 \labsec{ap:bar}
 
 \pbar~runes produce cores.
 
-\begin{tabular}{l}
-\hline \\ \hline \\
-\textbf{\barbuc\texttt{~(lest term) spec}}
-\\
-\pbarbuc~produces a mold from a TODO.
-\\
+\subsubsection{\barbuc\texttt{~(lest term) spec}} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{ap:barbuc}
+
+\pbarbuc~produces a mold (a type definition) given a non-empty list or \texttt{+\$lest} of \texttt{+\$term}s (\pattas~ASCII symbols, the labels) and a structure definition or \texttt{+\$spec}.  In other words, \barbuc~
+
+\paragraph{Definition}
+
+
+
+\paragraph{Examples}
+
+\begin{lstlisting}[caption={\texttt{++lest} (non-empty list) from \texttt{hoon.hoon}},
+                   style=nonumbers]
+++  lest
+  |$  [item]
+  ::    null-terminated non-empty list
+  ::
+  ::  mold generator: produces a mold of a null-terminated list of the
+  ::  homogeneous type {a} with at least one element.
+  [i=item t=(list item)]
+\end{lstlisting}
+
+\begin{lstlisting}[caption={\texttt{++pair} from \texttt{hoon.hoon}},
+                   style=nonumbers]
+++  pair
+  |$  [head tail]
+  ::    dual tuple
+  ::
+  ::  mold generator: produces a tuple of the two types passed in.
+  ::
+  ::  a: first type, labeled {p}
+  ::  b: second type, labeled {q}
+  ::
+  [p=head q=tail]
+\end{lstlisting}
+
+
+\subsubsection{{\barcab\texttt{~spec alas (map term tome)}}} %%%%%%%%%%%%%%%%%%%
+\label{ap:barcab}
+
+\pbarcab produces a door (a core with sample) given a spec alas and a
+
+\paragraph{Examples}
+
 \begin{lstlisting}[style=nonumbers]
 TODO
 \end{lstlisting}
-\\
-\begin{lstlisting}[style=nonumbers]
-::  $mk-item: constructor for +ordered-map item type
-++  mk-item  |$  [key val]  [key=key val=val]
-\end{lstlisting}
-\\
-\hhline{=} \\
-\textbf{\barcab\texttt{~spec alas (map term tome)}}
-\\ \hline
-\\
-\pbarcab produces a door (a core with sample) given XYZ
-\\
-\hline \\ \hline \\
-\textbf{\barcen\texttt{~(unit term) (map term tome)}}
-\\
-produces a core (battery and payload)
-\\
-\hhline{=} \\
-\textbf{\barcol\texttt{[hoon hoon]}}
-\\
-produces a gate with a custom sample
-\hhline{=} \\
-\textbf{\bardot\texttt{~hoon}}
-\\
-produces a trap (a core with one arm)
-\hhline{=} \\
-\textbf{\barhep\texttt{~hoon}}
-\\
-produces a trap (a core with one arm) and evaluates it
-\hhline{=} \\
-\textbf{\barket\texttt{~hoon (map term tome)}}
-\\
-produces a core whose battery includes a \$ arm and computes the latter
-\hhline{=} \\
-\textbf{\barpat\texttt{~(unit term) (map term tome)}}
-\\
-produces a wet core (battery and payload)
-\hhline{=} \\
-\textbf{\barsig\texttt{~[spec value]}}
-\\
-produces an iron gate
-\hhline{=} \\
-\textbf{\bartar\texttt{~[spec value]}}
-\\
-produces a wet gate (a one-armed core with sample)
-\hhline{=} \\
-\textbf{\bartis\texttt{~[spec value]}}
-\\
-produces a dry gate (a one-armed core with sample)
-\\
-\hhline{=} \\
-\textbf{\barwut\texttt{~hoon}}
-\\
-produces a lead trap
 
-\end{tabular}
+\begin{lstlisting}[caption={\texttt{+\$mk-item} from \texttt{hoon.hoon}},
+                   style=nonumbers]
+::  $mk-item: constructor for +ordered-map item type
+++  mk-item
+  |$  [key val]
+  [key=key val=val]
+\end{lstlisting}
+
+
+\subsubsection{\textbf{\barcen\texttt{~(unit term) (map term tome)}}}
+\label{ap:barcen}
+
+\pbarcab~produces a core (battery and payload) given a \texttt{unit} of \texttt{term}s (\pattas~ASCII symbols, arm labels, the battery) and a dictionary of named arms, or \texttt{map} from \texttt{term} keys to \texttt{tome} values ().  In other words,
+
+
+\subsubsection{\textbf{\barcol\texttt{~[p=hoon q=hoon]}}}
+\label{ap:barcol}
+
+\pbarcol~produces a gate with a custom sample given a
+
+\paragraph{Definition}
+
+\begin{lstlisting}
+[%tsls p.gen [%brdt q.gen]]
+=+  p  |. q
+\end{lstlisting}
+
+\subsubsection{\textbf{\bardot\texttt{~hoon}}}
+\label{ap:bardot}
+produces a trap (a core with one arm)
+
+\subsubsection{\textbf{\barhep\texttt{~hoon}}}
+\label{ap:barcen}
+produces a trap (a core with one arm) and evaluates it
+
+\subsubsection{\textbf{\barket\texttt{~hoon (map term tome)}}}
+\label{ap:barcen}
+produces a core whose battery includes a \$ arm and computes the latter
+
+\subsubsection{\textbf{\barpat\texttt{~(unit term) (map term tome)}}}
+\label{ap:barpat}
+produces a wet core (battery and payload)
+
+\subsubsection{\textbf{\barsig\texttt{~[spec value]}}}
+\label{ap:barcen}
+produces an iron gate
+
+\subsubsection{\textbf{\bartar\texttt{~[spec value]}}}
+\label{ap:barcen}
+produces a wet gate (a one-armed core with sample)
+
+\subsubsection{\textbf{\bartis\texttt{~[spec value]}}}
+\label{ap:barcen}
+produces a dry gate (a one-armed core with sample)
+
+\subsubsection{\textbf{\barwut\texttt{~hoon}}}
+\label{ap:barwut}
+
+\pbarwut~produces a lead trap (bivariant) or core with a single arm \texttt{\$}
+
+\lead~lets you export a library interface but hide the implementation details
 
 %------------------------------------------------------------------------------%
-\subsection{\texttt{\S} “buc”:  Mold Definition}
+\subsection{\pbuc:  Mold Definition}
 \labsec{ap:buc}
 
 \pbuc~runes produce mold definitions.
 
 %------------------------------------------------------------------------------%
-\subsection{\texttt{\%} “cen”:  Core Evaluation}
+\subsection{\pcen:  Core Evaluation}
 \labsec{ap:cen}
 
 \pcen~runes evaluate cores (similar to function calls in other languages).
@@ -109,49 +153,49 @@ produces a lead trap
 \end{lstlisting}
 
 %------------------------------------------------------------------------------%
-\subsection{\texttt{:} “col”:  Cell Construction}
+\subsection{\pcol:  Cell Construction}
 \labsec{ap:col}
 
 \pcol~runes produce cells of various structures.
 
 %------------------------------------------------------------------------------%
-\subsection{\texttt{.} “dot”:  Nock Evaluation}
+\subsection{\pdot:  Nock Evaluation}
 \labsec{ap:dot}
 
 \pdot~runes directly evaluate as Nock expressions.
 
 %------------------------------------------------------------------------------%
-\subsection{\texttt{\^} “ket”:  Core Typecasting}
+\subsection{\pket:  Core Typecasting}
 \labsec{ap:ket}
 
 \pket~runes are used to alter cores.
 
 %------------------------------------------------------------------------------%
-\subsection{\texttt{\textasciitilde} “sig”:  Hinting}
+\subsection{\psig:  Hinting}
 \labsec{ap:sig}
 
 \psig~runes represent directives to the runtime.
 
 %------------------------------------------------------------------------------%
-\subsection{\texttt{;} “mic”:  Macro}
+\subsection{\pmic:  Macro}
 \labsec{ap:mic}
 
 \mic~runes produce calling structures (mainly monadic binds) and XML elements.
 
 %------------------------------------------------------------------------------%
-\subsection{\texttt{=} “tis”:  Subject Alteration}
+\subsection{\ptis:  Composition}
 \labsec{ap:tis}
 
 \tis~runes modify the subject.
 
 %------------------------------------------------------------------------------%
-\subsection{\texttt{?} “wut”:  Comparison}
+\subsection{\pwut:  Conditional}
 \labsec{ap:wut}
 
 \wut~runes compare subtrees.
 
 %------------------------------------------------------------------------------%
-\subsection{\texttt{!} “zap”:  Wildcard}
+\subsection{\pzap:  Wildcard}
 \labsec{ap:zap}
 
 \zap~runes perform a miscellaneous set of auxiliary operations.

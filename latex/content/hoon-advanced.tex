@@ -2,6 +2,17 @@
 \chapter{Advanced Hoon}
 \labch{ha}
 
+\section{Objectives}
+\labsec{ha:objectives}
+
+The goals of this chapter are for you to be able to:
+
+\begin{enumerate}
+  \item  Identify Hoon runes and children in both inline and long-form syntax.
+  \item  Trace a short Hoon expression to its final result.
+  \item  Execute Hoon code within a running ship.
+  \item  Produce output as a side effect using the \sigpam~rune.
+\end{enumerate}
 
 \section{Cores}
 \labsec{ha:core}
@@ -81,6 +92,7 @@ Here one can see that
 The full core stores both payload types.  The type that describes the payload currently in the core is \texttt{p}.  The type that describes the payload the core was compiled with is \texttt{q.q}.  (Documentation, “Cores”)
 \end{quote}
 
+TODO more on doors etc.
 
 
 \section{Molds}
@@ -93,10 +105,13 @@ As we saw when discussing auras, molds are the most general category of type in 
 \subsection{Polymorphism}
 \labsec{ha:poly}
 
+%TODO more on molds beyond the former chapter, including subtleties
+
+
 \section{Rune Families}
 \labsec{ha:families}
 
-\marginnote[2mm]{These runes are up-to-date as of Hoon \texttt{\%140}.}
+\marginnote[2mm]{These runes are up-to-date as of Hoon \texttt{\%140}.  For an exhaustive list of runes, please check the appendix.}
 
 Runes play the role of structural keywords in Hoon.  Somewhat conveniently, runes are classified into semantic families by their first character.  (The second character rarely carries specific information, and only occasionally do “opposite” characters like \texttt{+} and \texttt{-} correspond.)  When reading or composing Hoon code, the ability to identify runes by family can quickly help you structure a program.
 
@@ -222,12 +237,32 @@ Like \mic~runes, \pzap~runes constitute a miscellany of effects.
 ... really long product that goes into the map
 \end{lstlisting}
 
+\begin{example}{Defining a Rune}
+
+It is fairly straightforward to produce a sugar rune.
+
+We proceed analogically from \pbarwut, a sugar rune which converts a core to a lead core (bivariant).  We will produce \texttt{|\#} “barhax” which will convert a core to a zinc trap (covariant).  (We punt on the question of why one would want a zinc trap, which may explain why such a rune does not exist.)
+
+Any new rune should not be reduced by the parser to
+%For instance, \texttt{\textasciitilde \textasciicircum} may, depending on context, be interpreted as a \psigket.
+
+\end{example}
 
 \section{Deep Dives}
 \labsec{ha:deep}
 
 \subsection{Text Stream Parsing}
 \labsec{ha:text}
+
+Text parsing in Urbit is largely synonymous with the Hoon parser itself.  \zuse~ offers built-in support for some structured text data, notably JSON and HTML/XML, which are discussed in subsequent sections.  Other text is parsed using a \texttt{++rule}.
+
+```py
+[(lent "foo") (met 3 'foo') (lent "😋") (lent (tuba "😋"))]
+```
+
+rules, nails, etc.
+
+More information can be found in the \shoe~tutorial TODO.
 
 \subsection{JSON Parsing}
 \labsec{ha:json}
